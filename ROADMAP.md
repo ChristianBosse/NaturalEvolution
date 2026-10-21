@@ -14,8 +14,9 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 
 ## Phase 0: Foundations
 
-- [ ] GitHub organization and repository (check that `nevo` or `naturalevolution` is available)
-- [ ] AGPL-3.0 license, README, VISION, ROADMAP, DECISIONS, CONTRIBUTING, CODE_OF_CONDUCT
+- [x] GitHub repository
+- [ ] GitHub organization (optional; the repository can be transferred to it later)
+- [x] AGPL-3.0 license, README, VISION, ROADMAP, DECISIONS, CONTRIBUTING, CODE_OF_CONDUCT
 - [ ] **AI benchmark spike (top priority):** run llama.cpp on a 4 GB Pi 4/5 with 3–4 candidate small models. Measure speed, RAM use and answer quality on about 20 real survival and medical questions. This picks the Standard-tier model.
 - [ ] **ZIM spike:** read and search Kiwix ZIM files from Rust
 - [ ] **Lock the content model format:** blob, item, revision, attestation. It is the hardest thing to change later.

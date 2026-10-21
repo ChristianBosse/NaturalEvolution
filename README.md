@@ -56,8 +56,8 @@ Planned platforms: Linux (ARM and x86), Windows, macOS. Android later.
 
 ## Contributing
 
-NEVO is in the planning phase. Contribution guidelines will come with the first code. If you care about offline knowledge, open an issue or a discussion. Not all help is code: curating knowledge packs (medical, farming, repair) and translating will matter as much as programming.
+NEVO is in the planning phase. If you care about offline knowledge, open an issue or a discussion. Not all help is code: curating knowledge packs (medical, farming, repair) and translating will matter as much as programming. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-NEVO's code will be released under the **GNU AGPL-3.0**. Content keeps its own licenses: community contributions default to **CC BY-SA 4.0**, and each knowledge pack records its own license.
+NEVO's code is released under the **GNU AGPL-3.0** (see [LICENSE](LICENSE)). Content keeps its own licenses: community contributions default to **CC BY-SA 4.0**, and each knowledge pack records its own license.
