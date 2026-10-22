@@ -37,7 +37,7 @@ const MAX_LEN: usize = 200;
 const MAX_SEGMENT: usize = 40;
 const MAX_DEPTH: usize = 6;
 
-/// A valid topic path under one of the starting top-level topics.
+/// A syntactically valid topic path. See [`Topic::is_known`] for whether its top level is known.
 #[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Topic(String);
 
@@ -54,6 +54,12 @@ impl Topic {
     /// Trust in a topic covers everything under it: `medical` covers `medical/first-aid`.
     pub fn covers(&self, other: &Topic) -> bool {
         other.0 == self.0 || other.0.strip_prefix(&self.0).is_some_and(|rest| rest.starts_with('/'))
+    }
+
+    /// Whether the top-level topic is one this spec version knows. Topics under a top level
+    /// added by a later version are stored and passed on, but no trust applies to them.
+    pub fn is_known(&self) -> bool {
+        STARTING_TOPICS.iter().any(|(t, _)| *t == self.top())
     }
 
     /// Whether this exact path is in the starting list (rather than added by a catalog).
@@ -90,9 +96,6 @@ impl FromStr for Topic {
                 return Err(bad("only a-z, 0-9 and - are allowed"));
             }
         }
-        if !STARTING_TOPICS.iter().any(|(t, _)| *t == segments[0]) {
-            return Err(bad("unknown top-level topic"));
-        }
         Ok(Topic(s.to_string()))
     }
 }
@@ -124,6 +127,12 @@ mod tests {
         assert!(t("maps").is_starting());
         let added = t("farming/crops/cassava");
         assert!(!added.is_starting(), "catalogs may add sub-topics");
+        assert!(added.is_known());
+        let later = t("legal/contracts");
+        assert!(
+            !later.is_known(),
+            "a top level from a later spec version is kept but not known"
+        );
     }
 
     #[test]
@@ -135,7 +144,6 @@ mod tests {
             "/medical",
             "medical//x",
             "medical/first aid",
-            "build",
             "médical",
         ] {
             assert!(bad.parse::<Topic>().is_err(), "{bad:?}");

@@ -1,0 +1,16 @@
+[package]
+name = "nevo-store"
+description = "NEVO node storage: objects in SQLite, blobs as verified files, and sync logs"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+nevo-format.workspace = true
+blake3.workspace = true
+rusqlite.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

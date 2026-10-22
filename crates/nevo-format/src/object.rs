@@ -149,34 +149,37 @@ fn decode_object(bytes: &[u8]) -> Result<(String, Map)> {
 // Shared field types
 
 /// Best-guess wall-clock time. Ordering never depends on it; see `clock`.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Time {
     /// Unix time in milliseconds.
     pub ms: i64,
     pub src: TimeSource,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum TimeSource {
     Gps,
     Network,
     User,
     Unknown,
+    /// A source added by a later spec version; treated like `Unknown`.
+    Other(String),
 }
 
 impl TimeSource {
-    pub fn as_str(self) -> &'static str {
+    pub fn as_str(&self) -> &str {
         match self {
             TimeSource::Gps => "gps",
             TimeSource::Network => "network",
             TimeSource::User => "user",
             TimeSource::Unknown => "unknown",
+            TimeSource::Other(s) => s,
         }
     }
 }
 
 impl Time {
-    fn to_value(self) -> Value {
+    fn to_value(&self) -> Value {
         let mut m = Map::new();
         m.insert("ms", self.ms).insert("src", self.src.as_str());
         m.into()
@@ -192,7 +195,7 @@ impl Time {
             "network" => TimeSource::Network,
             "user" => TimeSource::User,
             "unknown" => TimeSource::Unknown,
-            other => return Err(Error::invalid("time", format!("unknown source `{other}`"))),
+            other => TimeSource::Other(word("time", other)?),
         };
         Ok(Time { ms: f.int("ms")?, src })
     }
@@ -558,10 +561,13 @@ impl Object for Attestation {
                 format!("`{}` must be about an object", claim.as_str()),
             ));
         }
-        if claim == Claim::Trust && (!matches!(about, Subject::Key(_)) || topics.is_empty()) {
+        if claim == Claim::Trust && !matches!(about, Subject::Key(_)) {
+            return Err(Error::invalid("about", "`trust` must name a key"));
+        }
+        if matches!(claim, Claim::Trust | Claim::Verified) && topics.is_empty() {
             return Err(Error::invalid(
-                "about",
-                "`trust` must name a key and at least one topic",
+                "topics",
+                format!("`{}` needs at least one topic", claim.as_str()),
             ));
         }
         let needs_related = matches!(claim, Claim::TranslationOf | Claim::DuplicateOf | Claim::Replaces);
@@ -590,19 +596,22 @@ impl Object for Attestation {
 // ---------------------------------------------------------------------------------------------
 // Keys
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum KeyKind {
     Person,
     Node,
     Catalog,
+    /// A kind added by a later spec version. Stored and passed on, never trusted by default.
+    Other(String),
 }
 
 impl KeyKind {
-    pub fn as_str(self) -> &'static str {
+    pub fn as_str(&self) -> &str {
         match self {
             KeyKind::Person => "person",
             KeyKind::Node => "node",
             KeyKind::Catalog => "catalog",
+            KeyKind::Other(s) => s,
         }
     }
 }
@@ -643,7 +652,7 @@ impl Object for KeyRecord {
             "person" => KeyKind::Person,
             "node" => KeyKind::Node,
             "catalog" => KeyKind::Catalog,
-            other => return Err(Error::invalid("kind", format!("unknown key kind `{other}`"))),
+            other => KeyKind::Other(word("kind", other)?),
         };
         let recovery = f.opt_key("recovery")?;
         if recovery == Some(key) {
@@ -681,9 +690,14 @@ pub struct Revoke {
 const REVOKE_FIELDS: &[&str] = &["t", "v", "sig", "key", "from", "by", "clock", "time"];
 
 impl Revoke {
-    /// Whether `by` may revoke `key`, given the key's record if known.
-    pub fn is_authorized(&self, record: Option<&KeyRecord>) -> bool {
-        self.by == self.key || record.is_some_and(|r| r.key == self.key && r.recovery == Some(self.by))
+    /// Whether `by` may revoke `key`, given every key record seen for that key.
+    ///
+    /// A recovery key named in *any* record counts. Picking one record (the latest, say) would
+    /// let a thief who stole the main key publish a new record naming their own recovery key and
+    /// so block the owner's revocation. Accepting all costs nothing: the thief can already revoke
+    /// the key with the key itself.
+    pub fn is_authorized(&self, records: &[KeyRecord]) -> bool {
+        self.by == self.key || records.iter().any(|r| r.key == self.key && r.recovery == Some(self.by))
     }
 }
 
@@ -887,7 +901,9 @@ impl Fields<'_> {
 
     fn uint(&self, k: &'static str) -> Result<u64> {
         match self.req(k)? {
-            Value::Int(n) => u64::try_from(*n).map_err(|_| Error::invalid(k, "must be 0 or more")),
+            // Capped at 2^63 - 1 so every value fits a signed 64-bit database integer.
+            Value::Int(n) if (0..=i128::from(i64::MAX)).contains(n) => Ok(*n as u64),
+            Value::Int(_) => Err(Error::invalid(k, "must be 0 to 2^63 - 1")),
             _ => Err(Error::invalid(k, "must be an integer")),
         }
     }

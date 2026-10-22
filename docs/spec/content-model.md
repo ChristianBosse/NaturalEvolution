@@ -26,7 +26,19 @@ This spec turns decisions D-019 to D-025 into exact formats. It covers how conte
 
 - Only these CBOR types are used: unsigned and negative integers, byte strings, text strings (UTF-8, NFC-normalized), arrays, maps, `true`, `false`, `null`.
 - **No floats.** Numbers that need decimals are stored as integers in a stated unit, for example milliseconds or micrometres.
+- Counters and sizes (`clock`, `seq`, `from`, file `size`) are at most 2^63 − 1, so they fit a signed 64-bit database integer.
 - Map keys are short text strings, sorted as the RFC's deterministic rules require. Unknown keys are kept and ignored, so newer nodes can add fields without breaking older ones.
+
+### Forward compatibility
+
+Later spec versions may add new values without changing the format version, and version 1 nodes must still store and pass on objects that use them:
+
+- new revision `kind` and attestation `claim` values (shown as unknown)
+- new `time.src` values (treated as `unknown`)
+- new key `kind` values (never trusted by default)
+- new top-level topics (stored, but no trust applies to them)
+
+A new value of `vis` does need a new format version, because a node that misreads visibility could leak private content.
 - No indefinite-length items and no CBOR tags.
 
 ### Object IDs and signatures
@@ -84,7 +96,7 @@ A signed statement about a revision, an item or a key.
 | `t`, `v` | `"att"`, `1` | |
 | `about` | ID or key | What the statement is about |
 | `claim` | text | See below |
-| `topics` | array of text, optional | Topics the claim applies to (for `verified` and `trust`) |
+| `topics` | array of text | Topics the claim applies to. Required for `verified` and `trust`, optional otherwise. |
 | `related` | ID, optional | For `translation-of`, `duplicate-of` and `replaces` |
 | `note` | text, optional | Human explanation |
 | `author`, `clock`, `time`, `sig` | | As in a revision |
@@ -117,7 +129,7 @@ Who a key belongs to. Self-signed by that key.
 | `recovery` | Optional second public key, kept offline (printed or on a backup stick). It can sign a revocation if the main key is lost or stolen. |
 | `clock`, `time`, `sig` | |
 
-A **revocation** (`t: "revoke"`) names a key and the clock from which its signatures are no longer valid. It is signed by the key itself or by its recovery key. Objects signed before that clock stay valid. Fields: `key` (the revoked key), `from` (the first invalid clock value), `by` (the signer: the key or its recovery key), `clock`, `time`, `sig`.
+A **revocation** (`t: "revoke"`) names a key and the clock from which its signatures are no longer valid. It is signed by the key itself or by its recovery key. Objects signed before that clock stay valid. Fields: `key` (the revoked key), `from` (the first invalid clock value), `by` (the signer: the key or its recovery key), `clock`, `time`, `sig`. A recovery key named in **any** key record ever published for the key may revoke it. Using only the latest record would let a thief publish a new record with their own recovery key and block the owner's revocation.
 
 ### Derived data (`t: "derived"`)
 
@@ -152,6 +164,8 @@ A log entry is an unsigned object (`t: "log"`). Entries are always stored and se
 | `obj` | ID of the object |
 
 Every so often the node signs its latest entry as a **log head** (`t: "head"`: `node`, `seq`, `entry`, `sig`). Because every entry links to the one before, a signed head vouches for the whole log up to that point.
+
+Log entries are not signed, so a node accepts another node's entries only up to a head that node signed: the entries must chain back from that head's entry to what the node already has. Nodes keep every signed head they see. Two heads (or a head and an accepted entry) that disagree about the same position are proof that the node signed two different logs. That proof is kept and shown, and the trust layer decides what to do with that node.
 
 Nodes keep copies of other nodes' logs, which is how knowledge spreads by contact (D-021). Sync compares "highest `seq` I have for each node" and sends the missing entries and objects. Metadata always moves; blobs move by policy. This spec only fixes the entry format; the exchange itself belongs to the sync spec.
 

@@ -227,3 +227,16 @@ Plain keyword ranking put *Panic attack* above *Myocardial infarction* for "hear
 *2026-10-22*
 
 `docs/spec/content-model.md` is format version 1: BLAKE3 IDs in IPFS-compatible multihash form, Ed25519 signatures, deterministic CBOR, and the revision, attestation, key, derived-data, log and `.nevo` bundle formats. Choices made in review: one key per person in v1 (signed device keys in v2), content always in blobs, private content hidden but not encrypted, and topics from a fixed starting list that catalogs extend with sub-topics. Later versions may add fields but must keep version 1 objects readable, with their IDs and signatures valid.
+
+### D-039: Format v1 clarifications after the first code review
+*2026-10-22*
+
+Building `nevo-format` and `nevo-store` and having them independently reviewed showed gaps in the locked spec (D-038). The spec now states:
+
+- **Forward compatibility:** later spec versions may add values for revision kinds, claims, time sources, key kinds and top-level topics. Version 1 nodes store and pass them on, but don't trust them. Only a new visibility value needs a new format version.
+- **Limits:** counters and sizes are at most 2^63 − 1.
+- **Attestations:** `verified` needs at least one topic, like `trust`.
+- **Revocation:** a recovery key named in any key record for the key may revoke it, so a key thief can't block the owner by publishing a new record.
+- **Logs:** unsigned log entries from another node are accepted only up to a head it signed. All signed heads are kept, and contradicting heads are kept as proof of a fork.
+
+No version 1 data existed yet, so nothing had to be migrated. This supersedes the affected details of D-038.

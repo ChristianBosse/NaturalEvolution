@@ -177,7 +177,7 @@ fn validation_rules() {
         assert!(bad(r), "unsafe file name {name:?}");
     }
     // Unknown topics are refused at parse time.
-    assert!("build".parse::<Topic>().is_err());
+    assert!(!"build".parse::<Topic>().unwrap().is_known());
 }
 
 #[test]
@@ -292,13 +292,13 @@ fn keys_and_revocation() {
         extra: Map::new(),
     };
     let by_recovery = seal(&revoke(&recovery), &recovery).unwrap();
-    assert!(by_recovery.object.is_authorized(Some(&record.object)));
-    assert!(seal(&revoke(&kp), &kp).unwrap().object.is_authorized(None));
+    assert!(by_recovery.object.is_authorized(std::slice::from_ref(&record.object)));
+    assert!(seal(&revoke(&kp), &kp).unwrap().object.is_authorized(&[]));
 
     let stranger = Keypair::from_secret([6; 32]);
     let by_stranger = seal(&revoke(&stranger), &stranger).unwrap();
     assert!(
-        !by_stranger.object.is_authorized(Some(&record.object)),
+        !by_stranger.object.is_authorized(std::slice::from_ref(&record.object)),
         "signed, but not allowed to revoke"
     );
 }
@@ -396,4 +396,63 @@ fn matches_python_reference_encoder() {
         kp.public().to_string(),
         "kaoqqpp7tzyil4hlq3umoos6atft6jvrqtosq2xy53sdgiesvgg4a"
     );
+}
+
+/// Values added by later spec versions are kept, not rejected (spec section 1, "Forward
+/// compatibility"). Counters are capped so they fit a signed 64-bit database integer.
+#[test]
+fn forward_compatible_values_and_limits() {
+    let kp = author();
+    let first = seal(&first_revision(&kp), &kp).unwrap();
+    let resign = |change: &dyn Fn(&mut Map)| {
+        let Value::Map(mut m) = cbor::decode(first.bytes()).unwrap() else {
+            unreachable!()
+        };
+        change(&mut m);
+        let signed = kp.sign(m).unwrap();
+        open::<Revision>(&cbor::encode_map(&signed))
+    };
+
+    let newer = resign(&|m| {
+        m.insert("topics", Value::Array(vec!["legal/contracts".into()]));
+        let mut time = Map::new();
+        time.insert("ms", 0u64).insert("src", "ntp");
+        m.insert("time", time);
+    })
+    .unwrap();
+    assert!(!newer.object.topics[0].is_known());
+    assert_eq!(newer.object.time.src, TimeSource::Other("ntp".into()));
+
+    assert!(
+        resign(&|m| {
+            m.insert("vis", "friends");
+        })
+        .is_err(),
+        "a new visibility would need format version 2"
+    );
+    assert!(resign(&|m| {
+        m.insert("clock", 1u64 << 63);
+    })
+    .is_err());
+    assert!(resign(&|m| {
+        m.insert("clock", i64::MAX as u64);
+    })
+    .is_ok());
+}
+
+#[test]
+fn verified_needs_a_topic() {
+    let curator = Keypair::from_secret([3; 32]);
+    let a = Attestation {
+        about: Subject::Object(Id::of(b"x")),
+        claim: Claim::Verified,
+        topics: vec![],
+        related: None,
+        note: None,
+        author: curator.public(),
+        clock: 1,
+        time: time(),
+        extra: Map::new(),
+    };
+    assert!(seal(&a, &curator).is_err());
 }

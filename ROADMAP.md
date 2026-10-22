@@ -36,7 +36,7 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 - [ ] Import from USB and Wi-Fi upload: PDF, Markdown, images, ZIM, with import safety checks
 - [ ] Content model from day one: signed revisions, fingerprinted blobs
   - [x] `nevo-format` crate: format v1 objects, IDs, signatures, strict CBOR; matches the Python reference encoder
-  - [ ] Storage: object database and blob store
+  - [x] `nevo-store` crate: object database (SQLite), verified blob files, chained sync logs with fork detection
 - [ ] Roles: anonymous reader, contributor, admin
 - [ ] Setup wizard
 
