@@ -1,0 +1,14 @@
+[package]
+name = "nevo-zim"
+description = "NEVO's reader for Kiwix ZIM packs: metadata, entries, articles for indexing, and clean text"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+zim.workspace = true
+zstd.workspace = true
+xz2.workspace = true
+html5gum.workspace = true
