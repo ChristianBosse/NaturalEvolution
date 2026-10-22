@@ -27,3 +27,5 @@ maud = "=0.27.0"
 pulldown-cmark = { version = "=0.13.4", default-features = false, features = ["html"] }
 tower = { version = "=0.5.3", features = ["util"] }
 http-body-util = "=0.1.5"
+pdf-extract = "=0.12.1"
+zip = { version = "=7.3.0", default-features = false, features = ["deflate-flate2"] }

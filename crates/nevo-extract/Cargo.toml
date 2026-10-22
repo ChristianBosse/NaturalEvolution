@@ -1,0 +1,13 @@
+[package]
+name = "nevo-extract"
+description = "NEVO import checks and text extraction: type sniffing, size and bomb limits, PDF, EPUB, HTML and text"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+pdf-extract.workspace = true
+zip.workspace = true
+pulldown-cmark.workspace = true
