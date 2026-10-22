@@ -240,3 +240,19 @@ Building `nevo-format` and `nevo-store` and having them independently reviewed s
 - **Logs:** unsigned log entries from another node are accepted only up to a head it signed. All signed heads are kept, and contradicting heads are kept as proof of a fork.
 
 No version 1 data existed yet, so nothing had to be migrated. This supersedes the affected details of D-038.
+
+## Trust
+
+### D-040: How trust is configured and followed (Proposed)
+*2026-10-22*
+
+Building `nevo-trust` needed rules that D-023 to D-025 and the spec leave open:
+
+- **The admin's choices are signed attestations.** Each one is a `trust` attestation signed by the node's key and kept in the store, not published, so the configuration is auditable and undone with `withdraw`. The node's own key is trusted as a curator for every topic.
+- **Roles.** A `trust` attestation gets an optional `role` field: `catalog` (its content is Reference), `curator` (its `verified`, `dangerous`, `outdated`, `hide` and `trust` attestations count), `author` (its content is Community) or `node` (content it signs or lists in its own log is Community). Without the field it means `curator`; an unknown role grants nothing. Version 1 keeps unknown fields, so this needs no new format version.
+- **One hop.** `trust` attestations by a key the admin trusts directly as curator or catalog are followed once, only for topics both cover, and grant at most `curator`. Only the admin can make a key a catalog. Admins can turn this off.
+- **Labels with several topics.** A revision gets the weakest of its labels for the topics in view. A revision without topics counts as `general`. Flags apply whatever the topic in view.
+- **Forks.** A forked node is trusted for nothing, but content signed by another trusted key keeps that key's label.
+- **Attestations about a revision only.** `verified` and the flags apply to the revision they name. An item's ID is its first revision's ID, so attestations "about the item" can't be told apart from attestations about that revision.
+
+Alternatives: a plain settings file (not signed, not auditable); following trust any number of hops (one compromised curator could then trust anyone); letting delegated keys become catalogs (any curator could create Reference content).
