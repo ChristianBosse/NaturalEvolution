@@ -1,0 +1,21 @@
+[package]
+name = "nevo-bundle"
+description = "NEVO .nevo bundles for USB transfer, and plain-folder export of a library"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "nevo-bundle"
+path = "src/main.rs"
+
+[dependencies]
+nevo-format.workspace = true
+nevo-store.workspace = true
+blake3.workspace = true
+tar.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

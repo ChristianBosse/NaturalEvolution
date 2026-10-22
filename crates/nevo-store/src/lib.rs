@@ -322,6 +322,38 @@ impl Store {
         Ok(last_entry(&self.db(), &node)?.map_or(0, |(seq, _)| seq))
     }
 
+    /// Nodes whose logs this store holds at least one entry of, in key order.
+    pub fn log_nodes(&self) -> Result<Vec<PublicKey>> {
+        let db = self.db();
+        let mut stmt = db.prepare("SELECT DISTINCT node FROM log_entries ORDER BY node")?;
+        let rows = stmt.query_map([], |r| r.get::<_, Vec<u8>>(0))?;
+        Ok(rows
+            .collect::<rusqlite::Result<Vec<_>>>()?
+            .iter()
+            .filter_map(|k| PublicKey::from_bytes(k).ok())
+            .collect())
+    }
+
+    /// The highest signed head of `node` whose entry this store has, as the signed object, so it
+    /// can be passed on with the entries it vouches for (sync, `.nevo` bundles).
+    pub fn signed_head(&self, node: PublicKey) -> Result<Option<Sealed<LogHead>>> {
+        let head: Option<Vec<u8>> = {
+            let db = self.db();
+            db.query_row(
+                "SELECT h.head FROM log_heads h JOIN log_entries l
+                     ON l.node = h.node AND l.seq = h.seq AND l.entry = h.entry
+                 WHERE h.node = ?1 ORDER BY h.seq DESC LIMIT 1",
+                [node.as_bytes()],
+                |r| r.get(0),
+            )
+            .optional()?
+        };
+        match head.as_deref().and_then(id_from_db) {
+            Some(id) => self.get::<LogHead>(id),
+            None => Ok(None),
+        }
+    }
+
     /// The highest signed head stored for `node`: its sequence number and entry ID. Entries up
     /// to this point can be fetched from any node that has them.
     pub fn log_head(&self, node: PublicKey) -> Result<Option<(u64, Id)>> {

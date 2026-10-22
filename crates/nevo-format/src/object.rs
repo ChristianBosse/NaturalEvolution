@@ -1037,3 +1037,141 @@ fn license(s: &str) -> Result<String> {
         Err(Error::invalid("license", format!("`{s}` is not an SPDX expression")))
     }
 }
+
+// ---------------------------------------------------------------------------------------------
+// Bundles (spec section 5)
+
+/// Most logs or blobs one bundle object may list. The 1 MiB object limit is reached first
+/// (about 18,000 blobs), so this only guards against absurd counts of tiny entries.
+pub const MAX_BUNDLE_LIST: usize = 100_000;
+
+/// One node's log range carried by a bundle: entries `from` to `to`, ending at a signed head.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct BundleLog {
+    pub node: PublicKey,
+    /// The first entry included.
+    pub from: u64,
+    /// The last entry included, which is the `seq` of `head`.
+    pub to: u64,
+    /// ID of the node's signed log head at `to`. Receivers accept entries only up to a signed
+    /// head (section 4), so a range always ends at one.
+    pub head: Id,
+}
+
+/// A blob carried by a bundle.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct BundleBlob {
+    pub blob: Id,
+    pub size: u64,
+}
+
+/// The signed table of contents at the start of a `.nevo` bundle (spec section 5).
+///
+/// The signature says who wrote the bundle, not that its content is trustworthy: every object,
+/// entry and blob inside is still checked on its own. Bundle objects travel only in bundles and
+/// are not stored in a library, so [`open_any`] treats them as an unknown type.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Bundle {
+    /// The node or Seed that wrote the bundle and signed this object.
+    pub by: PublicKey,
+    pub clock: u64,
+    pub time: Time,
+    pub logs: Vec<BundleLog>,
+    pub blobs: Vec<BundleBlob>,
+    /// What the bundle is for, e.g. "Medical kit, October 2026".
+    pub note: Option<String>,
+    pub extra: Map,
+}
+
+const BUNDLE_FIELDS: &[&str] = &["t", "v", "sig", "by", "clock", "time", "logs", "blobs", "note"];
+
+impl Object for Bundle {
+    const TYPE: &'static str = "bundle";
+
+    fn to_map(&self) -> Map {
+        let mut m = self.extra.clone();
+        let logs = self.logs.iter().map(|l| {
+            let mut m = Map::new();
+            m.insert("node", l.node)
+                .insert("from", l.from)
+                .insert("to", l.to)
+                .insert("head", l.head);
+            Value::from(m)
+        });
+        let blobs = self.blobs.iter().map(|b| {
+            let mut m = Map::new();
+            m.insert("blob", b.blob).insert("size", b.size);
+            Value::from(m)
+        });
+        m.insert("by", self.by)
+            .insert("clock", self.clock)
+            .insert("time", self.time.to_value())
+            .insert("logs", Value::Array(logs.collect()))
+            .insert("blobs", Value::Array(blobs.collect()))
+            .insert_opt("note", self.note.as_deref());
+        m
+    }
+
+    fn from_map(map: &Map) -> Result<Bundle> {
+        let f = Fields(map);
+        let logs = bundle_list(map, "logs")?
+            .iter()
+            .map(|l| {
+                let (from, to) = (l.uint("from")?, l.uint("to")?);
+                if from == 0 || from > to {
+                    return Err(Error::invalid("logs", "a range needs 1 <= from <= to"));
+                }
+                Ok(BundleLog {
+                    node: l.key("node")?,
+                    from,
+                    to,
+                    head: l.id("head")?,
+                })
+            })
+            .collect::<Result<Vec<_>>>()?;
+        if has_duplicates(&logs.iter().map(|l| l.node).collect::<Vec<_>>()) {
+            return Err(Error::invalid("logs", "one range per node"));
+        }
+        let blobs = bundle_list(map, "blobs")?
+            .iter()
+            .map(|b| {
+                Ok(BundleBlob {
+                    blob: b.id("blob")?,
+                    size: b.uint("size")?,
+                })
+            })
+            .collect::<Result<Vec<_>>>()?;
+        if has_duplicates(&blobs.iter().map(|b| b.blob).collect::<Vec<_>>()) {
+            return Err(Error::invalid("blobs", "repeated blob"));
+        }
+        Ok(Bundle {
+            by: f.key("by")?,
+            clock: f.clock()?,
+            time: f.time()?,
+            logs,
+            blobs,
+            note: f.opt_bounded_text("note", MAX_NOTE)?,
+            extra: map.without(BUNDLE_FIELDS),
+        })
+    }
+
+    fn signer(&self) -> Option<PublicKey> {
+        Some(self.by)
+    }
+}
+
+/// A bundle's `logs` or `blobs`: an array of maps, longer than other lists may be.
+fn bundle_list<'a>(map: &'a Map, k: &'static str) -> Result<Vec<Fields<'a>>> {
+    match map.get(k) {
+        Some(Value::Array(items)) if items.len() <= MAX_BUNDLE_LIST => items
+            .iter()
+            .map(|v| match v {
+                Value::Map(m) => Ok(Fields(m)),
+                _ => Err(Error::invalid(k, "entries must be maps")),
+            })
+            .collect(),
+        Some(Value::Array(_)) => Err(Error::invalid(k, format!("at most {MAX_BUNDLE_LIST} entries"))),
+        Some(_) => Err(Error::invalid(k, "must be an array")),
+        None => Err(Error::Missing(k)),
+    }
+}
