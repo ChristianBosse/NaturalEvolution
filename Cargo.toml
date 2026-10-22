@@ -42,3 +42,7 @@ serde = { version = "=1.0.229", features = ["derive"] }
 proptest = { version = "=1.11.0", default-features = false, features = ["std"] }
 hyper = { version = "=1.12.0", features = ["client", "http1"] }
 hyper-util = { version = "=0.1.21", features = ["tokio"] }
+zim = "=0.5.0"
+zstd = "=0.13.3"
+xz2 = "=0.1.7"
+html5gum = "=0.8.4"
