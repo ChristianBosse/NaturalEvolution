@@ -240,3 +240,40 @@ Building `nevo-format` and `nevo-store` and having them independently reviewed s
 - **Logs:** unsigned log entries from another node are accepted only up to a head it signed. All signed heads are kept, and contradicting heads are kept as proof of a fork.
 
 No version 1 data existed yet, so nothing had to be migrated. This supersedes the affected details of D-038.
+
+## Seed catalog (proposed)
+
+These come with the catalog draft (`docs/spec/catalog.md`, `catalogs/nevo-catalog-draft.json`, `docs/kits.md`) and wait for review.
+
+### D-045 (Proposed): The catalog list is deterministic CBOR; JSON is only for review
+*2026-10-22*
+
+A catalog revision's content is one `catalog.cbor` file in the same deterministic CBOR as every other NEVO object. It has one exact byte form, so its blob ID and signature are unambiguous, nodes need no new parser, and hashes stay byte strings. Seed exports and imports a one-to-one JSON form for people to read and review; JSON is never signed or trusted.
+*Considered:* signed JSON (many spellings of the same data, so it would need its own canonical form).
+
+### D-046 (Proposed): Kits contain only open content
+*2026-10-22*
+
+Packs in kits must have licenses that meet the Open Definition (CC0, CC BY, CC BY-SA, ODbL, public domain, Apache-2.0, MIT). NonCommercial or NoDerivatives content (iFixit, TED, Khan Academy) and anything with unclear licensing is listed in the catalog's `flagged` section with the reason, not in kits. Whether iFixit and similar become a clearly labeled opt-in list is still open.
+*Considered:* including NonCommercial content because NEVO itself is free. Rejected for the default kits: people and groups who sell prepared sticks, even at cost, would break the license without knowing it.
+
+### D-047 (Proposed): Which tiers get semantic search for a pack
+*2026-10-22*
+
+Every tier keyword-searches every pack (with the reranker). Semantic search needs embeddings, so a catalog marks each pack by the text size its index covers: up to 2 GB, all tiers; 2 to 10 GB, Enhanced and up; over 10 GB, keyword only (full Wikipedia). Refines D-015; to be rechecked once the embedding model is chosen.
+
+### D-048 (Proposed): Signed catalogs carry BLAKE3 blob IDs; Reference comes from the catalog, not the stick
+*2026-10-22*
+
+Each file in a signed catalog has the upstream SHA-256 (to check downloads) and the NEVO blob ID (BLAKE3). A node computes each imported file's blob ID and labels the pack Reference only if a catalog it trusts lists that ID. Whoever built or copied the seed stick needs no trust, and the node hashes each file once, with the hash it already uses. The cost: the catalog maintainer downloads every file once to compute its blob ID.
+*Considered:* SHA-256 only (a second, slower hash of every large file on a Pi), and trusting the stick's signer (every stick builder would become a trusted party).
+
+### D-049 (Proposed): Non-English kits include English fallback packs
+*2026-10-22*
+
+Where a language has little open content of its own (French and Spanish farming, repair and survival), its kits add the matching English packs. The built-in AI translates the question before searching (D-037) and answers in the user's language. On by default; the user can untick them in Seed.
+
+### D-050 (Proposed): Standard sticks carry both Qwen models; 64 GB is the recommended stick
+*2026-10-22*
+
+A Standard stick carries Qwen3.5 4B and the 2B fallback (1.3 GB more), so a node can switch without a new stick if the 4B model is too slow on its Pi (D-031). Seed plans with 90% of a stick's label. A 32 GB stick holds every compact kit in one language; 64 GB adds a regional map with room for local content (see `docs/kits.md`); full English with all of Wikipedia needs 256 GB.
