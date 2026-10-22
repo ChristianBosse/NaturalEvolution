@@ -8,7 +8,7 @@ exclude = ["spikes"]
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.86"
 license = "AGPL-3.0-only"
 repository = "https://github.com/ChristianBosse/NaturalEvolution"
 
@@ -33,3 +33,5 @@ fs4 = "=1.1.0"
 serde_json = "=1.0.151"
 # No default features: bundles carry no extended attributes.
 tar = { version = "=0.4.46", default-features = false }
+tantivy = { version = "=0.26.2", default-features = false, features = ["mmap", "stopwords", "lz4-compression", "stemmer"] }
+nevo-search = { path = "crates/nevo-search" }

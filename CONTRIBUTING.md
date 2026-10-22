@@ -25,7 +25,7 @@ You don't need to be a programmer.
 
 ## Building and testing
 
-NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
+NEVO is a Rust workspace (Rust 1.86 or newer). The code lives in `crates/`:
 
 | Crate | What it does |
 |---|---|
@@ -35,6 +35,7 @@ NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
 | `nevo-answer` | AI answers without the model: builds the prompt and checks the answer before it is shown |
 | `nevo-node` | The `nevo` program: web server for browsing, reading and adding guides |
 | `nevo-bundle` | `.nevo` bundles for USB transfer, and plain-folder export (`nevo-bundle` program) |
+| `nevo-search` | Search: a Tantivy index of library items and ZIM articles, with passages for the AI |
 
 With Rust installed:
 
@@ -55,7 +56,7 @@ docker run --rm -v "$PWD:/src" -w /src rust:1-bookworm cargo test
 GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every push and pull request to `main`:
 
 - format, clippy and tests on Linux, Windows and macOS (Rust 1.99.1);
-- `cargo check` on Rust 1.85, our minimum version. The workspace uses resolver 3, so `cargo update` only picks dependency versions that support 1.85;
+- `cargo check` on Rust 1.86, our minimum version. The workspace uses resolver 3, so `cargo update` only picks dependency versions that support 1.86;
 - release builds of `nevo` for Linux x86_64, ARM 32-bit, ARM 64-bit and Windows x86_64. The binaries are kept as workflow artifacts for 14 days.
 
 Actions are pinned to a full commit SHA. When you update one, use a release that is at least 14 days old.

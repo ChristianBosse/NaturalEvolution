@@ -1,0 +1,17 @@
+# Benchmark for nevo-search on a real Kiwix ZIM file. Kept out of the workspace so that the
+# `zim` crate and its command-line dependencies don't build with every `cargo test`.
+#
+#   cargo run --release -- <file.zim> <index-dir>
+
+[package]
+name = "nevo-search-bench"
+version = "0.0.0"
+edition = "2021"
+publish = false
+license = "AGPL-3.0-only"
+
+[workspace]
+
+[dependencies]
+nevo-search = { path = ".." }
+zim = "=0.5.0"
