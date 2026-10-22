@@ -27,3 +27,5 @@ maud = "=0.27.0"
 pulldown-cmark = { version = "=0.13.4", default-features = false, features = ["html"] }
 tower = { version = "=0.5.3", features = ["util"] }
 http-body-util = "=0.1.5"
+hyper = { version = "=1.12.0", features = ["client", "http1"] }
+hyper-util = { version = "=0.1.21", features = ["tokio"] }

@@ -240,3 +240,22 @@ Building `nevo-format` and `nevo-store` and having them independently reviewed s
 - **Logs:** unsigned log entries from another node are accepted only up to a head it signed. All signed heads are kept, and contradicting heads are kept as proof of a fork.
 
 No version 1 data existed yet, so nothing had to be migrated. This supersedes the affected details of D-038.
+
+## Sync protocol
+
+### D-041 (Proposed): Sync is pull-only HTTP with CBOR messages and signatures instead of TLS
+*2026-10-22*
+
+`docs/spec/sync.md`, protocol version 1. A node pulls from a paired peer in rounds: signed heads, then entries ending at signed heads, then missing objects, then blobs by policy. Messages are deterministic CBOR, like objects, so objects and blob parts travel as raw bytes. Every request is signed by the requesting node's key over a server challenge and a growing counter (no clocks, D-020); every answer is signed by the serving node. A server refuses unpaired keys and never sends node-only or private content, nor blobs that private content here uses. Implemented in `crates/nevo-sync`.
+*Considered:* JSON (base64 adds a third to every object and blob part); TLS with self-signed certificates (no CA on a LAN, and it teaches people to click through warnings); timestamps against replay (a Pi's clock is often wrong); push-based sync (a receiver should only store what it chose to fetch).
+
+### D-042 (Proposed): Pairing by QR code or short code; optional mDNS discovery
+*2026-10-22*
+
+An admin on each side approves a peer once, by scanning a QR code with the other node's key and address, or by typing a one-time short code and comparing key fingerprints. Paired keys are kept in a plain text file. Discovery is optional and uses mDNS/DNS-SD (`_nevo._tcp`, key in a TXT record); it only finds candidates and updates paired peers' addresses, never grants access.
+*Considered:* a custom UDP broadcast (simpler but not a standard, and it reaches no further than mDNS).
+
+### D-043 (Proposed): Blobs are verified whole in sync v1
+*2026-10-22*
+
+Blobs move in parts aligned to 1 MiB pieces and resume from the last whole piece, but are checked against their ID only when complete, because the store doesn't keep BLAKE3 outboards yet. A corrupt download is dropped whole. Piece-by-piece checking (content-model section 2) comes with outboards, without a wire change.

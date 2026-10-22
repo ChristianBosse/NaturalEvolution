@@ -32,6 +32,7 @@ NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
 | `nevo-format` | The content format ([spec](docs/spec/content-model.md)): IDs, signatures, objects |
 | `nevo-store` | Node storage: objects in SQLite, blob files, sync logs |
 | `nevo-node` | The `nevo` program: web server for browsing, reading and adding guides |
+| `nevo-sync` | Sync between paired nodes on the local network ([spec](docs/spec/sync.md)): server routes, client, pull rounds |
 
 With Rust installed:
 
