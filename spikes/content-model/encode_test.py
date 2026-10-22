@@ -89,7 +89,7 @@ def main():
         "kind": "guide",
         "title": "How to build a rocket stove",
         "lang": "en",
-        "topics": ["energy/cooking", "build"],
+        "topics": ["energy/cooking", "shelter/building"],
         "license": "CC-BY-SA-4.0",
         "vis": "public",
         "content": [{"name": "guide.md", "blob": fake_id("guide v1"), "size": 8_412, "mime": "text/markdown"}],
@@ -106,7 +106,7 @@ def main():
         "kind": "guide",
         "title": "How to build a rocket stove",
         "lang": "en",
-        "topics": ["energy/cooking", "build"],
+        "topics": ["energy/cooking", "shelter/building"],
         "license": "CC-BY-SA-4.0",
         "vis": "public",
         "content": [

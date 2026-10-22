@@ -1,6 +1,6 @@
 # NEVO content model format
 
-**Status: draft 0.1, for review. Not locked.** Once approved, this becomes format version 1, and later changes must stay readable by version 1 nodes.
+**Status: format version 1, locked 2026-10-22 (D-038).** Later changes must keep version 1 objects readable and their IDs and signatures valid. New fields may be added; existing fields can't change meaning.
 
 This spec turns decisions D-019 to D-025 into exact formats. It covers how content, versions, signatures and trust statements are stored and identified. How nodes find each other and exchange data (the sync protocol) is a separate spec; this one only defines the log entries sync relies on.
 
@@ -171,13 +171,30 @@ Nodes keep copies of other nodes' logs, which is how knowledge spreads by contac
 
 **Export:** a dump command writes items as plain folders (`Title/` holding the files and a `meta.json`), so a library stays usable without NEVO.
 
-## 6. Open questions for review
+## 6. Topics
 
-1. **IPFS-compatible IDs.** Recommended: yes (multihash plus base32). It costs 2 bytes per ID and keeps the door open to IPFS tools. The alternative is plain hex BLAKE3.
-2. **Device keys in v1.** One person often uses several devices. Recommended: v1 has one key per person, exported by QR code to their other devices; signed device sub-keys come in v2.
-3. **Content always in blobs.** Recommended: yes, even for short guides. The alternative is putting text under 16 KB inside the revision.
-4. **Private content.** Already decided: hidden, not encrypted, in v1 (VISION).
-5. **Topic list.** Free text, or a fixed starting list (`medical`, `water`, `food`, `energy`, `shelter`, `repair`, `education`, …) that catalogs can extend? Recommended: a fixed starting list, so trust scopes match across nodes.
+Topics scope trust (D-023): "I trust this curator for `medical`" must mean the same thing on every node, so v1 starts from a fixed list.
+
+- A topic is a path of lowercase words joined by `/`, using only `a`–`z`, `0`–`9` and `-`. Example: `medical/first-aid`.
+- Trust in a topic covers everything under it: trusting a key for `medical` includes `medical/first-aid`.
+- Catalogs may add sub-topics under the list below, but not new top-level topics. New top-level topics come only with a new version of this spec.
+- Nodes keep and show unknown sub-topics, and treat them as their parent for trust.
+
+| Topic | Starting sub-topics |
+|---|---|
+| `medical` | `first-aid`, `maternal`, `child`, `medicines`, `infections`, `mental-health`, `dental` |
+| `water` | `treatment`, `sanitation`, `wells` |
+| `food` | `cooking`, `preservation`, `nutrition` |
+| `farming` | `crops`, `seeds`, `soil`, `animals`, `fishing` |
+| `energy` | `solar`, `electrical`, `fuel`, `cooking` |
+| `shelter` | `building`, `heating`, `cooling` |
+| `repair` | `electronics`, `vehicles`, `tools`, `textiles` |
+| `safety` | `fire`, `chemicals`, `disasters` |
+| `communication` | `radio`, `networks` |
+| `education` | `literacy`, `math`, `science`, `languages` |
+| `maps` | |
+| `culture` | `history`, `books` |
+| `general` | |
 
 ## 7. Measured sizes
 
@@ -185,12 +202,24 @@ Checked with [spikes/content-model/encode_test.py](../../spikes/content-model/en
 
 | Object | Size |
 |---|---|
-| First revision of a guide | 374 bytes |
-| Edit with two files, a source and a summary | 695 bytes |
+| First revision of a guide | 385 bytes |
+| Edit with two files, a source and a summary | 706 bytes |
 | Attestation | 238 bytes |
 | Key record | 241 bytes |
 | Log entry | 89 bytes |
 
+The revision sizes include two topics (`energy/cooking`, `shelter/building`). They were measured as 374 and 695 bytes with the shorter test topic `build`, and the 11-byte difference was added by hand, because the test couldn't be re-run when the topic list was locked.
+
 With about 1.6 KB per item (two revisions, one attestation, three log entries), 10,000 items need 16 MB and 100,000 items need 160 MB, before database indexes.
 
 An ID as text is 56 characters (`bdyqix3vicuu…`), and a public key is 53.
+
+## 8. Choices made in review
+
+Settled on 2026-10-22, all as recommended in draft 0.1:
+
+1. **IDs are IPFS-compatible**: multihash plus multibase base32 (section 1).
+2. **One key per person in v1.** A person moves their key to other devices by QR code or backup file. Signed device sub-keys come in v2.
+3. **Content always lives in blobs**, even short guides (section 2).
+4. **Private content is hidden, not encrypted**, in v1.
+5. **Topics come from a fixed starting list** that catalogs extend with sub-topics (section 6).

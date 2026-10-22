@@ -220,3 +220,10 @@ The ZIM's built-in Xapian index can't be read from Rust, and NEVO needs one inde
 *2026-10-22*
 
 Plain keyword ranking put *Panic attack* above *Myocardial infarction* for "heart attack". Dropping stop words and putting exact title or redirect matches first fixed most test queries. A small reranker comes next, and questions in a language other than the pack's are translated by the built-in AI before searching. The AI receives short passages, not whole articles, so the index also needs passage-level entries.
+
+## Content format
+
+### D-038: Content format version 1 is locked
+*2026-10-22*
+
+`docs/spec/content-model.md` is format version 1: BLAKE3 IDs in IPFS-compatible multihash form, Ed25519 signatures, deterministic CBOR, and the revision, attestation, key, derived-data, log and `.nevo` bundle formats. Choices made in review: one key per person in v1 (signed device keys in v2), content always in blobs, private content hidden but not encrypted, and topics from a fixed starting list that catalogs extend with sub-topics. Later versions may add fields but must keep version 1 objects readable, with their IDs and signatures valid.
