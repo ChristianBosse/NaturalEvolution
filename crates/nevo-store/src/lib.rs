@@ -421,6 +421,62 @@ impl Store {
         tx.commit()?;
         Ok(position)
     }
+
+    /// The nodes whose own log lists an object: the nodes it came from. The trust layer uses
+    /// this to give content from a trusted node its label, and to distrust a forked node's.
+    pub fn logged_by(&self, obj: Id) -> Result<Vec<PublicKey>> {
+        let db = self.db();
+        let mut stmt = db.prepare("SELECT DISTINCT node FROM log_entries WHERE obj = ?1 ORDER BY node")?;
+        let rows = stmt.query_map([obj.digest()], |r| r.get::<_, Vec<u8>>(0))?;
+        let mut nodes = Vec::new();
+        for row in rows {
+            nodes.push(PublicKey::from_bytes(&row?)?);
+        }
+        Ok(nodes)
+    }
+
+    /// Who said what about an object or a key, from the index alone, oldest clock first. Unlike
+    /// [`Store::attestations_about`] nothing is loaded or verified, so the trust layer can skip
+    /// attestations from keys it ignores: a thousand of them cost one query, not a thousand
+    /// signature checks.
+    pub fn attestation_refs(&self, subject: Subject) -> Result<Vec<AttestationRef>> {
+        let (about, is_key) = subject_to_db(subject);
+        let db = self.db();
+        let mut stmt = db.prepare(
+            "SELECT id, author, claim, clock FROM attestations WHERE about = ?1 AND about_key = ?2
+             ORDER BY clock, id",
+        )?;
+        let rows = stmt.query_map(params![about, is_key], |r| {
+            Ok((
+                r.get::<_, Vec<u8>>(0)?,
+                r.get::<_, Vec<u8>>(1)?,
+                r.get::<_, String>(2)?,
+                r.get::<_, i64>(3)?,
+            ))
+        })?;
+        let mut out = Vec::new();
+        for row in rows {
+            let (id, author, claim, clock) = row?;
+            let Some(id) = id_from_db(&id) else { continue };
+            out.push(AttestationRef {
+                id,
+                author: PublicKey::from_bytes(&author)?,
+                claim,
+                clock: clock as u64,
+            });
+        }
+        Ok(out)
+    }
+}
+
+/// An attestation as listed in the index. Load it with [`Store::get`] to read the rest.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct AttestationRef {
+    pub id: Id,
+    pub author: PublicKey,
+    /// The claim as written, e.g. `verified`.
+    pub claim: String,
+    pub clock: u64,
 }
 
 // ---------------------------------------------------------------------------------------------
