@@ -23,6 +23,30 @@ You don't need to be a programmer.
 - **Disagreeing with a decision:** open an issue that references its number (for example `D-013`) and explains what you would change and why. Accepted changes get a new entry in [DECISIONS.md](DECISIONS.md) that supersedes the old one; past entries are never rewritten.
 - **Changes to docs:** open a pull request. Keep it focused on one topic.
 
+## Building and testing
+
+NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
+
+| Crate | What it does |
+|---|---|
+| `nevo-format` | The content format ([spec](docs/spec/content-model.md)): IDs, signatures, objects |
+
+With Rust installed:
+
+```bash
+cargo test
+cargo clippy --all-targets -- -D warnings
+cargo fmt --check
+```
+
+Without installing Rust, use Docker:
+
+```bash
+docker run --rm -v "$PWD:/src" -w /src rust:1-bookworm cargo test
+```
+
+`spikes/` holds throwaway Phase 0 experiments. They aren't part of the workspace.
+
 ## Principles to respect
 
 Contributions should fit NEVO's principles (see [VISION.md](VISION.md)). In particular:

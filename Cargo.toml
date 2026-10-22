@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+# Spikes are throwaway experiments with their own Cargo.toml.
+exclude = ["spikes"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "AGPL-3.0-only"
+repository = "https://github.com/ChristianBosse/NaturalEvolution"
+
+[workspace.dependencies]
+blake3 = "=1.8.7"
+ed25519-dalek = { version = "=3.0.0", default-features = false, features = ["fast", "zeroize"] }
+getrandom = "=0.4.3"
+unicode-normalization = "=0.1.25"

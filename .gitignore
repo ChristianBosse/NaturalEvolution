@@ -1,2 +1,3 @@
 # Large local files (AI models, llama.cpp binaries)
 /.local/
+/target/

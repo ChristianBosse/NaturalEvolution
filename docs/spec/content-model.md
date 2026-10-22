@@ -117,7 +117,7 @@ Who a key belongs to. Self-signed by that key.
 | `recovery` | Optional second public key, kept offline (printed or on a backup stick). It can sign a revocation if the main key is lost or stolen. |
 | `clock`, `time`, `sig` | |
 
-A **revocation** (`t: "revoke"`) names a key and the clock from which its signatures are no longer valid. It is signed by the key itself or by its recovery key. Objects signed before that clock stay valid.
+A **revocation** (`t: "revoke"`) names a key and the clock from which its signatures are no longer valid. It is signed by the key itself or by its recovery key. Objects signed before that clock stay valid. Fields: `key` (the revoked key), `from` (the first invalid clock value), `by` (the signer: the key or its recovery key), `clock`, `time`, `sig`.
 
 ### Derived data (`t: "derived"`)
 
@@ -143,7 +143,7 @@ These reuse revisions, so they get versions, signatures and trust for free.
 
 Each node keeps an append-only log of the objects it publishes: its own users' revisions, attestations and key records.
 
-Entries are always stored and sent grouped by log, so the node's key is not repeated in each one:
+A log entry is an unsigned object (`t: "log"`). Entries are always stored and sent grouped by log, so the node's key is not repeated in each one:
 
 | Field | Meaning |
 |---|---|
@@ -208,11 +208,11 @@ Checked with [spikes/content-model/encode_test.py](../../spikes/content-model/en
 | Key record | 241 bytes |
 | Log entry | 89 bytes |
 
-The revision sizes include two topics (`energy/cooking`, `shelter/building`). They were measured as 374 and 695 bytes with the shorter test topic `build`, and the 11-byte difference was added by hand, because the test couldn't be re-run when the topic list was locked.
+The Rust implementation (`crates/nevo-format`) produces byte-identical objects and the same IDs as this independent Python encoder.
 
 With about 1.6 KB per item (two revisions, one attestation, three log entries), 10,000 items need 16 MB and 100,000 items need 160 MB, before database indexes.
 
-An ID as text is 56 characters (`bdyqix3vicuu…`), and a public key is 53.
+An ID as text is 56 characters (`bdyqnhrr5rhm…`), and a public key is 53.
 
 ## 8. Choices made in review
 
