@@ -61,7 +61,7 @@ sudo du -sh /var/lib/nevo/library/blobs
 
 ### Keep space free
 
-Warning: **NEVO doesn't yet refuse uploads when the disk is nearly full** (**coming soon**). A completely full disk can stop the database from saving and stop the whole system from working.
+NEVO keeps a safety margin of free space (at least 512 MB, or 5% of the disk). When free space drops below it, NEVO refuses new uploads with an "almost out of storage space" page, so the database always has room to save. The home page shows how much space is free. Files left behind by failed uploads are removed automatically after a day.
 
 - Keep at least 10% of the disk, and at least a few GB, free.
 - Check after big uploads, and once a month on a busy node.
