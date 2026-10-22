@@ -22,6 +22,8 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
   - [ ] Confirm speed and memory on a real 4 GB Pi
 - [x] **ZIM spike:** read and search Kiwix ZIM files from Rust. Results in [spikes/zim-search/RESULTS.md](spikes/zim-search/RESULTS.md) (D-035 to D-037).
 - [ ] **Lock the content model format:** blob, item, revision, attestation. It is the hardest thing to change later.
+  - [x] Draft spec: [docs/spec/content-model.md](docs/spec/content-model.md)
+  - [ ] Review the open questions and lock it as format version 1
 
 ## Phase 1: v0.1 "One box"
 
