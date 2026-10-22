@@ -32,7 +32,8 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 - [ ] Rust core, one binary for Linux ARM, Linux x86 and Windows
   - [x] `nevo-node`: first runnable node (`nevo` binary, 6 MB) built for Linux x86
   - [x] Cross-builds for 32-bit and 64-bit ARM Linux (5–6 MB; not yet run on a Pi)
-  - [ ] Windows build
+  - [x] Windows build (8.6 MB, cross-compiled; runs on Windows 11 and passes all tests there)
+  - [x] CI (GitHub Actions): format, lint and tests on Linux, Windows and macOS; MSRV check; release builds for all four targets
 - [ ] Web UI: browse, read, search; works on old phones and without JavaScript
   - [x] Browse topics, read guides (safe Markdown), view and stream files, add guides with uploads
   - [ ] Search
