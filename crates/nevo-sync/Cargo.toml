@@ -1,0 +1,22 @@
+[package]
+name = "nevo-sync"
+description = "NEVO sync protocol: paired nodes pull logs, objects and blobs from each other on the local network"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+nevo-format.workspace = true
+nevo-store.workspace = true
+axum.workspace = true
+tokio.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+http-body-util.workspace = true
+blake3.workspace = true
+getrandom.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

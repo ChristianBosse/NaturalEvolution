@@ -343,7 +343,7 @@ impl Store {
     }
 
     /// Nodes whose logs this store holds at least one entry of, in key order.
-    pub fn log_nodes(&self) -> Result<Vec<PublicKey>> {
+    pub fn nodes_with_entries(&self) -> Result<Vec<PublicKey>> {
         let db = self.db();
         let mut stmt = db.prepare("SELECT DISTINCT node FROM log_entries ORDER BY node")?;
         let rows = stmt.query_map([], |r| r.get::<_, Vec<u8>>(0))?;
@@ -356,7 +356,7 @@ impl Store {
 
     /// The highest signed head of `node` whose entry this store has, as the signed object, so it
     /// can be passed on with the entries it vouches for (sync, `.nevo` bundles).
-    pub fn signed_head(&self, node: PublicKey) -> Result<Option<Sealed<LogHead>>> {
+    pub fn held_signed_head(&self, node: PublicKey) -> Result<Option<Sealed<LogHead>>> {
         let head: Option<Vec<u8>> = {
             let db = self.db();
             db.query_row(
@@ -509,6 +509,86 @@ pub struct AttestationRef {
     /// The claim as written, e.g. `verified`.
     pub claim: String,
     pub clock: u64,
+}
+
+impl Store {
+    // -----------------------------------------------------------------------------------------
+    // Sync queries (used by nevo-sync)
+
+    /// Nodes this store has signed log heads for, in key byte order, starting after `after`.
+    /// Paging lets a node with thousands of known logs answer in bounded pieces.
+    pub fn log_nodes(&self, after: Option<PublicKey>, limit: usize) -> Result<Vec<PublicKey>> {
+        let db = self.db();
+        let mut stmt = db.prepare("SELECT DISTINCT node FROM log_heads WHERE node > ?1 ORDER BY node LIMIT ?2")?;
+        let after = after.map_or(Vec::new(), |k| k.as_bytes().to_vec());
+        let limit = i64::try_from(limit).unwrap_or(i64::MAX);
+        let rows = stmt.query_map(params![after, limit], |r| r.get::<_, Vec<u8>>(0))?;
+        let mut out = Vec::new();
+        for row in rows {
+            // Heads were verified when stored, so their keys are valid.
+            out.push(PublicKey::from_bytes(&row?)?);
+        }
+        Ok(out)
+    }
+
+    /// The highest signed head of `node` at or below `at_most`. Sync serves a log only up to
+    /// a head whose entries it has, because every batch of entries must end at a signed head.
+    pub fn signed_head(&self, node: PublicKey, at_most: u64) -> Result<Option<Sealed<LogHead>>> {
+        let at_most = i64::try_from(at_most).unwrap_or(i64::MAX);
+        let head: Option<Vec<u8>> = self
+            .db()
+            .query_row(
+                "SELECT head FROM log_heads WHERE node = ?1 AND seq <= ?2 ORDER BY seq DESC LIMIT 1",
+                params![node.as_bytes(), at_most],
+                |r| r.get(0),
+            )
+            .optional()?;
+        match head.as_deref().and_then(id_from_db) {
+            Some(id) => self.get::<LogHead>(id),
+            None => Ok(None),
+        }
+    }
+
+    /// The signed heads that prove `node` forked its log, as encoded objects, so they can be
+    /// passed on. A fork found against an accepted entry has one head here; the other side of
+    /// the proof is the log itself, which a receiver checks on its own copy.
+    pub fn fork_evidence(&self, node: PublicKey) -> Result<Vec<Vec<u8>>> {
+        let db = self.db();
+        let mut stmt = db.prepare(
+            "SELECT DISTINCT o.bytes FROM log_forks f JOIN objects o ON o.id IN (f.first, f.second)
+             WHERE f.node = ?1 AND o.type = 'head'",
+        )?;
+        let rows = stmt.query_map([node.as_bytes()], |r| r.get::<_, Vec<u8>>(0))?;
+        Ok(rows.collect::<rusqlite::Result<Vec<_>>>()?)
+    }
+
+    /// Objects listed in any log that this store doesn't have yet, in ID order after `after`.
+    /// The cursor lets sync walk past objects one peer can't provide.
+    pub fn missing_logged_objects(&self, after: Option<Id>, limit: usize) -> Result<Vec<Id>> {
+        let db = self.db();
+        let mut stmt = db.prepare(
+            "SELECT DISTINCT l.obj FROM log_entries l
+             WHERE l.obj > ?1 AND NOT EXISTS (SELECT 1 FROM objects o WHERE o.id = l.obj)
+             ORDER BY l.obj LIMIT ?2",
+        )?;
+        let after = after.map_or(Vec::new(), |id| id.digest().to_vec());
+        let limit = i64::try_from(limit).unwrap_or(i64::MAX);
+        let rows = stmt.query_map(params![after, limit], |r| r.get::<_, Vec<u8>>(0))?;
+        Ok(rows
+            .collect::<rusqlite::Result<Vec<_>>>()?
+            .iter()
+            .filter_map(|d| id_from_db(d))
+            .collect())
+    }
+
+    /// Revisions that list `blob` among their files, including node-only and private ones.
+    /// Sync uses them to decide whether a blob may be shared and whether it is wanted.
+    pub fn blob_users(&self, blob: Id) -> Result<Vec<Sealed<Revision>>> {
+        self.get_all(
+            "SELECT DISTINCT rev FROM revision_files WHERE blob = ?1 ORDER BY rev",
+            blob.digest(),
+        )
+    }
 }
 
 // ---------------------------------------------------------------------------------------------

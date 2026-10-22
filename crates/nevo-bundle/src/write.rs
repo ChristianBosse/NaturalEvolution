@@ -147,7 +147,7 @@ pub fn export_bundle_file(store: &Store, key: &Keypair, options: &ExportOptions,
 /// those entries can travel too: receivers accept entries only up to a signed head.
 pub fn export_bundle(store: &Store, key: &Keypair, options: &ExportOptions, out: impl Write) -> Result<ExportReport> {
     let own = key.public();
-    let signed_to = store.signed_head(own)?.map_or(0, |h| h.object.seq);
+    let signed_to = store.held_signed_head(own)?.map_or(0, |h| h.object.seq);
     if store.log_position(own)? > signed_to {
         store.sign_head(key)?;
     }
@@ -263,7 +263,7 @@ pub fn export_bundle(store: &Store, key: &Keypair, options: &ExportOptions, out:
 fn plan(store: &Store, options: &ExportOptions, report: &mut ExportReport) -> Result<Plan> {
     let nodes = match &options.nodes {
         Some(nodes) => nodes.clone(),
-        None => store.log_nodes()?,
+        None => store.nodes_with_entries()?,
     };
     let mut logs = Vec::new();
     let mut total_entries = 0u64;
@@ -274,7 +274,7 @@ fn plan(store: &Store, options: &ExportOptions, report: &mut ExportReport) -> Re
     let mut derived: Vec<(Id, Id)> = Vec::new();
 
     for node in nodes {
-        let Some(head) = store.signed_head(node)? else {
+        let Some(head) = store.held_signed_head(node)? else {
             continue;
         };
         let from = options.known.get(&node).copied().unwrap_or(0).saturating_add(1);
