@@ -36,6 +36,7 @@ NEVO is a Rust workspace (Rust 1.86 or newer). The code lives in `crates/`:
 | `nevo-node` | The `nevo` program: web server for browsing, reading and adding guides |
 | `nevo-bundle` | `.nevo` bundles for USB transfer, and plain-folder export (`nevo-bundle` program) |
 | `nevo-search` | Search: a Tantivy index of library items and ZIM articles, with passages for the AI |
+| `nevo-seed` | The `nevo-seed` program: verified resumable downloads, USB stick capacity test, vault checks |
 
 With Rust installed:
 

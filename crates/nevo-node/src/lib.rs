@@ -4,9 +4,9 @@
 //! the first slice of Phase 1; search, the built-in AI, user roles and sync come next.
 
 pub mod app;
-pub mod housekeeping;
 mod diff;
 mod edit;
+pub mod housekeeping;
 pub mod identity;
 mod markdown;
 mod pages;

@@ -1,0 +1,21 @@
+[package]
+name = "nevo-seed"
+description = "NEVO Seed: prepares USB sticks for offline NEVO nodes on a computer with internet"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "nevo-seed"
+path = "src/main.rs"
+
+[dependencies]
+ureq.workspace = true
+sha2.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
