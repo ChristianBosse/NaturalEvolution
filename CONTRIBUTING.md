@@ -34,6 +34,7 @@ NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
 | `nevo-trust` | Trust labels (Reference, Verified, Community, Unknown) from the admin's choices and signed attestations |
 | `nevo-answer` | AI answers without the model: builds the prompt and checks the answer before it is shown |
 | `nevo-node` | The `nevo` program: web server for browsing, reading and adding guides |
+| `nevo-bundle` | `.nevo` bundles for USB transfer, and plain-folder export (`nevo-bundle` program) |
 
 With Rust installed:
 

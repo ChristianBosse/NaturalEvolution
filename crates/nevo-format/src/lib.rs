@@ -36,5 +36,6 @@ pub use object::{
     LogEntry, LogHead, Object, Revision, Revoke, Sealed, Subject, Time, TimeSource, Visibility, FORMAT_VERSION,
     MAX_OBJECT_BYTES,
 };
+pub use object::{Bundle, BundleBlob, BundleLog, MAX_BUNDLE_LIST};
 pub use sign::{verify, Keypair, DOMAIN};
 pub use topic::{Topic, STARTING_TOPICS};

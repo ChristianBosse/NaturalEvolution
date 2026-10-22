@@ -183,7 +183,32 @@ Nodes keep copies of other nodes' logs, which is how knowledge spreads by contac
 - `objects/<id>` and `blobs/<id>` (plus `.obao` outboards)
 - Any tar tool can unpack it. Any NEVO version can check every object and blob against its ID.
 
+**Bundle object** (`t: "bundle"`), added after the first implementation:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `t`, `v` | `"bundle"`, `1` | |
+| `by` | public key | The node or Seed that wrote the bundle, and signer |
+| `clock`, `time` | | As in a revision |
+| `logs` | array of maps | One per node: `node` (key), `from` and `to` (the first and last `seq` included, `1 <= from <= to`) and `head` (ID of that node's signed log head at `to`). At most one range per node. |
+| `blobs` | array of maps | `blob` (ID) and `size` (bytes), no repeats |
+| `note` | text, optional | What the bundle is for, e.g. "Medical kit, October 2026" |
+| `sig` | 64 bytes | Ed25519 signature |
+
+A range ends at a signed head because receivers accept entries only up to one (section 4). The signature says who wrote the bundle; it doesn't make the content trusted, and every head, entry, object and blob is still checked on its own. Bundle objects are not stored in a library.
+
+Members use exactly these names, with IDs in their text form: `bundle.cbor`, `objects/<id>`, `blobs/<id>` and `blobs/<id>.obao`. They come in this order, so a reader can import in one pass and a cut-off copy loses blobs before metadata:
+
+1. `bundle.cbor`
+2. For each log in `logs`: its head, its entries from `from` to `to`, then the objects those entries list that aren't already in the bundle. Objects not listed by an entry don't belong in a bundle.
+3. The blobs.
+
+A reader ignores members with any other name. Members are plain files in ustar format.
+
+**Version 1 simplification:** outboards are optional. Version 1 writers leave them out, and readers verify each blob whole against its ID and ignore any `.obao` member.
+
 **Export:** a dump command writes items as plain folders (`Title/` holding the files and a `meta.json`), so a library stays usable without NEVO.
+Each folder holds the item's current version. `meta.json` gives its title, topics, license, source and every version. Names are made safe on Windows and Linux, and repeated titles get a number (`Title (2)`). Node-only and private items are left out unless asked for.
 
 ## 6. Topics
 
