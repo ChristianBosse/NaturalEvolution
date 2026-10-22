@@ -15,6 +15,8 @@ use crate::error::{Result, StoreError};
 use crate::Store;
 
 const BUFFER: usize = 256 * 1024;
+/// How often a long write checks free space again, so one huge upload can't fill the disk.
+const SPACE_CHECK_EVERY: u64 = 64 * 1024 * 1024;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BlobInfo {
@@ -85,6 +87,9 @@ impl Store {
     }
 
     /// Stores everything `reader` yields and returns its ID.
+    ///
+    /// Fails with [`StoreError::DiskFull`] if free space is below the reserve, checked before
+    /// starting and every 64 MiB; nothing is kept then.
     pub fn put_blob(&self, reader: impl Read) -> Result<BlobInfo> {
         self.write_blob(reader, None)
     }
@@ -96,6 +101,7 @@ impl Store {
     }
 
     fn write_blob(&self, mut reader: impl Read, expected: Option<Id>) -> Result<BlobInfo> {
+        self.check_space()?;
         static COUNTER: AtomicU64 = AtomicU64::new(0);
         let name = format!(
             "{}-{}.part",
@@ -104,10 +110,18 @@ impl Store {
         );
         let mut tmp = TmpFile(Some(self.root.join("tmp").join(name)));
 
-        let mut file = File::create(tmp.path())?;
+        let full = |e: std::io::Error| match e.kind() {
+            std::io::ErrorKind::StorageFull => StoreError::DiskFull {
+                free: 0,
+                reserve: self.reserve(),
+            },
+            _ => e.into(),
+        };
+        let mut file = File::create(tmp.path()).map_err(full)?;
         let mut hasher = blake3::Hasher::new();
         let mut buf = vec![0u8; BUFFER];
         let mut size = 0u64;
+        let mut unchecked = 0u64;
         loop {
             let n = match reader.read(&mut buf) {
                 Ok(0) => break,
@@ -116,10 +130,15 @@ impl Store {
                 Err(e) => return Err(e.into()),
             };
             hasher.update(&buf[..n]);
-            file.write_all(&buf[..n])?;
+            file.write_all(&buf[..n]).map_err(full)?;
             size += n as u64;
+            unchecked += n as u64;
+            if unchecked >= SPACE_CHECK_EVERY {
+                unchecked = 0;
+                self.check_space()?;
+            }
         }
-        file.sync_all()?;
+        file.sync_all().map_err(full)?;
         drop(file);
 
         let id = Id::from_digest(*hasher.finalize().as_bytes());
@@ -135,11 +154,20 @@ impl Store {
         let existed = dest.is_file();
         let dir = dest.parent().expect("blob paths have a parent");
         fs::create_dir_all(dir)?;
+        // Garbage collection must not delete the file between this move and its age check.
+        let _placing = self.blob_lock.read().unwrap_or_else(|poisoned| poisoned.into_inner());
         match fs::rename(tmp.path(), &dest) {
             Ok(()) => tmp.disarm(),
             // On Windows a file that is open for reading can't be replaced. The verified copy is
-            // dropped then; a caller repairing a blob can try again once readers are done.
-            Err(_) if dest.is_file() => return Ok(BlobInfo { id, size, new: false }),
+            // dropped then; a caller repairing a blob can try again once readers are done. The old
+            // file is made young again, so garbage collection gives the caller time to use it.
+            Err(_) if dest.is_file() => {
+                let _ = File::options()
+                    .write(true)
+                    .open(&dest)
+                    .and_then(|f| f.set_modified(SystemTime::now()));
+                return Ok(BlobInfo { id, size, new: false });
+            }
             Err(e) => return Err(e.into()),
         }
         sync_dir(dir)?;

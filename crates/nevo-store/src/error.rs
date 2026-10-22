@@ -27,6 +27,12 @@ pub enum StoreError {
     SchemaVersion(String),
     /// A number is too big to store (above 2^63 - 1).
     OutOfRange(&'static str),
+    /// A blob write stopped because free space fell below the reserve (see [`crate::Store::reserve`]),
+    /// or the disk ran full. `free` is 0 when the disk itself reported full.
+    DiskFull {
+        free: u64,
+        reserve: u64,
+    },
 }
 
 impl fmt::Display for StoreError {
@@ -43,6 +49,9 @@ impl fmt::Display for StoreError {
             StoreError::NotShareable => write!(f, "object is node-only or private and can't be published"),
             StoreError::SchemaVersion(v) => write!(f, "database schema version {v} is not supported"),
             StoreError::OutOfRange(what) => write!(f, "{what} is too large to store"),
+            StoreError::DiskFull { free, reserve } => {
+                write!(f, "not enough free space: {free} bytes free, {reserve} kept in reserve")
+            }
         }
     }
 }

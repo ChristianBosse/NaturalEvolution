@@ -12,7 +12,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 use std::sync::Arc;
 
-use nevo_node::{identity, router, AppState};
+use nevo_node::{housekeeping, identity, router, AppState};
 use nevo_store::Store;
 
 struct Args {
@@ -62,7 +62,9 @@ async fn run() -> Result<(), String> {
     println!("NEVO node {} ", node.public());
     println!("data:   {}", args.data.display());
 
-    let app = router(AppState::new(Arc::new(store), Arc::new(node)));
+    let store = Arc::new(store);
+    housekeeping::spawn(store.clone());
+    let app = router(AppState::new(store, Arc::new(node)));
     let listener = tokio::net::TcpListener::bind(args.listen)
         .await
         .map_err(|e| format!("can't listen on {}: {e}", args.listen))?;

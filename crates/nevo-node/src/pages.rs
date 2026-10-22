@@ -110,7 +110,7 @@ fn item_list(items: &[(Id, Sealed<Revision>)]) -> Markup {
     }
 }
 
-pub fn home(recent: &[(Id, Sealed<Revision>)]) -> Markup {
+pub fn home(recent: &[(Id, Sealed<Revision>)], free: Option<u64>) -> Markup {
     layout(
         "Library",
         html! {
@@ -124,6 +124,7 @@ pub fn home(recent: &[(Id, Sealed<Revision>)]) -> Markup {
             } @else {
                 (item_list(recent))
             }
+            @if let Some(free) = free { p.meta { "Storage: " (size(free)) " free" } }
         },
     )
 }

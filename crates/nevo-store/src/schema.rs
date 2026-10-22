@@ -94,6 +94,8 @@ CREATE TABLE IF NOT EXISTS derived (
     author   BLOB NOT NULL
 );
 CREATE INDEX IF NOT EXISTS derived_src ON derived (src, producer);
+-- For garbage collection, which keeps any blob that derived data uses.
+CREATE INDEX IF NOT EXISTS derived_out ON derived (out);
 
 -- Each node's append-only log. `entry` is the log entry object's ID, `obj` the logged object.
 CREATE TABLE IF NOT EXISTS log_entries (

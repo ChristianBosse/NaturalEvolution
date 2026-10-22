@@ -19,14 +19,23 @@
 //! chain (by hash) to a head that node signed: every batch must end exactly at a stored signed
 //! head. All signed heads are kept, and two that contradict each other are recorded as proof that
 //! the node forked its log ([`Store::is_forked`]).
+//!
+//! ## Housekeeping
+//!
+//! [`Store::collect_garbage`] deletes blob files that nothing uses (from abandoned uploads).
+//! Blob writes stop with [`StoreError::DiskFull`] when free space falls below
+//! [`Store::reserve`], so a full disk can't break the database.
 
 mod blobs;
 mod error;
+mod gc;
 mod schema;
+mod space;
 
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::sync::{Mutex, MutexGuard};
+use std::sync::atomic::AtomicU64;
+use std::sync::{Mutex, MutexGuard, RwLock};
 
 use nevo_format::{
     open, open_any, seal_unsigned, AnyObject, Attestation, Derived, Id, KeyRecord, Keypair, LogEntry, LogHead, Object,
@@ -36,11 +45,17 @@ use rusqlite::{params, Connection, OptionalExtension, Transaction};
 
 pub use blobs::BlobInfo;
 pub use error::{Result, StoreError};
+pub use gc::{GcReport, GC_GRACE};
+pub use space::MIN_RESERVE;
 
 /// A node's storage folder.
 pub struct Store {
     root: PathBuf,
     db: Mutex<Connection>,
+    /// Bytes that blob writes leave free on the disk.
+    reserve: AtomicU64,
+    /// Shared while a blob file is put in place, exclusive while garbage collection deletes one.
+    blob_lock: RwLock<()>,
 }
 
 /// The result of storing an object.
@@ -60,8 +75,10 @@ impl Store {
         let mut conn = Connection::open(root.join("objects.sqlite"))?;
         schema::init(&mut conn)?;
         Ok(Store {
+            reserve: AtomicU64::new(space::default_reserve(&root)),
             root,
             db: Mutex::new(conn),
+            blob_lock: RwLock::new(()),
         })
     }
 
@@ -83,6 +100,9 @@ impl Store {
     /// A signed log head that contradicts what is already known about that node's log is kept
     /// as evidence, recorded as a fork, and reported as [`StoreError::Forked`].
     pub fn put_object(&self, bytes: &[u8]) -> Result<Put> {
+        // No free-space check: objects are a few KB, and the reserve that blob writes leave free
+        // (see `space.rs`) is what keeps room for them. Refusing them would also stop a node from
+        // recording that its own upload finished, after the files were already stored.
         let object = open_any(bytes)?;
         let mut db = self.db();
         let tx = db.transaction()?;
