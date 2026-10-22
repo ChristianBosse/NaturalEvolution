@@ -20,7 +20,7 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 - [ ] **AI benchmark spike (top priority):** run llama.cpp on a 4 GB Pi 4/5 with 3–4 candidate small models. Measure speed, RAM use and answer quality on about 20 real survival and medical questions. This picks the Standard-tier model.
   - [x] Desktop run: 7 models, quality on GPU, memory and speed in a 4 GB, 4-core container. Results in [spikes/ai-benchmark/RESULTS.md](spikes/ai-benchmark/RESULTS.md); Qwen3.5 4B picked for Standard (D-031).
   - [ ] Confirm speed and memory on a real 4 GB Pi
-- [ ] **ZIM spike:** read and search Kiwix ZIM files from Rust
+- [x] **ZIM spike:** read and search Kiwix ZIM files from Rust. Results in [spikes/zim-search/RESULTS.md](spikes/zim-search/RESULTS.md) (D-035 to D-037).
 - [ ] **Lock the content model format:** blob, item, revision, attestation. It is the hardest thing to change later.
 
 ## Phase 1: v0.1 "One box"

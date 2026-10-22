@@ -1,0 +1,13 @@
+[package]
+name = "nevo-zim-spike"
+version = "0.0.0"
+edition = "2021"
+publish = false
+license = "AGPL-3.0-only"
+
+[dependencies]
+zim = "=0.5.0"
+tantivy = "=0.26.2"
+
+[profile.release]
+debug = false

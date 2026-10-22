@@ -202,3 +202,21 @@ Every model under 4B made at least one dangerous mistake, and the common ones ar
 
 If a check fails, NEVO shows the source text instead of the AI answer. Seed also prepares checked summary cards for the most important procedures.
 *Considered:* relying on a bigger model or a better prompt. Rejected: even the best model is not guaranteed safe, and the checks are cheap.
+
+## ZIM and search (Phase 0 spike)
+
+### D-035: Read ZIM files with the pure-Rust `zim` crate
+*2026-10-22*
+
+The `zim` crate (MIT/Apache-2.0) read current Kiwix files (format 6.3) correctly, opens them in under 1 ms by memory-mapping, and reads an article in about 2 ms. Its command-line dependencies should be made optional upstream, or the crate vendored. See `spikes/zim-search/RESULTS.md`.
+*Considered:* bindings to Kiwix's C++ libzim (harder to cross-compile for ARM and Windows), and writing a reader from scratch (not needed).
+
+### D-036: NEVO builds its own Tantivy index that points into the ZIM
+*2026-10-22*
+
+The ZIM's built-in Xapian index can't be read from Rust, and NEVO needs one index across ZIMs, PDFs and community content. The index stores paths, titles and redirects as aliases; text is read from the ZIM when needed. It is about a third of the ZIM's size. A 4 GB node indexes a 1 GB pack in about 35 s on one desktop core (minutes on a Pi) using about 0.3 GB, so Seed builds indexes ahead of time when it can (D-029), and nodes index only while the AI model is unloaded.
+
+### D-037: Search ranking: stop words, exact title match, then a reranker
+*2026-10-22*
+
+Plain keyword ranking put *Panic attack* above *Myocardial infarction* for "heart attack". Dropping stop words and putting exact title or redirect matches first fixed most test queries. A small reranker comes next, and questions in a language other than the pack's are translated by the built-in AI before searching. The AI receives short passages, not whole articles, so the index also needs passage-level entries.
