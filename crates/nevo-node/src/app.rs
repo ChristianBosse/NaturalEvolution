@@ -99,14 +99,22 @@ pub fn router(state: AppState) -> Router {
 pub enum AppError {
     NotFound,
     BadRequest(String),
+    /// Free space is below the store's reserve, so new files are refused.
+    DiskFull,
     Internal(String),
 }
 
+const DISK_FULL: &str = "This NEVO is almost out of storage space, so it can't take new files right now. \
+                         Please tell the person who looks after it.";
+
 impl From<StoreError> for AppError {
     fn from(e: StoreError) -> AppError {
-        // Objects in the store were checked when stored, so even a format error here means
-        // something is wrong with this node, not with the request.
-        AppError::Internal(e.to_string())
+        match e {
+            StoreError::DiskFull { .. } => AppError::DiskFull,
+            // Objects in the store were checked when stored, so even a format error here means
+            // something is wrong with this node, not with the request.
+            e => AppError::Internal(e.to_string()),
+        }
     }
 }
 
@@ -118,6 +126,7 @@ impl IntoResponse for AppError {
                 "Nothing here. It may not have reached this NEVO yet.".into(),
             ),
             AppError::BadRequest(m) => (StatusCode::BAD_REQUEST, m),
+            AppError::DiskFull => (StatusCode::INSUFFICIENT_STORAGE, DISK_FULL.into()),
             AppError::Internal(m) => {
                 eprintln!("error: {m}");
                 (
@@ -156,17 +165,18 @@ fn current(tips: &[Sealed<Revision>]) -> Option<&Sealed<Revision>> {
 }
 
 async fn home(State(state): State<AppState>) -> AppResult<Html<String>> {
-    let recent = blocking(move || {
+    let (recent, free) = blocking(move || {
         let tips = state.store.recent_tips(100)?;
-        Ok(tips
+        let recent = tips
             .into_iter()
             .filter(|r| r.object.vis != Visibility::Private)
             .take(50)
             .map(|r| (r.object.item_id(r.id()), r))
-            .collect::<Vec<_>>())
+            .collect::<Vec<_>>();
+        Ok((recent, state.store.free_space().ok()))
     })
     .await?;
-    Ok(Html(pages::home(&recent).into_string()))
+    Ok(Html(pages::home(&recent, free).into_string()))
 }
 
 async fn topics() -> Html<String> {
@@ -362,6 +372,10 @@ async fn add_submit(State(state): State<AppState>, multipart: Multipart) -> Resp
         Err(AppError::BadRequest(message)) => {
             form.error = Some(message);
             (StatusCode::BAD_REQUEST, Html(pages::add(&form).into_string())).into_response()
+        }
+        Err(AppError::DiskFull) => {
+            form.error = Some(DISK_FULL.into());
+            (StatusCode::INSUFFICIENT_STORAGE, Html(pages::add(&form).into_string())).into_response()
         }
         Err(other) => other.into_response(),
     }

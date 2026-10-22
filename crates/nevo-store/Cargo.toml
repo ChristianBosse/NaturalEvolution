@@ -11,6 +11,7 @@ repository.workspace = true
 nevo-format.workspace = true
 blake3.workspace = true
 rusqlite.workspace = true
+fs4.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

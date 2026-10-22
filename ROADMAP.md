@@ -36,7 +36,7 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 - [ ] Web UI: browse, read, search; works on old phones and without JavaScript
   - [x] Browse topics, read guides (safe Markdown), view and stream files, add guides with uploads
   - [ ] Search
-  - [ ] Storage housekeeping: remove files no version uses (from failed or abandoned uploads), and refuse uploads when free space runs low
+  - [x] Storage housekeeping: remove files no version uses (from failed or abandoned uploads), and refuse uploads when free space runs low
 - [ ] Built-in AI: RAG with citations, "I don't know," answer template, request queue (off-the-shelf small model)
 - [ ] Search: keyword across ZIM packs and the local library; semantic search on uploaded content
 - [ ] Import from USB and Wi-Fi upload: PDF, Markdown, images, ZIM, with import safety checks

@@ -362,6 +362,45 @@ async fn a_rejected_form_stores_no_files() {
 }
 
 #[tokio::test]
+async fn a_full_disk_refuses_uploads_politely() {
+    let n = node();
+    assert!(get(&n.app, "/").await.text().contains(" free"), "home shows free space");
+
+    n.store.set_reserve(u64::MAX);
+    let reply = post_form(
+        &n.app,
+        &[
+            ("title", None, b"Wells"),
+            ("topics", None, b"water"),
+            ("text", None, b"My careful steps"),
+            ("files", Some(("well.pdf", "application/pdf")), b"%PDF-1.7 pretend"),
+        ],
+    )
+    .await;
+    assert_eq!(reply.status, StatusCode::INSUFFICIENT_STORAGE);
+    assert!(reply.text().contains("almost out of storage space"));
+    assert!(
+        reply.text().contains("My careful steps"),
+        "the form keeps what was typed"
+    );
+    assert_eq!(blob_files(&n), 0);
+
+    // Text alone is stored as a blob too, so it is refused the same way.
+    let reply = post_form(
+        &n.app,
+        &[
+            ("title", None, b"Wells"),
+            ("topics", None, b"water"),
+            ("text", None, b"My careful steps"),
+        ],
+    )
+    .await;
+    assert_eq!(reply.status, StatusCode::INSUFFICIENT_STORAGE);
+    assert!(reply.text().contains("My careful steps"));
+    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 0);
+}
+
+#[tokio::test]
 async fn same_named_files_are_numbered() {
     let n = node();
     let url = add_burns_guide(

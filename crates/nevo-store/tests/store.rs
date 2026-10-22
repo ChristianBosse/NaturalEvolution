@@ -4,7 +4,7 @@ use std::time::{Duration, SystemTime};
 
 use nevo_format::cbor::Map;
 use nevo_format::*;
-use nevo_store::{Store, StoreError};
+use nevo_store::{Store, StoreError, GC_GRACE, MIN_RESERVE};
 
 fn time() -> Time {
     Time {
@@ -383,6 +383,150 @@ fn missing_blobs_and_interrupted_writes() {
     let _reopened = Store::open(dir.path()).unwrap();
     assert!(!tmp.join("old.part").exists());
     assert!(tmp.join("fresh.part").exists());
+}
+
+// ---------------------------------------------------------------------------------------------
+// Housekeeping
+
+fn age(path: &std::path::Path, by: Duration) {
+    fs::File::options()
+        .write(true)
+        .open(path)
+        .unwrap()
+        .set_modified(SystemTime::now() - by)
+        .unwrap();
+}
+
+const DAY: Duration = Duration::from_secs(24 * 60 * 60);
+
+#[test]
+fn garbage_collection_removes_only_old_unused_blobs() {
+    let (dir, store) = store();
+    let kp = key(1);
+    let put = |bytes: &[u8]| store.put_blob(bytes).unwrap().id;
+    let (public, node_only, private, src, out) = (put(b"pub"), put(b"node"), put(b"priv"), put(b"src"), put(b"out"));
+    let (orphan, young) = (put(b"abandoned upload"), put(b"upload in progress"));
+
+    for (blob, vis, n) in [
+        (public, Visibility::Public, 1),
+        (node_only, Visibility::Node, 2),
+        (private, Visibility::Private, 3),
+    ] {
+        let rev = Revision {
+            vis,
+            ..revision(&kp, &format!("Guide {n}"), &["water"], blob)
+        };
+        store.put_object(seal(&rev, &kp).unwrap().bytes()).unwrap();
+    }
+    let derived = Derived {
+        from: src,
+        producer: "nevo-ocr/1".into(),
+        out,
+        author: kp.public(),
+        extra: Map::new(),
+    };
+    store.put_object(seal(&derived, &kp).unwrap().bytes()).unwrap();
+
+    // Things that aren't blobs, even with a blob's name in the wrong folder, stay.
+    let stray = dir.path().join("blobs").join("notes.txt");
+    fs::write(&stray, b"keep me").unwrap();
+    let misplaced = dir.path().join("blobs").join("00").join(orphan.to_string());
+    fs::create_dir_all(misplaced.parent().unwrap()).unwrap();
+    fs::write(&misplaced, b"abandoned upload").unwrap();
+
+    for id in [public, node_only, private, src, out, orphan] {
+        age(&store.blob_path(id), 2 * DAY);
+    }
+    age(&store.blob_path(young), DAY / 2);
+    age(&stray, 2 * DAY);
+    age(&misplaced, 2 * DAY);
+
+    let report = store.collect_garbage(GC_GRACE).unwrap();
+    assert_eq!(report.scanned, 7);
+    assert_eq!(report.removed, 1);
+    assert_eq!(report.bytes_freed, b"abandoned upload".len() as u64);
+    assert_eq!(report.failed, 0, "{:?}", report.errors);
+    assert!(!store.has_blob(orphan));
+    for id in [public, node_only, private, src, out, young] {
+        assert!(store.has_blob(id), "{id} is used or young");
+    }
+    assert!(stray.exists() && misplaced.exists());
+
+    // A fresh copy of the same bytes makes a blob young again.
+    age(&store.blob_path(young), 2 * DAY);
+    put(b"upload in progress");
+    assert_eq!(store.collect_garbage(GC_GRACE).unwrap().removed, 0);
+    assert_eq!(store.collect_garbage(Duration::ZERO).unwrap().removed, 1);
+    assert!(!store.has_blob(young));
+}
+
+#[test]
+fn blobs_can_be_purged() {
+    let (_dir, store) = store();
+    let kp = key(1);
+    let blob = store.put_blob(&b"unwanted"[..]).unwrap().id;
+    let rev = seal(&revision(&kp, "Unwanted", &["water"], blob), &kp).unwrap();
+    store.put_object(rev.bytes()).unwrap();
+    assert!(store.remove_blob(blob).unwrap());
+    assert!(!store.remove_blob(blob).unwrap());
+    assert_eq!(store.missing_blobs().unwrap(), vec![blob]);
+}
+
+#[test]
+fn blob_writes_keep_a_free_space_reserve() {
+    let (dir, store) = store();
+    let free = store.free_space().unwrap();
+    assert!(free > 0);
+    assert!(store.reserve() >= MIN_RESERVE);
+
+    store.set_reserve(free + 1024 * 1024 * 1024);
+    match store.put_blob(&b"too much"[..]) {
+        Err(StoreError::DiskFull { reserve, .. }) => assert_eq!(reserve, store.reserve()),
+        other => panic!("expected DiskFull, got {other:?}"),
+    }
+    assert!(!store.has_blob(Id::of(b"too much")));
+    assert_eq!(fs::read_dir(dir.path().join("tmp")).unwrap().count(), 0, "no leftovers");
+
+    // Objects are still stored: they are tiny, and the reserve is there for them.
+    let kp = key(1);
+    let rev = seal(&revision(&kp, "Still works", &["water"], Id::of(b"x")), &kp).unwrap();
+    store.put_object(rev.bytes()).unwrap();
+
+    store.set_reserve(0);
+    store.put_blob(&b"fits"[..]).unwrap();
+}
+
+/// A reader that lowers the reserve's headroom while it is being read, as another upload
+/// filling the disk would.
+struct Filling<'a> {
+    store: &'a Store,
+    left: u64,
+}
+
+impl std::io::Read for Filling<'_> {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        if self.left == 0 {
+            return Ok(0);
+        }
+        // After the first chunk, the disk "fills up".
+        self.store.set_reserve(u64::MAX);
+        let n = buf.len().min(self.left as usize);
+        buf[..n].fill(7);
+        self.left -= n as u64;
+        Ok(n)
+    }
+}
+
+#[test]
+fn a_long_blob_write_stops_when_the_disk_fills() {
+    let (dir, store) = store();
+    store.set_reserve(0);
+    let reader = Filling {
+        store: &store,
+        left: 65 * 1024 * 1024,
+    };
+    assert!(matches!(store.put_blob(reader), Err(StoreError::DiskFull { .. })));
+    assert_eq!(fs::read_dir(dir.path().join("tmp")).unwrap().count(), 0, "no leftovers");
 }
 
 // ---------------------------------------------------------------------------------------------
