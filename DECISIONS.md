@@ -240,3 +240,27 @@ Building `nevo-format` and `nevo-store` and having them independently reviewed s
 - **Logs:** unsigned log entries from another node are accepted only up to a head it signed. All signed heads are kept, and contradicting heads are kept as proof of a fork.
 
 No version 1 data existed yet, so nothing had to be migrated. This supersedes the affected details of D-038.
+
+## Accounts and security
+
+### D-050 (Proposed): Passphrases unlock per-person keys with Argon2id
+*2026-10-22*
+
+Each account has its own Ed25519 key (D-038). The secret key is stored encrypted with XChaCha20-Poly1305 under a key derived from the passphrase with Argon2id (19 MiB, 2 passes, 1 lane: the OWASP minimum and Argon2's default). A copy of the data folder gives an attacker no signing keys, only a slow offline guessing job per account. The passphrase is checked by decrypting the key: there is no separate password hash, so sign-in costs one Argon2 run (about 21 ms on a desktop CPU, an estimated 150-250 ms on a Raspberry Pi 4). At most two Argon2 runs happen at once, so sign-ins can't exhaust a Pi's memory. The cost is stored per account and can be raised later. Accounts live in `accounts.sqlite`, apart from the library: they are local and never sync. A forgotten passphrase can't be reset; the person gets a new account and key.
+
+Alternatives: a password hash plus a separately stored key (two secrets to keep in step, and a stolen folder still holds the key); bcrypt or scrypt (Argon2id is the current recommendation).
+
+### D-051 (Proposed): Cookie sessions and forged-form protection on a plain-HTTP network
+*2026-10-22*
+
+Sign-in sets a random 256-bit cookie, `HttpOnly` and `SameSite=Strict`, valid 30 days. It can't be `Secure`: a NEVO is reached over plain HTTP on a local network without a certificate. Anyone who can watch the Wi-Fi traffic can therefore copy a session (or a passphrase as it is typed); WPA2/3 Wi-Fi encryption is the protection for now, and HTTPS with a node certificate is a later step. The database stores only a hash of the cookie, plus the person's key encrypted under another value derived from the cookie, so sessions survive a restart but the database alone can't sign. Every POST must carry the session's form token in a hidden field and come from the node itself by its `Origin` header (or `Referer` for old browsers). For that, pages use `Referrer-Policy: same-origin` instead of `no-referrer`, which makes browsers send `Origin: null` on every form post. Forms used before sign-in use a random cookie compared with the hidden field.
+
+### D-052 (Proposed): The setup wizard needs a one-time code from the console
+*2026-10-22*
+
+Until a node has an admin, every page leads to `/setup`, where the first person names the node and creates the admin account. Anyone on the network could reach it first and take the node over, so `nevo` prints a one-time code (12 characters, about 59 bits, without look-alike characters) in its console at startup, and `/setup` requires it. Only someone who can see the console, normally the person who started the node, can finish setup. The node's own key record, with its name, is published at the same time.
+
+### D-053 (Proposed): Moving a key to another device by QR code
+*2026-10-22*
+
+Following D-038 (one key per person, moved by QR code), the account page shows the secret key as an inline SVG QR code and as text, only after the passphrase is typed again: a session alone (a borrowed phone, a copied cookie) must not be enough to take someone's key. The text form is `NEVO-SECRET-1:` followed by the 32 bytes in uppercase RFC 4648 base32 without padding, which QR codes store compactly in alphanumeric mode. Importing on the other device comes with the app or a second node's sign-in.

@@ -12,6 +12,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 use std::sync::Arc;
 
+use nevo_node::accounts::{Accounts, ACCOUNTS_FILE};
 use nevo_node::{identity, router, AppState};
 use nevo_store::Store;
 
@@ -59,14 +60,24 @@ async fn run() -> Result<(), String> {
     std::fs::create_dir_all(&args.data).map_err(|e| format!("can't create {}: {e}", args.data.display()))?;
     let node = identity::load_or_create(&args.data).map_err(|e| format!("node key: {e}"))?;
     let store = Store::open(args.data.join("library")).map_err(|e| format!("library: {e}"))?;
+    let accounts = Accounts::open(args.data.join(ACCOUNTS_FILE)).map_err(|e| format!("accounts: {e}"))?;
     println!("NEVO node {} ", node.public());
     println!("data:   {}", args.data.display());
+    let setup_code = accounts.setup_code();
 
-    let app = router(AppState::new(Arc::new(store), Arc::new(node)));
+    let app = router(AppState::new(Arc::new(store), Arc::new(node), Arc::new(accounts)));
     let listener = tokio::net::TcpListener::bind(args.listen)
         .await
         .map_err(|e| format!("can't listen on {}: {e}", args.listen))?;
     println!("open:   http://{}/", args.listen);
+    if let Some(code) = setup_code {
+        // Only someone who can see this console can finish setup (D-052).
+        println!();
+        println!("This NEVO is not set up yet. Open it in a browser and enter this setup code:");
+        println!();
+        println!("        {code}");
+        println!();
+    }
     axum::serve(listener, app)
         .with_graceful_shutdown(async {
             let _ = tokio::signal::ctrl_c().await;

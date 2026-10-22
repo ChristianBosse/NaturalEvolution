@@ -10,6 +10,7 @@ use axum::extract::multipart::Field;
 use axum::extract::{DefaultBodyLimit, Multipart, Path, Request, State};
 use axum::http::header::{self, HeaderName, HeaderValue};
 use axum::http::StatusCode;
+use axum::middleware;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
 use axum::Router;
@@ -20,7 +21,9 @@ use tower::ServiceExt;
 use tower_http::services::ServeFile;
 use tower_http::set_header::SetResponseHeaderLayer;
 
-use crate::{markdown, pages};
+use crate::accounts::{Accounts, Session};
+use crate::auth::{self, Contributor, Viewer};
+use crate::{account_pages, markdown, pages, setup};
 
 /// Largest upload accepted in one form: enough for a long video. Computed in u64 so it also
 /// compiles on 32-bit boards (armv7 Raspberry Pi OS), where it is capped at the address space.
@@ -46,9 +49,9 @@ const UPLOAD_IDLE: Duration = Duration::from_secs(120);
 #[derive(Clone)]
 pub struct AppState {
     pub store: Arc<Store>,
-    /// This node's key. Until user accounts exist (roadmap: roles), it also signs what people
-    /// add through the web page.
+    /// This node's key. It signs the node's log; people sign what they add with their own keys.
     pub node: Arc<Keypair>,
+    pub accounts: Arc<Accounts>,
     /// Held while choosing a clock value and storing the object, so two additions at the same
     /// moment can't get the same clock (spec section 2: each new object needs a higher one).
     adding: Arc<Mutex<()>>,
@@ -56,10 +59,11 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn new(store: Arc<Store>, node: Arc<Keypair>) -> AppState {
+    pub fn new(store: Arc<Store>, node: Arc<Keypair>, accounts: Arc<Accounts>) -> AppState {
         AppState {
             store,
             node,
+            accounts,
             adding: Arc::new(Mutex::new(())),
             uploads: Arc::new(Semaphore::new(MAX_CONCURRENT_UPLOADS)),
         }
@@ -77,6 +81,10 @@ pub fn router(state: AppState) -> Router {
         .route("/file/{rev}/{index}/{name}", get(file))
         .route("/add", get(add_form).post(add_submit))
         .route("/health", get(|| async { "ok" }))
+        .merge(auth::routes())
+        .merge(setup::routes())
+        .merge(account_pages::routes())
+        .layer(middleware::from_fn_with_state(state.clone(), auth::middleware))
         .layer(DefaultBodyLimit::max(MAX_UPLOAD))
         .layer(SetResponseHeaderLayer::if_not_present(
             header::CONTENT_SECURITY_POLICY,
@@ -88,7 +96,9 @@ pub fn router(state: AppState) -> Router {
         ))
         .layer(SetResponseHeaderLayer::overriding(
             header::REFERRER_POLICY,
-            HeaderValue::from_static("no-referrer"),
+            // Not `no-referrer`: with it, browsers send `Origin: null` on form posts, and the
+            // forged-form check (auth.rs) needs the real origin.
+            HeaderValue::from_static("same-origin"),
         ))
         .with_state(state)
 }
@@ -99,6 +109,8 @@ pub fn router(state: AppState) -> Router {
 pub enum AppError {
     NotFound,
     BadRequest(String),
+    /// Not allowed: a reader adding, a forged form, a non-admin managing accounts.
+    Forbidden(String),
     Internal(String),
 }
 
@@ -118,6 +130,7 @@ impl IntoResponse for AppError {
                 "Nothing here. It may not have reached this NEVO yet.".into(),
             ),
             AppError::BadRequest(m) => (StatusCode::BAD_REQUEST, m),
+            AppError::Forbidden(m) => (StatusCode::FORBIDDEN, m),
             AppError::Internal(m) => {
                 eprintln!("error: {m}");
                 (
@@ -130,11 +143,11 @@ impl IntoResponse for AppError {
     }
 }
 
-type AppResult<T> = Result<T, AppError>;
+pub(crate) type AppResult<T> = Result<T, AppError>;
 
 /// Runs store work on the blocking thread pool: SQLite and file I/O must not stall the async
 /// workers that serve other people.
-async fn blocking<T: Send + 'static>(f: impl FnOnce() -> AppResult<T> + Send + 'static) -> AppResult<T> {
+pub(crate) async fn blocking<T: Send + 'static>(f: impl FnOnce() -> AppResult<T> + Send + 'static) -> AppResult<T> {
     tokio::task::spawn_blocking(f)
         .await
         .map_err(|e| AppError::Internal(e.to_string()))?
@@ -147,20 +160,20 @@ fn parse_id(text: &str) -> AppResult<Id> {
 // ---------------------------------------------------------------------------------------------
 // Pages
 
-/// The newest visible version of an item. Private items are hidden: there are no user
-/// accounts yet, so nobody can prove they own one.
-fn current(tips: &[Sealed<Revision>]) -> Option<&Sealed<Revision>> {
+/// The newest version of an item that the viewer may see. Private items are shown only to
+/// their author.
+fn current<'a>(tips: &'a [Sealed<Revision>], viewer: &Viewer) -> Option<&'a Sealed<Revision>> {
     tips.iter()
-        .filter(|r| r.object.vis != Visibility::Private)
+        .filter(|r| viewer.can_see(&r.object))
         .max_by_key(|r| r.object.clock)
 }
 
-async fn home(State(state): State<AppState>) -> AppResult<Html<String>> {
+async fn home(State(state): State<AppState>, viewer: Viewer) -> AppResult<Html<String>> {
     let recent = blocking(move || {
         let tips = state.store.recent_tips(100)?;
         Ok(tips
             .into_iter()
-            .filter(|r| r.object.vis != Visibility::Private)
+            .filter(|r| viewer.can_see(&r.object))
             .take(50)
             .map(|r| (r.object.item_id(r.id()), r))
             .collect::<Vec<_>>())
@@ -173,13 +186,13 @@ async fn topics() -> Html<String> {
     Html(pages::topics().into_string())
 }
 
-async fn topic(State(state): State<AppState>, Path(path): Path<String>) -> AppResult<Html<String>> {
+async fn topic(State(state): State<AppState>, viewer: Viewer, Path(path): Path<String>) -> AppResult<Html<String>> {
     let topic: Topic = path.parse().map_err(|_| AppError::NotFound)?;
     let shown = topic.clone();
     let items = blocking(move || {
         let mut out = Vec::new();
         for item in state.store.items_in_topic(&topic)? {
-            if let Some(tip) = current(&state.store.item_tips(item)?) {
+            if let Some(tip) = current(&state.store.item_tips(item)?, &viewer) {
                 out.push((item, tip.clone()));
             }
         }
@@ -190,17 +203,17 @@ async fn topic(State(state): State<AppState>, Path(path): Path<String>) -> AppRe
     Ok(Html(pages::topic(&shown, &items).into_string()))
 }
 
-async fn item(State(state): State<AppState>, Path(id): Path<String>) -> AppResult<Html<String>> {
+async fn item(State(state): State<AppState>, viewer: Viewer, Path(id): Path<String>) -> AppResult<Html<String>> {
     let item = parse_id(&id)?;
     let page = blocking(move || {
         let store = &state.store;
         let tips = store.item_tips(item)?;
-        let tip = current(&tips).ok_or(AppError::NotFound)?.clone();
-        let visible_tips = tips.iter().filter(|r| r.object.vis != Visibility::Private).count();
+        let tip = current(&tips, &viewer).ok_or(AppError::NotFound)?.clone();
+        let visible_tips = tips.iter().filter(|r| viewer.can_see(&r.object)).count();
         let history: Vec<_> = store
             .item_revisions(item)?
             .into_iter()
-            .filter(|r| r.object.vis != Visibility::Private)
+            .filter(|r| viewer.can_see(&r.object))
             .collect();
 
         // The first Markdown file is the guide text, shown on the page.
@@ -235,7 +248,8 @@ async fn item(State(state): State<AppState>, Path(id): Path<String>) -> AppResul
             tip: &tip,
             tips: visible_tips,
             history: &history,
-            local_author: tip.object.author == state.node.public(),
+            local_author: tip.object.author == state.node.public()
+                || state.accounts.is_local_key(&tip.object.author)?,
             guide_html,
         };
         Ok(pages::item(&view).into_string())
@@ -276,18 +290,19 @@ fn media_type(mime: &str) -> Option<&'static str> {
 /// Serves one file of a revision. Range requests work, so video and audio can seek.
 async fn file(
     State(state): State<AppState>,
+    viewer: Viewer,
     Path((rev, index, _name)): Path<(String, usize, String)>,
     request: Request,
 ) -> AppResult<Response> {
     let rev = parse_id(&rev)?;
-    let (path, file) = blocking(move || {
+    let (path, file, private) = blocking(move || {
         let revision = match state.store.get::<Revision>(rev) {
             Ok(Some(r)) => r,
             // Not stored, or the ID of something that isn't a revision.
             Ok(None) | Err(StoreError::Format(_)) => return Err(AppError::NotFound),
             Err(e) => return Err(e.into()),
         };
-        if revision.object.vis == Visibility::Private {
+        if !viewer.can_see(&revision.object) {
             return Err(AppError::NotFound);
         }
         let file = revision.object.content.get(index).cloned().ok_or(AppError::NotFound)?;
@@ -295,7 +310,7 @@ async fn file(
         if !path.is_file() {
             return Err(AppError::NotFound);
         }
-        Ok((path, file))
+        Ok((path, file, revision.object.vis == Visibility::Private))
     })
     .await?;
 
@@ -329,10 +344,15 @@ async fn file(
             headers.insert(header::CONTENT_DISPOSITION, disposition("attachment", &ascii_name));
         }
     }
-    // Files never change (their name is their hash), so browsers may keep them.
+    // Files never change (their name is their hash), so browsers may keep them. Not private
+    // ones: the next person on a shared device must not find them in the cache.
     headers.insert(
         header::CACHE_CONTROL,
-        HeaderValue::from_static("private, max-age=31536000, immutable"),
+        HeaderValue::from_static(if private {
+            "no-store"
+        } else {
+            "private, max-age=31536000, immutable"
+        }),
     );
     // Only types that can't run code are shown inline, so a strict policy is enough. (A CSP
     // `sandbox` would be stricter but stops browsers' built-in PDF viewers.)
@@ -351,13 +371,23 @@ fn disposition(kind: &str, ascii_name: &str) -> HeaderValue {
 // ---------------------------------------------------------------------------------------------
 // Adding a guide
 
-async fn add_form() -> Html<String> {
-    Html(pages::add(&pages::AddForm::default()).into_string())
+async fn add_form(Contributor(session): Contributor) -> Html<String> {
+    let form = pages::AddForm {
+        csrf: session.csrf_token(),
+        ..Default::default()
+    };
+    Html(pages::add(&form).into_string())
 }
 
-async fn add_submit(State(state): State<AppState>, multipart: Multipart) -> Response {
+async fn add_submit(
+    State(state): State<AppState>,
+    Contributor(session): Contributor,
+    multipart: Multipart,
+) -> Response {
     let mut form = pages::AddForm::default();
-    match add(&state, multipart, &mut form).await {
+    let result = add(&state, &session, multipart, &mut form).await;
+    form.csrf = session.csrf_token();
+    match result {
         Ok(item) => Redirect::to(&format!("/item/{item}")).into_response(),
         Err(AppError::BadRequest(message)) => {
             form.error = Some(message);
@@ -367,7 +397,12 @@ async fn add_submit(State(state): State<AppState>, multipart: Multipart) -> Resp
     }
 }
 
-async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddForm) -> AppResult<Id> {
+async fn add(
+    state: &AppState,
+    session: &Session,
+    mut multipart: Multipart,
+    form: &mut pages::AddForm,
+) -> AppResult<Id> {
     let bad = |m: &str| AppError::BadRequest(m.to_string());
     let mut files = Vec::new();
     let mut parts = 0;
@@ -393,6 +428,7 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
                 // The form puts files last, so the typed fields have arrived: check them before
                 // storing anything, so a mistake doesn't leave uploaded files behind.
                 if !checked {
+                    auth::check_session_csrf(session, &form.csrf)?;
                     check_fields(form)?;
                     checked = true;
                 }
@@ -431,10 +467,13 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
             "lang" => form.lang = text_field(field, MAX_FIELD).await?.trim().to_string(),
             "license" => form.license = text_field(field, MAX_FIELD).await?.trim().to_string(),
             "node_only" => form.node_only = true,
+            "private" => form.private = true,
+            "csrf" => form.csrf = text_field(field, MAX_FIELD).await?,
             _ => {}
         }
     }
 
+    auth::check_session_csrf(session, &form.csrf)?;
     check_fields(form)?;
     let topics = form
         .topics
@@ -453,13 +492,16 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
 
     let store = state.store.clone();
     let node = state.node.clone();
+    // Signed by the person adding it; the node key only signs the node's log.
+    let author_key = session.signing_key()?;
     let adding = state.adding.clone();
-    let (lang, license, summary, title, node_only) = (
+    let (lang, license, summary, title, node_only, private) = (
         form.lang.clone(),
         form.license.clone(),
         form.summary.clone(),
         form.title.clone(),
         form.node_only,
+        form.private,
     );
     blocking(move || {
         let mut content = Vec::new();
@@ -480,7 +522,7 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
             Kind::Guide
         };
         content.extend(files);
-        let author = node.public();
+        let author = author_key.public();
         let _adding = adding.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
         let revision = Revision {
             item: None,
@@ -497,7 +539,9 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
             } else {
                 license
             },
-            vis: if node_only {
+            vis: if private {
+                Visibility::Private
+            } else if node_only {
                 Visibility::Node
             } else {
                 Visibility::Public
@@ -507,8 +551,9 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
             summary: (!summary.is_empty()).then_some(summary),
             extra: Default::default(),
         };
-        let sealed = seal(&revision, &node).map_err(|e| AppError::BadRequest(format!("Please check the form: {e}")))?;
-        if node_only {
+        let sealed =
+            seal(&revision, &author_key).map_err(|e| AppError::BadRequest(format!("Please check the form: {e}")))?;
+        if node_only || private {
             store.put_object(sealed.bytes())?;
         } else {
             store.publish(&node, sealed.bytes())?;

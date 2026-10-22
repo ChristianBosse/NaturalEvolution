@@ -1,11 +1,15 @@
 //! The NEVO node: a web server for the local library.
 //!
-//! Anyone on the local network opens it in a browser to browse, read and add guides. This is
-//! the first slice of Phase 1; search, the built-in AI, user roles and sync come next.
+//! Anyone on the local network opens it in a browser to browse and read; people with an account
+//! add guides. This is the first slice of Phase 1; search, the built-in AI and sync come next.
 
+mod account_pages;
+pub mod accounts;
 pub mod app;
+pub mod auth;
 pub mod identity;
 mod markdown;
 mod pages;
+mod setup;
 
 pub use app::{router, AppState};

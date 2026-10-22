@@ -4,6 +4,12 @@ members = ["crates/*"]
 # Spikes are throwaway experiments with their own Cargo.toml.
 exclude = ["spikes"]
 
+# The passphrase hash is slow on purpose; unoptimized, it would take seconds in every test.
+[profile.dev.package.argon2]
+opt-level = 3
+[profile.dev.package.blake2]
+opt-level = 3
+
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
@@ -27,3 +33,7 @@ maud = "=0.27.0"
 pulldown-cmark = { version = "=0.13.4", default-features = false, features = ["html"] }
 tower = { version = "=0.5.3", features = ["util"] }
 http-body-util = "=0.1.5"
+argon2 = { version = "=0.6.0", default-features = false, features = ["alloc", "zeroize"] }
+chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["alloc", "zeroize"] }
+qrcode = { version = "=0.14.1", default-features = false, features = ["svg"] }
+zeroize = "=1.9.0"

@@ -36,16 +36,18 @@ ul.items a { font-weight: 600; text-decoration: none; }
 table { border-collapse: collapse; } td, th { border: 1px solid var(--line); padding: .3rem .5rem; }
 form label { display: block; margin-top: 1rem; font-weight: 600; }
 form .hint { font-weight: 400; color: var(--muted); font-size: .9rem; }
-input[type=text], input[type=search], select, textarea { width: 100%; font: inherit; padding: .5rem;
-       border: 1px solid var(--line); border-radius: .3rem; background: var(--bg); color: var(--fg); }
+input[type=text], input[type=search], input[type=password], select, textarea { width: 100%; font: inherit;
+       padding: .5rem; border: 1px solid var(--line); border-radius: .3rem; background: var(--bg); color: var(--fg); }
 textarea { min-height: 14rem; }
 button { font: inherit; margin-top: 1.2rem; padding: .6rem 1.2rem; border: 0; border-radius: .3rem;
          background: var(--accent); color: var(--bg); font-weight: 600; }
 .error { color: #b3261e; font-weight: 600; }
+form.inline { display: inline; } form.inline button { margin-top: .4rem; padding: .3rem .8rem; }
+.qr svg { width: 100%; max-width: 20rem; height: auto; } code.secret { word-break: break-all; }
 footer { max-width: 46rem; margin: 2rem auto; padding: 0 1rem; color: var(--muted); font-size: .85rem; }
 "#;
 
-fn layout(title: &str, body: Markup) -> Markup {
+pub(crate) fn layout(title: &str, body: Markup) -> Markup {
     html! {
         (DOCTYPE)
         html lang="en" {
@@ -62,6 +64,7 @@ fn layout(title: &str, body: Markup) -> Markup {
                         a href="/" { "Library" }
                         a href="/topics" { "Topics" }
                         a href="/add" { "Add a guide" }
+                        a href="/account" { "Account" }
                     }
                 }
                 main { (body) }
@@ -196,6 +199,7 @@ pub fn item(view: &ItemView) -> Markup {
                 span { "Language: " (r.lang) }
                 span { "License: " (r.license) }
                 @if r.vis == Visibility::Node { span { "Only on this NEVO" } }
+                @if r.vis == Visibility::Private { span { "Private: only you can see it" } }
             }
             @if view.tips > 1 {
                 p.notice { "This item has " (view.tips) " versions that were edited separately and haven't been merged. You are seeing the newest." }
@@ -257,6 +261,9 @@ pub struct AddForm {
     pub lang: String,
     pub license: String,
     pub node_only: bool,
+    pub private: bool,
+    /// The session's form token (auth.rs).
+    pub csrf: String,
     pub error: Option<String>,
 }
 
@@ -274,6 +281,7 @@ pub fn add(form: &AddForm) -> Markup {
             p.muted { "Write steps in the text box, attach files (PDF, photos, video), or both." }
             @if let Some(error) = &form.error { p.error role="alert" { (error) } }
             form method="post" action="/add" enctype="multipart/form-data" {
+                input type="hidden" name="csrf" value=(form.csrf);
                 label for="title" { "Title" }
                 input type="text" id="title" name="title" required maxlength="500" value=(form.title);
                 label for="summary" { "Summary " span.hint { "(optional, one or two sentences)" } }
@@ -297,6 +305,7 @@ pub fn add(form: &AddForm) -> Markup {
                 label for="license" { "License " span.hint { "(CC-BY-SA-4.0 lets others share and improve it)" } }
                 input type="text" id="license" name="license" maxlength="200" value=(license);
                 label { input type="checkbox" name="node_only" value="1" checked[form.node_only]; " Keep it on this NEVO only (don't share with other nodes)" }
+                label { input type="checkbox" name="private" value="1" checked[form.private]; " Private: only you can see it, when signed in" }
                 // Files come last: browsers send fields in page order, so the server can check the
                 // typed fields before it stores any upload.
                 label for="files" { "Files " span.hint { "(optional: PDF, photos, video)" } }
