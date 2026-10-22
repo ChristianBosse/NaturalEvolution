@@ -1,0 +1,11 @@
+[package]
+name = "nevo-answer"
+description = "NEVO AI answers without the model: prompt building and code checks on the model's answer"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
