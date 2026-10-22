@@ -39,6 +39,7 @@ NEVO is a Rust workspace (Rust 1.86 or newer). The code lives in `crates/`:
 | `nevo-seed` | The `nevo-seed` program: verified resumable downloads, USB stick capacity test, vault checks |
 | `nevo-sync` | Sync between paired nodes on the local network ([spec](docs/spec/sync.md)): server routes, client, pull rounds |
 | `nevo-zim` | Kiwix ZIM packs: metadata, entries, articles for indexing, clean text and passages |
+| `nevo-extract` | Import safety checks (real file type, size, zip and image bombs) and text extraction from PDF, EPUB, HTML and text |
 
 With Rust installed:
 

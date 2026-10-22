@@ -1,0 +1,12 @@
+[package]
+name = "pdf-eval"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# Throwaway comparison of pure-Rust PDF text extractors for nevo-extract.
+[dependencies]
+pdf-extract = "=0.12.1"
+lopdf = { version = "=0.42.0", default-features = false }
+
+[workspace]
