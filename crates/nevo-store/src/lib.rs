@@ -21,6 +21,7 @@
 //! the node forked its log ([`Store::is_forked`]).
 
 mod blobs;
+mod check;
 mod error;
 mod schema;
 
@@ -35,6 +36,7 @@ use nevo_format::{
 use rusqlite::{params, Connection, OptionalExtension, Transaction};
 
 pub use blobs::BlobInfo;
+pub use check::{CheckOptions, CheckReport, Problem};
 pub use error::{Result, StoreError};
 
 /// A node's storage folder.
