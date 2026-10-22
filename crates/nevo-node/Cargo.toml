@@ -20,6 +20,7 @@ tower-http.workspace = true
 maud.workspace = true
 pulldown-cmark.workspace = true
 tower.workspace = true
+similar.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

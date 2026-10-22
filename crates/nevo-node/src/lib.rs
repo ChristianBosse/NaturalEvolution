@@ -5,6 +5,8 @@
 
 pub mod app;
 pub mod housekeeping;
+mod diff;
+mod edit;
 pub mod identity;
 mod markdown;
 mod pages;

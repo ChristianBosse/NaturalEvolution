@@ -20,7 +20,7 @@ use tower::ServiceExt;
 use tower_http::services::ServeFile;
 use tower_http::set_header::SetResponseHeaderLayer;
 
-use crate::{markdown, pages};
+use crate::{edit, markdown, pages};
 
 /// Largest upload accepted in one form: enough for a long video. Computed in u64 so it also
 /// compiles on 32-bit boards (armv7 Raspberry Pi OS), where it is capped at the address space.
@@ -31,12 +31,12 @@ pub const MAX_UPLOAD: usize = if MAX_UPLOAD_BYTES > usize::MAX as u64 {
     MAX_UPLOAD_BYTES as usize
 };
 /// Largest guide text, and the largest Markdown file rendered inline.
-const MAX_TEXT: usize = 1024 * 1024;
-const MAX_FIELD: usize = 4096;
+pub(crate) const MAX_TEXT: usize = 1024 * 1024;
+pub(crate) const MAX_FIELD: usize = 4096;
 const MAX_TITLE_CHARS: usize = 500;
 /// Limits on one form, so a single request can't exhaust a Pi's memory or CPU.
-const MAX_PARTS: usize = 200;
-const MAX_FILES: usize = 100;
+pub(crate) const MAX_PARTS: usize = 200;
+pub(crate) const MAX_FILES: usize = 100;
 const MAX_TOPICS: usize = 16;
 /// Uploads written at the same time. Each holds a blocking thread while it streams.
 const MAX_CONCURRENT_UPLOADS: usize = 4;
@@ -51,7 +51,7 @@ pub struct AppState {
     pub node: Arc<Keypair>,
     /// Held while choosing a clock value and storing the object, so two additions at the same
     /// moment can't get the same clock (spec section 2: each new object needs a higher one).
-    adding: Arc<Mutex<()>>,
+    pub(crate) adding: Arc<Mutex<()>>,
     uploads: Arc<Semaphore>,
 }
 
@@ -76,6 +76,10 @@ pub fn router(state: AppState) -> Router {
         .route("/item/{id}", get(item))
         .route("/file/{rev}/{index}/{name}", get(file))
         .route("/add", get(add_form).post(add_submit))
+        .route("/item/{id}/edit", get(edit::edit_form).post(edit::edit_submit))
+        .route("/item/{id}/merge", get(edit::merge_form))
+        .route("/item/{id}/history", get(edit::history))
+        .route("/item/{id}/version/{rev}", get(edit::version))
         .route("/health", get(|| async { "ok" }))
         .layer(DefaultBodyLimit::max(MAX_UPLOAD))
         .layer(SetResponseHeaderLayer::if_not_present(
@@ -139,17 +143,17 @@ impl IntoResponse for AppError {
     }
 }
 
-type AppResult<T> = Result<T, AppError>;
+pub(crate) type AppResult<T> = Result<T, AppError>;
 
 /// Runs store work on the blocking thread pool: SQLite and file I/O must not stall the async
 /// workers that serve other people.
-async fn blocking<T: Send + 'static>(f: impl FnOnce() -> AppResult<T> + Send + 'static) -> AppResult<T> {
+pub(crate) async fn blocking<T: Send + 'static>(f: impl FnOnce() -> AppResult<T> + Send + 'static) -> AppResult<T> {
     tokio::task::spawn_blocking(f)
         .await
         .map_err(|e| AppError::Internal(e.to_string()))?
 }
 
-fn parse_id(text: &str) -> AppResult<Id> {
+pub(crate) fn parse_id(text: &str) -> AppResult<Id> {
     text.parse().map_err(|_| AppError::NotFound)
 }
 
@@ -158,7 +162,7 @@ fn parse_id(text: &str) -> AppResult<Id> {
 
 /// The newest visible version of an item. Private items are hidden: there are no user
 /// accounts yet, so nobody can prove they own one.
-fn current(tips: &[Sealed<Revision>]) -> Option<&Sealed<Revision>> {
+pub(crate) fn current(tips: &[Sealed<Revision>]) -> Option<&Sealed<Revision>> {
     tips.iter()
         .filter(|r| r.object.vis != Visibility::Private)
         .max_by_key(|r| r.object.clock)
@@ -398,12 +402,9 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
         let name = field.name().unwrap_or_default().to_string();
         match name.as_str() {
             "files" => {
-                let Some(file_name) = field.file_name().map(safe_file_name) else {
+                let Some(file_name) = upload_name(&field) else {
                     continue;
                 };
-                if file_name.is_empty() {
-                    continue; // the browser sends an empty part when no file was chosen
-                }
                 // The form puts files last, so the typed fields have arrived: check them before
                 // storing anything, so a mistake doesn't leave uploaded files behind.
                 if !checked {
@@ -413,52 +414,15 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
                 if files.len() >= MAX_FILES {
                     return Err(AppError::BadRequest(format!("At most {MAX_FILES} files at a time.")));
                 }
-                let mime = field
-                    .content_type()
-                    .filter(|m| valid_mime(m))
-                    .unwrap_or("application/octet-stream")
-                    .to_string();
-                let _permit = state
-                    .uploads
-                    .acquire()
-                    .await
-                    .map_err(|e| AppError::Internal(e.to_string()))?;
-                let info = store_upload(state.store.clone(), field).await?;
-                if info.size > 0 {
-                    files.push(ContentFile {
-                        name: file_name,
-                        blob: info.id,
-                        size: info.size,
-                        mime,
-                    });
+                if let Some(file) = upload(state, field, file_name).await? {
+                    files.push(file);
                 }
             }
-            "title" => form.title = text_field(field, MAX_FIELD).await?.trim().to_string(),
-            "summary" => form.summary = text_field(field, MAX_FIELD).await?.trim().to_string(),
-            "text" => form.text = text_field(field, MAX_TEXT).await?,
-            "topics" => {
-                if form.topics.len() >= MAX_TOPICS {
-                    return Err(AppError::BadRequest(format!("At most {MAX_TOPICS} topics.")));
-                }
-                form.topics.push(text_field(field, MAX_FIELD).await?);
-            }
-            "lang" => form.lang = text_field(field, MAX_FIELD).await?.trim().to_string(),
-            "license" => form.license = text_field(field, MAX_FIELD).await?.trim().to_string(),
-            "node_only" => form.node_only = true,
-            _ => {}
+            _ => typed_field(&name, field, form).await?,
         }
     }
 
-    check_fields(form)?;
-    let topics = form
-        .topics
-        .iter()
-        .map(|t| t.parse::<Topic>().map_err(|_| bad("Unknown topic.")))
-        .collect::<AppResult<Vec<_>>>()?;
-    let text = form.text.replace("\r\n", "\n");
-    if text.trim().is_empty() && files.is_empty() {
-        return Err(bad("Write some text or attach at least one file."));
-    }
+    let (topics, text) = check_content(form, !files.is_empty())?;
     // Two attachments with the same name would make links to them ambiguous.
     let mut names = HashSet::new();
     for f in &mut files {
@@ -532,7 +496,77 @@ async fn add(state: &AppState, mut multipart: Multipart, form: &mut pages::AddFo
     .await
 }
 
-fn now() -> Time {
+/// Reads one of the typed fields that the add and edit forms share into `form`. Other fields
+/// are ignored.
+pub(crate) async fn typed_field(name: &str, field: Field<'_>, form: &mut pages::AddForm) -> AppResult<()> {
+    match name {
+        "title" => form.title = text_field(field, MAX_FIELD).await?.trim().to_string(),
+        "summary" => form.summary = text_field(field, MAX_FIELD).await?.trim().to_string(),
+        "text" => form.text = text_field(field, MAX_TEXT).await?,
+        "topics" => {
+            if form.topics.len() >= MAX_TOPICS {
+                return Err(AppError::BadRequest(format!("At most {MAX_TOPICS} topics.")));
+            }
+            form.topics.push(text_field(field, MAX_FIELD).await?);
+        }
+        "lang" => form.lang = text_field(field, MAX_FIELD).await?.trim().to_string(),
+        "license" => form.license = text_field(field, MAX_FIELD).await?.trim().to_string(),
+        "node_only" => form.node_only = true,
+        _ => {}
+    }
+    Ok(())
+}
+
+/// The cleaned name of an uploaded file, or `None` for an empty file input (the browser sends
+/// an empty part when no file was chosen).
+pub(crate) fn upload_name(field: &Field<'_>) -> Option<String> {
+    field.file_name().map(safe_file_name).filter(|name| !name.is_empty())
+}
+
+/// Streams one uploaded file into the blob store. An empty file is stored nowhere and gives
+/// `None`.
+pub(crate) async fn upload(state: &AppState, field: Field<'_>, name: String) -> AppResult<Option<ContentFile>> {
+    let mime = field
+        .content_type()
+        .filter(|m| valid_mime(m))
+        .unwrap_or("application/octet-stream")
+        .to_string();
+    let _permit = state
+        .uploads
+        .acquire()
+        .await
+        .map_err(|e| AppError::Internal(e.to_string()))?;
+    let info = store_upload(state.store.clone(), field).await?;
+    Ok((info.size > 0).then_some(ContentFile {
+        name,
+        blob: info.id,
+        size: info.size,
+        mime,
+    }))
+}
+
+/// The checks that run once the whole form has arrived. Gives the topics, and the guide text
+/// with the browser's line endings made plain.
+pub(crate) fn check_content(form: &pages::AddForm, has_files: bool) -> AppResult<(Vec<Topic>, String)> {
+    check_fields(form)?;
+    let topics = form
+        .topics
+        .iter()
+        .map(|t| {
+            t.parse::<Topic>()
+                .map_err(|_| AppError::BadRequest("Unknown topic.".into()))
+        })
+        .collect::<AppResult<Vec<_>>>()?;
+    let text = form.text.replace("\r\n", "\n");
+    if text.trim().is_empty() && !has_files {
+        return Err(AppError::BadRequest(
+            "Write some text or attach at least one file.".into(),
+        ));
+    }
+    Ok((topics, text))
+}
+
+pub(crate) fn now() -> Time {
     let ms = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map_or(0, |d| d.as_millis() as i64);
@@ -543,7 +577,7 @@ fn now() -> Time {
     }
 }
 
-async fn text_field(mut field: Field<'_>, max: usize) -> AppResult<String> {
+pub(crate) async fn text_field(mut field: Field<'_>, max: usize) -> AppResult<String> {
     let mut bytes = Vec::new();
     while let Some(chunk) = field.chunk().await.map_err(|e| AppError::BadRequest(e.to_string()))? {
         if bytes.len() + chunk.len() > max {
@@ -558,7 +592,7 @@ async fn text_field(mut field: Field<'_>, max: usize) -> AppResult<String> {
 }
 
 /// Checks the typed fields. Runs before files are stored and again at the end.
-fn check_fields(form: &pages::AddForm) -> AppResult<()> {
+pub(crate) fn check_fields(form: &pages::AddForm) -> AppResult<()> {
     if form.title.is_empty() {
         return Err(AppError::BadRequest("Please give it a title.".into()));
     }
@@ -574,7 +608,7 @@ fn check_fields(form: &pages::AddForm) -> AppResult<()> {
 }
 
 /// `name` if unused, else `name (2)`, `name (3)`, … before the extension.
-fn unique_name(name: &str, used: &mut HashSet<String>) -> String {
+pub(crate) fn unique_name(name: &str, used: &mut HashSet<String>) -> String {
     if used.insert(name.to_string()) {
         return name.to_string();
     }
