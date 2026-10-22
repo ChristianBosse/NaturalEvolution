@@ -8,8 +8,11 @@ use axum::Router;
 use http_body_util::BodyExt;
 use nevo_format::cbor::Map;
 use nevo_format::*;
+use nevo_node::accounts::{Accounts, Role, ACCOUNTS_FILE};
+use nevo_node::auth::SESSION_COOKIE;
 use nevo_node::{router, AppState};
 use nevo_store::Store;
+use tower::util::MapRequestLayer;
 use tower::ServiceExt;
 
 struct Node {
@@ -19,11 +22,28 @@ struct Node {
     app: Router,
 }
 
+/// A node that is set up, with every request sent by its signed-in admin from one of its own
+/// pages. tests/accounts.rs covers readers, sign-in and forged forms.
 fn node() -> Node {
     let dir = tempfile::tempdir().unwrap();
     let store = Arc::new(Store::open(dir.path()).unwrap());
     let key = Arc::new(Keypair::from_secret([7; 32]));
-    let app = router(AppState::new(store.clone(), key.clone()));
+    let accounts = Arc::new(Accounts::open(dir.path().join(ACCOUNTS_FILE)).unwrap());
+    // Publishes the admin's key record: the first entry of the node's log.
+    accounts
+        .create(&store, &key, "Tester", "test passphrase", Role::Admin, true)
+        .unwrap();
+    let session = accounts.sign_in("Tester", "test passphrase").unwrap();
+    let cookie = format!("{SESSION_COOKIE}={}", session.cookie);
+    let app = router(AppState::new(store.clone(), key.clone(), accounts)).layer(MapRequestLayer::new(
+        move |mut request: Request<Body>| {
+            let headers = request.headers_mut();
+            headers.insert(header::COOKIE, cookie.parse().unwrap());
+            headers.insert(header::HOST, "nevo.test".parse().unwrap());
+            headers.insert(header::ORIGIN, "http://nevo.test".parse().unwrap());
+            request
+        },
+    ));
     Node {
         _dir: dir,
         store,
@@ -66,9 +86,20 @@ async fn get(app: &Router, uri: &str) -> Reply {
 type Part<'a> = (&'a str, Option<(&'a str, &'a str)>, &'a [u8]);
 
 async fn post_form(app: &Router, parts: &[Part<'_>]) -> Reply {
+    // The form carries the session's form token (auth.rs); take it from the page, as a browser does.
+    let page = get(app, "/add").await.text();
+    let csrf = page
+        .split("name=\"csrf\" value=\"")
+        .nth(1)
+        .unwrap()
+        .split('"')
+        .next()
+        .unwrap();
+    let mut with_token: Vec<Part> = vec![("csrf", None, csrf.as_bytes())];
+    with_token.extend_from_slice(parts);
     let boundary = "nevo-test-boundary-7d3f";
     let mut body = Vec::new();
-    for (name, file, data) in parts {
+    for (name, file, data) in &with_token {
         body.extend_from_slice(format!("--{boundary}\r\n").as_bytes());
         match file {
             Some((file_name, mime)) => body.extend_from_slice(
@@ -162,7 +193,8 @@ async fn add_a_guide_and_read_it() {
         .await
         .text()
         .contains("Treating a small burn"));
-    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 1);
+    // After the admin's key record.
+    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 2);
 }
 
 #[tokio::test]
@@ -218,7 +250,7 @@ async fn node_only_guides_stay_out_of_the_log() {
     let url = add_burns_guide(&n.app, &[("node_only", None, b"1")]).await;
     let page = get(&n.app, &url).await.text();
     assert!(page.contains("Only on this NEVO"));
-    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 0);
+    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 1, "only the key record");
 }
 
 #[tokio::test]
@@ -299,7 +331,7 @@ async fn form_mistakes_keep_what_was_typed() {
     )
     .await;
     assert_eq!(reply.status, StatusCode::BAD_REQUEST);
-    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 0);
+    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 1, "only the key record");
 }
 
 /// Counts files in the blob store folder, to check that rejected forms keep nothing.
@@ -397,7 +429,8 @@ async fn a_full_disk_refuses_uploads_politely() {
     .await;
     assert_eq!(reply.status, StatusCode::INSUFFICIENT_STORAGE);
     assert!(reply.text().contains("My careful steps"));
-    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 0);
+    // Only the admin's key record, from setup, is in the log.
+    assert_eq!(n.store.log_position(n.key.public()).unwrap(), 1);
 }
 
 #[tokio::test]
@@ -487,5 +520,6 @@ async fn simultaneous_additions_get_distinct_clocks() {
         .map(|r| r.object.clock)
         .collect();
     clocks.sort();
-    assert_eq!(clocks, (1..=8).collect::<Vec<_>>());
+    // The author's key record has clock 1.
+    assert_eq!(clocks, (2..=9).collect::<Vec<_>>());
 }

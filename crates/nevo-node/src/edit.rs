@@ -15,7 +15,9 @@ use maud::{html, Markup, PreEscaped};
 use nevo_format::{seal, ContentFile, Id, Keypair, Kind, Revision, Sealed, Visibility};
 use nevo_store::{Store, StoreError};
 
+use crate::accounts::Session;
 use crate::app::{self, blocking, parse_id, AppError, AppResult, AppState, MAX_FIELD, MAX_FILES, MAX_PARTS, MAX_TEXT};
+use crate::auth::{self, Contributor, Viewer};
 use crate::diff::{self, Side};
 use crate::{markdown, pages};
 
@@ -42,10 +44,10 @@ form label.check { font-weight: 400; margin-top: .3rem; }
 details { margin: .4rem 0; } summary { cursor: pointer; color: var(--accent); }
 "#;
 
-/// The key that signs edits and merges. Until user accounts exist it is the node's key; this
-/// is the one place to change when people sign their own work.
-fn signer(state: &AppState) -> Arc<Keypair> {
-    state.node.clone()
+/// The key that signs edits and merges: the signed-in person's own (accounts.rs). The node
+/// key only signs the node's log.
+fn signer(session: &Session) -> AppResult<Arc<Keypair>> {
+    Ok(Arc::new(session.signing_key()?))
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -155,7 +157,7 @@ fn visible_tips(store: &Store, item: Id) -> AppResult<Vec<Sealed<Revision>>> {
         .into_iter()
         .filter(|r| r.object.vis != Visibility::Private)
         .collect();
-    let shown = app::current(&tips).ok_or(AppError::NotFound)?.id();
+    let shown = app::current(&tips, &Viewer::default()).ok_or(AppError::NotFound)?.id();
     if let Some(pos) = tips.iter().position(|t| t.id() == shown) {
         let tip = tips.remove(pos);
         tips.insert(0, tip);
@@ -240,6 +242,10 @@ fn prefill(versions: &[Version]) -> EditForm {
             lang: r.lang.clone(),
             license: r.license.clone(),
             node_only: r.vis != Visibility::Public,
+            // Private items can't be edited yet (visible_tips leaves them out).
+            private: false,
+            // Filled in by the handler from the session.
+            csrf: String::new(),
             error: None,
         },
         parents: versions.iter().map(Version::id).collect(),
@@ -273,6 +279,7 @@ fn edit_page(item: Id, versions: &[Version], form: &EditForm, on_node: bool) -> 
             form method="post" action={ "/item/" (item) "/edit" } enctype="multipart/form-data" {
                 @for parent in &form.parents { input type="hidden" name="parent" value=(parent); }
                 (pages::guide_fields(&form.fields))
+                (auth::csrf_field(&form.fields.csrf))
                 @if on_node {
                     p.muted { "This item is kept on this NEVO only, so its new versions stay here too." }
                 } @else {
@@ -327,14 +334,21 @@ fn comparison(item: Id, versions: &[Version]) -> Markup {
     }
 }
 
-pub(crate) async fn edit_form(State(state): State<AppState>, Path(id): Path<String>) -> AppResult<Html<String>> {
+pub(crate) async fn edit_form(
+    State(state): State<AppState>,
+    Contributor(session): Contributor,
+    Path(id): Path<String>,
+) -> AppResult<Html<String>> {
     let item = parse_id(&id)?;
+    let csrf = session.csrf_token();
     let page = blocking(move || {
         let store = &state.store;
         let start = visible_tips(store, item)?.remove(0);
         let on_node = stays_on_node(store, item, std::slice::from_ref(&start))?;
         let versions = [load(store, start, &mut HashMap::new())?];
-        Ok(edit_page(item, &versions, &prefill(&versions), on_node).into_string())
+        let mut form = prefill(&versions);
+        form.fields.csrf = csrf;
+        Ok(edit_page(item, &versions, &form, on_node).into_string())
     })
     .await?;
     Ok(Html(page))
@@ -342,10 +356,12 @@ pub(crate) async fn edit_form(State(state): State<AppState>, Path(id): Path<Stri
 
 pub(crate) async fn merge_form(
     State(state): State<AppState>,
+    Contributor(session): Contributor,
     Path(id): Path<String>,
     Query(query): Query<HashMap<String, String>>,
 ) -> AppResult<Response> {
     let item = parse_id(&id)?;
+    let csrf = session.csrf_token();
     let start: Option<Id> = query.get("start").and_then(|s| s.parse().ok());
     let page = blocking(move || {
         let store = &state.store;
@@ -364,9 +380,9 @@ pub(crate) async fn merge_form(
             .into_iter()
             .map(|t| load(store, t, &mut texts))
             .collect::<AppResult<Vec<_>>>()?;
-        Ok(Some(
-            edit_page(item, &versions, &prefill(&versions), on_node).into_string(),
-        ))
+        let mut form = prefill(&versions);
+        form.fields.csrf = csrf;
+        Ok(Some(edit_page(item, &versions, &form, on_node).into_string()))
     })
     .await?;
     Ok(match page {
@@ -377,6 +393,7 @@ pub(crate) async fn merge_form(
 
 pub(crate) async fn edit_submit(
     State(state): State<AppState>,
+    Contributor(session): Contributor,
     Path(id): Path<String>,
     multipart: Multipart,
 ) -> Response {
@@ -385,7 +402,9 @@ pub(crate) async fn edit_submit(
         Err(e) => return e.into_response(),
     };
     let mut form = EditForm::default();
-    match save(&state, item, multipart, &mut form).await {
+    let result = save(&state, &session, item, multipart, &mut form).await;
+    form.fields.csrf = session.csrf_token();
+    match result {
         Ok(()) => Redirect::to(&format!("/item/{item}")).into_response(),
         Err(AppError::BadRequest(message)) => {
             form.fields.error = Some(message);
@@ -445,7 +464,13 @@ async fn resolve(state: &AppState, item: Id, form: &EditForm) -> AppResult<Base>
     .await
 }
 
-async fn save(state: &AppState, item: Id, mut multipart: Multipart, form: &mut EditForm) -> AppResult<()> {
+async fn save(
+    state: &AppState,
+    session: &Session,
+    item: Id,
+    mut multipart: Multipart,
+    form: &mut EditForm,
+) -> AppResult<()> {
     let bad = |m: &str| AppError::BadRequest(m.to_string());
     let too_many_files = || AppError::BadRequest(format!("At most {MAX_FILES} files."));
     let mut uploads = Vec::new();
@@ -491,6 +516,7 @@ async fn save(state: &AppState, item: Id, mut multipart: Multipart, form: &mut E
                 // As in adding: check what was typed before storing anything, so a mistake
                 // leaves no uploaded files behind.
                 if base.is_none() {
+                    auth::check_session_csrf(session, &form.fields.csrf)?;
                     app::check_fields(&form.fields)?;
                     base = Some(resolve(state, item, form).await?);
                 }
@@ -506,6 +532,7 @@ async fn save(state: &AppState, item: Id, mut multipart: Multipart, form: &mut E
         }
     }
 
+    auth::check_session_csrf(session, &form.fields.csrf)?;
     app::check_fields(&form.fields)?;
     let base = match base {
         Some(base) => base,
@@ -547,6 +574,7 @@ async fn save(state: &AppState, item: Id, mut multipart: Multipart, form: &mut E
     let (title, summary, lang, license) = (f.title.clone(), f.summary.clone(), f.lang.clone(), f.license.clone());
     let parents = base.parents;
     let state = state.clone();
+    let key = signer(session)?;
     blocking(move || {
         let store = &state.store;
         let mut content = Vec::new();
@@ -560,7 +588,6 @@ async fn save(state: &AppState, item: Id, mut multipart: Multipart, form: &mut E
             });
         }
         content.extend(files);
-        let key = signer(&state);
         let author = key.public();
         let _adding = state.adding.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
         // One more than the author's last object and every version this builds on (spec

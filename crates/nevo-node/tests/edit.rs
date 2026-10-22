@@ -7,8 +7,11 @@ use axum::http::{header, HeaderMap, Request, StatusCode};
 use axum::Router;
 use http_body_util::BodyExt;
 use nevo_format::*;
+use nevo_node::accounts::{Accounts, Role, ACCOUNTS_FILE};
+use nevo_node::auth::SESSION_COOKIE;
 use nevo_node::{router, AppState};
 use nevo_store::Store;
+use tower::util::MapRequestLayer;
 use tower::ServiceExt;
 
 struct Node {
@@ -22,7 +25,23 @@ fn node() -> Node {
     let dir = tempfile::tempdir().unwrap();
     let store = Arc::new(Store::open(dir.path()).unwrap());
     let key = Arc::new(Keypair::from_secret([7; 32]));
-    let app = router(AppState::new(store.clone(), key.clone()));
+    // Editing needs a signed-in contributor (accounts.rs): create one and send its cookie, plus
+    // the Host and Origin a browser sends, which the forged-form check compares.
+    let accounts = Arc::new(Accounts::open(dir.path().join(ACCOUNTS_FILE)).unwrap());
+    accounts
+        .create(&store, &key, "Tester", "test passphrase", Role::Admin, true)
+        .unwrap();
+    let session = accounts.sign_in("Tester", "test passphrase").unwrap();
+    let cookie = format!("{SESSION_COOKIE}={}", session.cookie);
+    let app = router(AppState::new(store.clone(), key.clone(), accounts)).layer(MapRequestLayer::new(
+        move |mut request: Request<Body>| {
+            let headers = request.headers_mut();
+            headers.insert(header::COOKIE, cookie.parse().unwrap());
+            headers.insert(header::HOST, "nevo.test".parse().unwrap());
+            headers.insert(header::ORIGIN, "http://nevo.test".parse().unwrap());
+            request
+        },
+    ));
     Node {
         _dir: dir,
         store,
@@ -65,9 +84,21 @@ async fn get(app: &Router, uri: &str) -> Reply {
 type Part<'a> = (&'a str, Option<(&'a str, &'a str)>, &'a [u8]);
 
 async fn post(app: &Router, uri: &str, parts: &[Part<'_>]) -> Reply {
+    // The form carries the session's form token (auth.rs); take it from a page, as a browser does.
+    let page = get(app, "/add").await.text();
+    let csrf = page
+        .split("name=\"csrf\" value=\"")
+        .nth(1)
+        .unwrap()
+        .split('"')
+        .next()
+        .unwrap()
+        .to_string();
+    let mut with_token: Vec<Part> = vec![("csrf", None, csrf.as_bytes())];
+    with_token.extend_from_slice(parts);
     let boundary = "nevo-test-boundary-7d3f";
     let mut body = Vec::new();
-    for (name, file, data) in parts {
+    for (name, file, data) in &with_token {
         body.extend_from_slice(format!("--{boundary}\r\n").as_bytes());
         match file {
             Some((file_name, mime)) => body.extend_from_slice(
@@ -181,8 +212,12 @@ async fn an_edit_is_a_child_version() {
     let r = &now[0].object;
     assert_eq!(r.item, Some(item));
     assert_eq!(r.parents, vec![first.id()]);
-    assert_eq!(r.clock, 2);
-    assert_eq!(r.author, n.key.public());
+    assert_eq!(r.clock, 3, "the contributor's key record has clock 1");
+    assert_ne!(
+        r.author,
+        n.key.public(),
+        "signed by the contributor's own key, not the node key"
+    );
     assert_eq!(r.vis, Visibility::Public);
     assert_eq!(r.kind, Kind::Guide);
     let names: Vec<&str> = r.content.iter().map(|f| f.name.as_str()).collect();
@@ -193,8 +228,8 @@ async fn an_edit_is_a_child_version() {
     assert_eq!(r.content[0].size, stored.len() as u64);
     assert_eq!(
         n.store.log_position(n.key.public()).unwrap(),
-        2,
-        "the edit was published"
+        3,
+        "the admin's key record, the first version and the edit were published"
     );
 
     let page = get(&n.app, &format!("/item/{item}")).await.text();
@@ -289,7 +324,7 @@ async fn concurrent_edits_branch_and_a_merge_joins_them() {
     assert_eq!(merged.len(), 1);
     let r = &merged[0].object;
     assert_eq!(r.parents, ids, "every tip is a parent");
-    assert_eq!(r.clock, 4);
+    assert_eq!(r.clock, 5, "the contributor's key record has clock 1");
     assert_eq!(r.title, "Burns: merged");
     assert_eq!(r.content[1].blob, first.object.content[1].blob);
     assert!(!get(&n.app, &format!("/item/{item}"))
@@ -426,8 +461,8 @@ async fn node_only_items_stay_node_only() {
     assert_eq!(tip.object.vis, Visibility::Node);
     assert_eq!(
         n.store.log_position(n.key.public()).unwrap(),
-        0,
-        "nothing was published"
+        1,
+        "nothing was published but the admin's key record"
     );
 
     // A public item can be kept here from some version on.
@@ -446,8 +481,8 @@ async fn node_only_items_stay_node_only() {
     assert_eq!(tips(&n, public)[0].object.vis, Visibility::Node);
     assert_eq!(
         n.store.log_position(n.key.public()).unwrap(),
-        1,
-        "only the first version"
+        2,
+        "only the admin's key record and the first version"
     );
 }
 

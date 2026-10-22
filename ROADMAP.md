@@ -44,8 +44,8 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 - [ ] Content model from day one: signed revisions, fingerprinted blobs
   - [x] `nevo-format` crate: format v1 objects, IDs, signatures, strict CBOR; matches the Python reference encoder
   - [x] `nevo-store` crate: object database (SQLite), verified blob files, chained sync logs with fork detection
-- [ ] Roles: anonymous reader, contributor, admin
-- [ ] Setup wizard
+- [x] Roles: anonymous reader, contributor, admin (each person signs with their own key)
+- [x] Setup wizard (first admin and node name, guarded by a one-time code from the console)
 
 **NEVO Seed**
 
