@@ -111,7 +111,7 @@ Out of scope: the public internet. A node never talks to it (D-005), so remote a
 |---|---|---|---|---|
 | T37 | Power cut mid-write. | Corrupt database, half-written blob, empty key file. | SQLite WAL with `synchronous = FULL`; blobs written to `tmp/`, fsynced, renamed, directory fsynced; stale temp files cleaned at start; key file written to a temp file then renamed. Power governor shuts down cleanly on low battery. | **Done**: `nevo-store/src/schema.rs`, `blobs.rs`, `identity.rs`. Power governor **Planned** (Phase 2). |
 | T38 | SD card wear and bit rot. | Silent corruption, then a dead card. | `verify_blob` re-hashes files; a corrupt blob can be fetched again from a peer. Keep writes low (no prompt cache, D-033). Vault mode for stored sticks (D-028). | **Done** (`verify_blob`). Scheduled scrubbing and repair **Planned**. |
-| T39 | Disk fills up (big uploads, orphaned blobs from failed forms, sync). | Writes fail; database can't commit. | Remove blobs no revision uses; refuse uploads below a free-space floor; reserve space for the database. | **In progress** (storage housekeeping, ROADMAP Phase 1). No blob GC today. |
+| T39 | Disk fills up (big uploads, orphaned blobs from failed forms, sync). | Writes fail; database can't commit. | Remove blobs no revision uses; refuse uploads below a free-space floor; reserve space for the database. | **Done** (`nevo-store` gc.rs and space.rs: unused blobs removed after 24 h; uploads refused below a reserve of max(512 MB, 5%), checked every 64 MB while writing; objects need no check because they are tiny). Sync-driven filling still needs per-peer limits (sync spec). |
 | T40 | The node is used to reach the internet, or reached from it. | Breaks D-005; exposes the node. | No code opens outbound connections. Sync will accept only local addresses (D-005, D-021). The default listener is `0.0.0.0:8080`, so the admin must not port-forward it. | **Done** (no outbound code). Enforced local-only sync **Planned**. |
 
 ### 3.8 Supply chain: Seed, catalogs, releases (A1, A2)
@@ -129,10 +129,10 @@ In order of how badly they could hurt people, and how close they are to shipping
 1. **ZIM HTML on the node's origin (T20).** Must be sandboxed before ZIM reading ships.
 2. **Unverified model files and derived data (T28, T29).** Both can put words in a trusted source's mouth.
 3. **No accounts yet (T21, T22).** Anyone on the Wi-Fi publishes as the node; CSRF protection comes with accounts.
-4. **No free-space floor or blob GC (T39).** One user can fill the disk.
-5. **Keys at rest (T34, T15).** The node key and private content sit unencrypted on a removable card.
+4. **Keys at rest (T34, T15).** The node key and private content sit unencrypted on a removable card.
+5. **Backdated signatures after revocation (T9).** A key thief can sign with clock values below the revocation point.
 
-Also open: backdated signatures after revocation (T9), no TLS on a LAN (T25), EXIF location (T16), connection timeouts (T24), physical access (T36), release signing (T43).
+Also open: no TLS on a LAN (T25), EXIF location (T16), connection timeouts (T24), physical access (T36), release signing (T43).
 
 ## 5. Reporting vulnerabilities
 
