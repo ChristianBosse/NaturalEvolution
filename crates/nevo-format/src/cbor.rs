@@ -347,9 +347,11 @@ impl Decoder<'_> {
             }
             3 => Value::Text(self.text(n)?),
             4 => {
-                // Every item takes at least one byte, which bounds the allocation.
+                // Every item takes at least one byte, so `count` is bounded by the input, but not
+                // across nesting levels: each level could reserve room for the whole input. Reserve
+                // a little and let the vector grow as items actually decode.
                 let count = self.length(n)?;
-                let mut items = Vec::with_capacity(count);
+                let mut items = Vec::with_capacity(count.min(64));
                 for _ in 0..count {
                     items.push(self.value(depth + 1)?);
                 }
