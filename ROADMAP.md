@@ -50,6 +50,9 @@ If v0.1 does this well, NEVO's core idea is proven. Everything else builds on it
 **NEVO Seed**
 
 - [ ] Built-in catalog and kits
+  - [x] Draft catalog format: [docs/spec/catalog.md](docs/spec/catalog.md) (D-045 to D-060 proposed)
+  - [x] First catalog draft with real Kiwix packs and models in English, French and Spanish: [catalogs/nevo-catalog-draft.json](catalogs/nevo-catalog-draft.json), summary in [docs/kits.md](docs/kits.md)
+  - [ ] Review the format and kits, add BLAKE3 blob IDs, sign the first catalog
 - [ ] Resumable, verified downloads
 - [ ] Seed stick writing: exFAT, fake-capacity test, verification after writing
 - [ ] Vault mode

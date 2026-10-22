@@ -1,0 +1,4783 @@
+{
+ "t": "catalog-list",
+ "v": 1,
+ "name": "NEVO project catalog",
+ "slug": "nevo",
+ "seq": 1,
+ "built": "2026-10-22",
+ "update": [],
+ "draft": {
+  "status": "Unsigned JSON for review. The signed form is catalog.cbor inside a catalog revision (docs/spec/catalog.md).",
+  "built_from": "https://library.kiwix.org/catalog/v2/entries?count=-1, each file's .sha256 and .meta4, and the Hugging Face API",
+  "tool": "catalogs/tools/build_draft.py",
+  "units": "Sizes in bytes. GB in notes means 10^9 bytes.",
+  "missing": "BLAKE3 blob IDs (need the full files); update URLs (none yet)."
+ },
+ "license_refs": {
+  "LicenseRef-PublicDomain-US": "Public domain in the United States (expired copyright or a US federal work). May still be protected in some other countries."
+ },
+ "mirror_sets": {
+  "kiwix": {
+   "primary": "https://download.kiwix.org/",
+   "mirrors": [
+    "https://dumps.wikimedia.org/kiwix/",
+    "https://ftp.nluug.nl/pub/kiwix/",
+    "https://ftpmirror.your.org/pub/kiwix/",
+    "https://mirror-sites-ca.mblibrary.info/mirror-sites/download.kiwix.org/",
+    "https://mirror-sites-in.mblibrary.info/mirror-sites/download.kiwix.org/",
+    "https://mirror.download.kiwix.org/",
+    "https://mirrors.dotsrc.org/kiwix/",
+    "https://ny.mirror.driftle.ss/kiwix/",
+    "https://wi.mirror.driftle.ss/kiwix/"
+   ],
+   "note": "A file's URL on a mirror is the mirror base plus the file's path. Each file's .meta4 lists the live mirrors."
+  },
+  "huggingface": {
+   "primary": "https://huggingface.co/",
+   "mirrors": []
+  }
+ },
+ "stick_budget": {
+  "usable_fraction": 0.9,
+  "base": {
+   "software": {
+    "size": 100000000,
+    "what": "NEVO binaries for Linux ARM 32/64, Linux x86, Windows"
+   },
+   "os_image": {
+    "size": 600000000,
+    "what": "Compressed OS image for a Pi (if Seed ships one; open question)"
+   },
+   "docs": {
+    "size": 50000000,
+    "what": "Printable setup guide, licenses and attributions"
+   },
+   "helper_models": {
+    "size": 1000000000,
+    "what": "Embedding model and reranker (not chosen yet; reserve)"
+   },
+   "predigest": {
+    "size": 1000000000,
+    "what": "Embeddings and summary cards made by Seed (reserve)"
+   }
+  },
+  "tier_models": {
+   "standard": [
+    "hf/unsloth/Qwen3.5-4B-GGUF/Q4_K_M",
+    "hf/unsloth/Qwen3.5-2B-GGUF/Q4_K_M"
+   ],
+   "enhanced": [
+    "hf/unsloth/gemma-4-E4B-it-GGUF/Q4_K_M"
+   ]
+  },
+  "index_ratio": 0.34
+ },
+ "packs": [
+  {
+   "id": "kiwix/wikipedia_en_medicine_mini",
+   "kind": "zim",
+   "title": "WikiMed Medical Encyclopedia (mini)",
+   "summary": "The largest medical encyclopedia, from Wikipedia",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-10",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "6471ba0e-dd99-b0ac-6c5b-31f838663e03",
+    "name": "wikipedia_en_medicine",
+    "flavour": "mini",
+    "articles": 340299,
+    "media": 446
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_medicine_mini_2026-10.zim",
+     "size": 174350854,
+     "sha256": "c66f27274775870cec7e0c230c7e7626d367633b1f26c4a74499c249ddac0822",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_mini_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_medicine_mini_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_mini_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_mini_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_medicine_mini_2026-10.zim",
+     "size_estimate": 59279290,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_medicine_nopic",
+   "kind": "zim",
+   "title": "WikiMed Medical Encyclopedia (nopic)",
+   "summary": "The largest medical encyclopedia, from Wikipedia",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-10",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "1f8cf2fe-e076-e018-2e09-004387350cba",
+    "name": "wikipedia_en_medicine",
+    "flavour": "nopic",
+    "articles": 371615,
+    "media": 5493
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_medicine_nopic_2026-10.zim",
+     "size": 1047708415,
+     "sha256": "718fadad40b3491be3fa8f95181a948e4d726f97a79a14e0ef1b90c6b2b03625",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_medicine_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_medicine_nopic_2026-10.zim",
+     "size_estimate": 356220861,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_medicine_maxi",
+   "kind": "zim",
+   "title": "WikiMed Medical Encyclopedia (maxi)",
+   "summary": "The largest medical encyclopedia, from Wikipedia",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-10",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "f0902c7c-81ad-0490-6f91-fecc14810992",
+    "name": "wikipedia_en_medicine",
+    "flavour": "maxi",
+    "articles": 371615,
+    "media": 104515
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_medicine_maxi_2026-10.zim",
+     "size": 1864210320,
+     "sha256": "9a1570f2f346aa18694ee520e0483f19b7447f69e0970e2f727c53ccf0dcc7d6",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_medicine_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_medicine_maxi_2026-10.zim",
+     "size_estimate": 356220861,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_fr_medicine_nopic",
+   "kind": "zim",
+   "title": "Encyclopédie médicale WikiMed (nopic)",
+   "summary": "L'Encyclopédie médicale de Wikipédia",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-15",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "951848b1-40fd-26fa-e8c3-37b08ff6d5e7",
+    "name": "wikipedia_fr_medicine",
+    "flavour": "nopic",
+    "articles": 87661,
+    "media": 2211
+   },
+   "files": [
+    {
+     "name": "wikipedia_fr_medicine_nopic_2026-10.zim",
+     "size": 320851596,
+     "sha256": "f10857e0d3d0bcfa8db4e106baf52e77f7c76b124a0f61505711b4e98402f592",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_fr_medicine_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_fr_medicine_nopic_2026-10.zim",
+     "size_estimate": 109089542,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_fr_medicine_maxi",
+   "kind": "zim",
+   "title": "Encyclopédie médicale WikiMed (maxi)",
+   "summary": "L'Encyclopédie médicale de Wikipédia",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-15",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "8e8bc1c3-636f-9dfd-a66d-d1f15f912323",
+    "name": "wikipedia_fr_medicine",
+    "flavour": "maxi",
+    "articles": 87661,
+    "media": 58196
+   },
+   "files": [
+    {
+     "name": "wikipedia_fr_medicine_maxi_2026-10.zim",
+     "size": 864254351,
+     "sha256": "f5b71d4b057cddf1f66130658bf922292ca5cf25c40e589fa6cdee7cddf091d4",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_fr_medicine_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_medicine_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_fr_medicine_maxi_2026-10.zim",
+     "size_estimate": 109089542,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_es_medicine_nopic",
+   "kind": "zim",
+   "title": "Wikipedia Médica (nopic)",
+   "summary": "La Enciclopedia medical de Wikipedia",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-15",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "a65a596a-29d5-a71d-adf6-a4a48fa38d88",
+    "name": "wikipedia_es_medicine",
+    "flavour": "nopic",
+    "articles": 56839,
+    "media": 1756
+   },
+   "files": [
+    {
+     "name": "wikipedia_es_medicine_nopic_2026-10.zim",
+     "size": 171178026,
+     "sha256": "d52b3fddfb5cb4fb0bd79b9eb38fa0734ef247e3695ee01d1cdc7ffc89e00fb0",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_es_medicine_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_es_medicine_nopic_2026-10.zim",
+     "size_estimate": 58200528,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_es_medicine_maxi",
+   "kind": "zim",
+   "title": "Wikipedia Médica (maxi)",
+   "summary": "La Enciclopedia medical de Wikipedia",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-15",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "cf21d0d2-0a67-f755-6136-888b25d88018",
+    "name": "wikipedia_es_medicine",
+    "flavour": "maxi",
+    "articles": 56839,
+    "media": 31119
+   },
+   "files": [
+    {
+     "name": "wikipedia_es_medicine_maxi_2026-10.zim",
+     "size": 468834575,
+     "sha256": "692e606f9173798e1193707e5de50f278fbeed415e187426b6522eab002835d7",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_es_medicine_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_medicine_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_es_medicine_maxi_2026-10.zim",
+     "size_estimate": 58200528,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/mdwiki_en_all_maxi",
+   "kind": "zim",
+   "title": "MDWiki Medical Encyclopedia (maxi)",
+   "summary": "Healthcare articles curated by WikiProjectMed",
+   "lang": "en",
+   "version": "2025-11",
+   "date": "2025-11-12",
+   "topics": [
+    "medical"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: mdwiki.org footer, CC BY-SA 4.0",
+   "attribution": "MDWiki / WikiProjectMed contributors",
+   "homepage": "https://mdwiki.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "00be15d4-7231-6bf3-d02e-968b100d2cca",
+    "name": "mdwiki_en_all",
+    "flavour": "maxi",
+    "articles": 363797,
+    "media": 109499
+   },
+   "files": [
+    {
+     "name": "mdwiki_en_all_maxi_2025-11.zim",
+     "size": 2302838768,
+     "sha256": "ee51df7860dbcab8c628aad32cf9972726ab708d784cdaf3e217d596920edf80",
+     "url": "https://download.kiwix.org/zim/other/mdwiki_en_all_maxi_2025-11.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/mdwiki_en_all_maxi_2025-11.zim",
+     "meta4": "https://download.kiwix.org/zim/other/mdwiki_en_all_maxi_2025-11.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/mdwiki_en_all_maxi_2025-11.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "mdwiki_en_all_maxi_2025-11.zim",
+     "size_estimate": 391482590,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikem_en_all_nopic",
+   "kind": "zim",
+   "title": "WikEM (nopic)",
+   "summary": "The world's largest emergency medicine open-access resource",
+   "lang": "en",
+   "version": "2026-07",
+   "date": "2026-07-24",
+   "topics": [
+    "medical/first-aid"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: wikem.org/wiki/WikEM:Copyrights, CC BY-SA 4.0",
+   "attribution": "WikEM contributors",
+   "homepage": "https://wikem.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "be20c57a-317a-800d-bfaf-c24cc6bb08c1",
+    "name": "wikem_en_all",
+    "flavour": "nopic",
+    "articles": 107952,
+    "media": 38
+   },
+   "files": [
+    {
+     "name": "wikem_en_all_nopic_2026-07.zim",
+     "size": 346946448,
+     "sha256": "831c6cad5dac7c51fe3cc12d226d8bd411b3883c8c83643f2c167d12928f5dd5",
+     "url": "https://download.kiwix.org/zim/other/wikem_en_all_nopic_2026-07.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/wikem_en_all_nopic_2026-07.zim",
+     "meta4": "https://download.kiwix.org/zim/other/wikem_en_all_nopic_2026-07.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/wikem_en_all_nopic_2026-07.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikem_en_all_nopic_2026-07.zim",
+     "size_estimate": 117961792,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikem_en_all_maxi",
+   "kind": "zim",
+   "title": "WikEM (maxi)",
+   "summary": "The world's largest emergency medicine open-access resource",
+   "lang": "en",
+   "version": "2026-07",
+   "date": "2026-07-24",
+   "topics": [
+    "medical/first-aid"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: wikem.org/wiki/WikEM:Copyrights, CC BY-SA 4.0",
+   "attribution": "WikEM contributors",
+   "homepage": "https://wikem.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "2a517a3f-68d0-4f27-508f-20a7ed5fd4f1",
+    "name": "wikem_en_all",
+    "flavour": "maxi",
+    "articles": 107945,
+    "media": 2778
+   },
+   "files": [
+    {
+     "name": "wikem_en_all_maxi_2026-07.zim",
+     "size": 374632362,
+     "sha256": "7bbdd705544616df1ff37f8b4e0e5382e7b4d92532feecea42227af4169fbd7f",
+     "url": "https://download.kiwix.org/zim/other/wikem_en_all_maxi_2026-07.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/wikem_en_all_maxi_2026-07.zim",
+     "meta4": "https://download.kiwix.org/zim/other/wikem_en_all_maxi_2026-07.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/wikem_en_all_maxi_2026-07.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikem_en_all_maxi_2026-07.zim",
+     "size_estimate": 117961792,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/gardening.stackexchange.com_en_all",
+   "kind": "zim",
+   "title": "Gardening & Landscaping Q&A",
+   "summary": "Stack Exchange Q&A for gardeners and landscapers",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-19",
+   "topics": [
+    "farming/crops"
+   ],
+   "license": "CC-BY-SA-2.5 AND CC-BY-SA-3.0 AND CC-BY-SA-4.0",
+   "license_note": "Posts are CC BY-SA 2.5, 3.0 or 4.0 depending on when they were written.",
+   "license_check": "known: Stack Exchange terms",
+   "attribution": "Stack Exchange contributors",
+   "homepage": "https://stackexchange.com",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "e6c0cf4d-c610-0ef0-bb79-ebae48c61c63",
+    "name": "gardening.stackexchange.com_en_all",
+    "flavour": "",
+    "articles": 32508,
+    "media": 23857
+   },
+   "files": [
+    {
+     "name": "gardening.stackexchange.com_en_all_2026-10.zim",
+     "size": 933097375,
+     "sha256": "8079b77ba40d830c31cdfa0e3f43a100e9d9488d856b10ffb3aca4e829594e6e",
+     "url": "https://download.kiwix.org/zim/stack_exchange/gardening.stackexchange.com_en_all_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/stack_exchange/gardening.stackexchange.com_en_all_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/stack_exchange/gardening.stackexchange.com_en_all_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/stack_exchange/gardening.stackexchange.com_en_all_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gardening.stackexchange.com_en_all_2026-10.zim",
+     "size_estimate": 317253107,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/cooking.stackexchange.com_en_all",
+   "kind": "zim",
+   "title": "Cooking Q&A (Seasoned Advice)",
+   "summary": "Stack Exchange Q&A for professional and amateur cooking chefs",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-19",
+   "topics": [
+    "food/cooking"
+   ],
+   "license": "CC-BY-SA-2.5 AND CC-BY-SA-3.0 AND CC-BY-SA-4.0",
+   "license_note": "Posts are CC BY-SA 2.5, 3.0 or 4.0 depending on when they were written.",
+   "license_check": "known: Stack Exchange terms",
+   "attribution": "Stack Exchange contributors",
+   "homepage": "https://stackexchange.com",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "824a49b9-e96e-a649-26e3-6d5bd97872cb",
+    "name": "cooking.stackexchange.com_en_all",
+    "flavour": "",
+    "articles": 59758,
+    "media": 7466
+   },
+   "files": [
+    {
+     "name": "cooking.stackexchange.com_en_all_2026-10.zim",
+     "size": 238098128,
+     "sha256": "b5dc3a79b681be1afea32dd65e837c604e7dd7072f51622414a7a1d61fc52541",
+     "url": "https://download.kiwix.org/zim/stack_exchange/cooking.stackexchange.com_en_all_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/stack_exchange/cooking.stackexchange.com_en_all_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/stack_exchange/cooking.stackexchange.com_en_all_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/stack_exchange/cooking.stackexchange.com_en_all_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "cooking.stackexchange.com_en_all_2026-10.zim",
+     "size_estimate": 80953363,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/gardenology_en_all",
+   "kind": "zim",
+   "title": "Gardenology",
+   "summary": "A complete plant and garden encyclopedia",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-09",
+   "topics": [
+    "farming/crops"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: gardenology.org footer badge, CC BY-SA 3.0",
+   "attribution": "Gardenology.org contributors",
+   "homepage": "https://www.gardenology.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "02e5374f-9e77-efb8-792e-8cc9f11a51b1",
+    "name": "gardenology_en_all",
+    "flavour": "",
+    "articles": 44083,
+    "media": 11816
+   },
+   "files": [
+    {
+     "name": "gardenology.org_en_all_2026-09.zim",
+     "size": 112499438,
+     "sha256": "796c4930a18174ef39c2f7aa676d9773d4d9c0f7c9f0eeae9a9338889edfd6c9",
+     "url": "https://download.kiwix.org/zim/other/gardenology.org_en_all_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/gardenology.org_en_all_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/other/gardenology.org_en_all_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/gardenology.org_en_all_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gardenology.org_en_all_2026-09.zim",
+     "size_estimate": 38249808,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/gutenberg_en_lcc-s",
+   "kind": "zim",
+   "title": "Project Gutenberg Library",
+   "summary": "Agriculture",
+   "lang": "en",
+   "version": "2026-03",
+   "date": "2026-03-06",
+   "topics": [
+    "farming",
+    "culture/books"
+   ],
+   "license": "LicenseRef-PublicDomain-US",
+   "license_note": "Public domain in the USA. A few works may still be under copyright in countries with longer terms.",
+   "license_check": "known: Project Gutenberg license",
+   "attribution": "Project Gutenberg",
+   "homepage": "https://www.gutenberg.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "4dc2d539-98f7-0b76-7256-0943f0c52e60",
+    "name": "gutenberg_en_lcc-s",
+    "flavour": "",
+    "articles": 1258,
+    "media": 31526
+   },
+   "files": [
+    {
+     "name": "gutenberg_en_lcc-s_2026-03.zim",
+     "size": 4532683039,
+     "sha256": "3012dfb7936d5bc8a5c3bdd0c9f864cd81e9514c28c40afc548415fd95272fcc",
+     "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-s_2026-03.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/gutenberg/gutenberg_en_lcc-s_2026-03.zim",
+     "meta4": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-s_2026-03.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-s_2026-03.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gutenberg_en_lcc-s_2026-03.zim",
+     "size_estimate": 1541112233,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/appropedia_en_all_maxi",
+   "kind": "zim",
+   "title": "Appropedia (maxi)",
+   "summary": "Shared knowledge to build rich, sustainable lives",
+   "lang": "en",
+   "version": "2026-02",
+   "date": "2026-02-26",
+   "topics": [
+    "shelter/building",
+    "water",
+    "energy",
+    "farming"
+   ],
+   "license": "CC-BY-SA-3.0 AND CC-BY-SA-4.0",
+   "license_note": "Newer pages CC BY-SA 4.0, older pages CC BY-SA 3.0.",
+   "license_check": "site: appropedia.org footer names both",
+   "attribution": "Appropedia contributors",
+   "homepage": "https://www.appropedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "7b656250-40ad-8d4d-5fa2-1486590278da",
+    "name": "appropedia_en_all",
+    "flavour": "maxi",
+    "articles": 30736,
+    "media": 34218
+   },
+   "files": [
+    {
+     "name": "appropedia_en_all_maxi_2026-02.zim",
+     "size": 581641351,
+     "sha256": "dcf200ba723c27397e1c9a2e4891ff91fa13993df1fa285315190d8525a53469",
+     "url": "https://download.kiwix.org/zim/other/appropedia_en_all_maxi_2026-02.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/appropedia_en_all_maxi_2026-02.zim",
+     "meta4": "https://download.kiwix.org/zim/other/appropedia_en_all_maxi_2026-02.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/appropedia_en_all_maxi_2026-02.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "appropedia_en_all_maxi_2026-02.zim",
+     "size_estimate": 98879029,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/energypedia_en_all_nopic",
+   "kind": "zim",
+   "title": "energypedia (nopic)",
+   "summary": "Knowledge exchange on renewable energy and energy access",
+   "lang": "en",
+   "version": "2026-06",
+   "date": "2026-06-20",
+   "topics": [
+    "energy/solar",
+    "energy/cooking"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: energypedia.info footer, CC BY-SA 4.0",
+   "attribution": "energypedia contributors",
+   "homepage": "https://energypedia.info",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "b533f099-aa73-ab5a-e6fe-0440dc690038",
+    "name": "energypedia_en_all",
+    "flavour": "nopic",
+    "articles": 10151,
+    "media": 203
+   },
+   "files": [
+    {
+     "name": "energypedia_en_all_nopic_2026-06.zim",
+     "size": 722590405,
+     "sha256": "f1b2cf0afde2927eab9acd2b6365144eae35986894c2a8eac7071045fd01d295",
+     "url": "https://download.kiwix.org/zim/other/energypedia_en_all_nopic_2026-06.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/energypedia_en_all_nopic_2026-06.zim",
+     "meta4": "https://download.kiwix.org/zim/other/energypedia_en_all_nopic_2026-06.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/energypedia_en_all_nopic_2026-06.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "energypedia_en_all_nopic_2026-06.zim",
+     "size_estimate": 245680737,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/energypedia_en_all_maxi",
+   "kind": "zim",
+   "title": "energypedia (maxi)",
+   "summary": "Knowledge exchange on renewable energy and energy access",
+   "lang": "en",
+   "version": "2026-06",
+   "date": "2026-06-20",
+   "topics": [
+    "energy/solar",
+    "energy/cooking"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: energypedia.info footer, CC BY-SA 4.0",
+   "attribution": "energypedia contributors",
+   "homepage": "https://energypedia.info",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "bcdb4912-3320-18c1-888f-c355b9c4beae",
+    "name": "energypedia_en_all",
+    "flavour": "maxi",
+    "articles": 10151,
+    "media": 7455
+   },
+   "files": [
+    {
+     "name": "energypedia_en_all_maxi_2026-06.zim",
+     "size": 799712780,
+     "sha256": "c328df321497003e30f96af67340c04bff52e2831e09cf2b0c0fde52bba23bd0",
+     "url": "https://download.kiwix.org/zim/other/energypedia_en_all_maxi_2026-06.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/energypedia_en_all_maxi_2026-06.zim",
+     "meta4": "https://download.kiwix.org/zim/other/energypedia_en_all_maxi_2026-06.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/energypedia_en_all_maxi_2026-06.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "energypedia_en_all_maxi_2026-06.zim",
+     "size_estimate": 245680737,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/restarters_en_all_maxi",
+   "kind": "zim",
+   "title": "Restarters (maxi)",
+   "summary": "How things work and how to fix them",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-22",
+   "topics": [
+    "repair/electronics"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_check": "site: wiki.restarters.net footer, CC BY-SA 4.0",
+   "attribution": "The Restart Project wiki contributors",
+   "homepage": "https://wiki.restarters.net",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "f432fb56-2daf-0cd0-c306-db4954e93cb0",
+    "name": "restarters_en_all",
+    "flavour": "maxi",
+    "articles": 1013,
+    "media": 459
+   },
+   "files": [
+    {
+     "name": "restarters_en_all_maxi_2026-10.zim",
+     "size": 17044635,
+     "sha256": "c57dddaee3d82f735292ee62b4e29e9dd90ba898d5ae691863d2c56eb99999bd",
+     "url": "https://download.kiwix.org/zim/other/restarters_en_all_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/other/restarters_en_all_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/other/restarters_en_all_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/other/restarters_en_all_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "restarters_en_all_maxi_2026-10.zim",
+     "size_estimate": 2897587,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/gutenberg_en_lcc-t",
+   "kind": "zim",
+   "title": "Project Gutenberg Library",
+   "summary": "Technology",
+   "lang": "en",
+   "version": "2026-03",
+   "date": "2026-03-06",
+   "topics": [
+    "repair",
+    "culture/books"
+   ],
+   "license": "LicenseRef-PublicDomain-US",
+   "license_note": "Public domain in the USA. A few works may still be under copyright in countries with longer terms.",
+   "license_check": "known: Project Gutenberg license",
+   "attribution": "Project Gutenberg",
+   "homepage": "https://www.gutenberg.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "1bc843c0-c4d3-5241-90b8-f70496cff27b",
+    "name": "gutenberg_en_lcc-t",
+    "flavour": "",
+    "articles": 2550,
+    "media": 112467
+   },
+   "files": [
+    {
+     "name": "gutenberg_en_lcc-t_2026-03.zim",
+     "size": 13154803470,
+     "sha256": "362c9f07d79363802fe2b2e5e97c1b8e717d730bbcfaff478938652dbf12a2fd",
+     "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-t_2026-03.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/gutenberg/gutenberg_en_lcc-t_2026-03.zim",
+     "meta4": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-t_2026-03.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-t_2026-03.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gutenberg_en_lcc-t_2026-03.zim",
+     "size_estimate": 4472633179,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_en_all_nopic",
+   "kind": "zim",
+   "title": "Wikibooks (nopic)",
+   "summary": "The open-content textbooks collection",
+   "lang": "en",
+   "version": "2026-04",
+   "date": "2026-04-27",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "b3b62066-a9ef-2f6c-7ded-94245b7f4997",
+    "name": "wikibooks_en_all",
+    "flavour": "nopic",
+    "articles": 118571,
+    "media": 142451
+   },
+   "files": [
+    {
+     "name": "wikibooks_en_all_nopic_2026-04.zim",
+     "size": 3507893616,
+     "sha256": "2f4a1dfbd07683377baef38fe76a31e194f41e8c57ba7dfb47a674d238e06b80",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_nopic_2026-04.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_en_all_nopic_2026-04.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_nopic_2026-04.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_nopic_2026-04.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_en_all_nopic_2026-04.zim",
+     "size_estimate": 1192683829,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_en_all_maxi",
+   "kind": "zim",
+   "title": "Wikibooks (maxi)",
+   "summary": "The open-content textbooks collection",
+   "lang": "en",
+   "version": "2026-04",
+   "date": "2026-04-27",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "3af31496-dba2-1022-3b55-e39469019c35",
+    "name": "wikibooks_en_all",
+    "flavour": "maxi",
+    "articles": 118571,
+    "media": 266325
+   },
+   "files": [
+    {
+     "name": "wikibooks_en_all_maxi_2026-04.zim",
+     "size": 6177865115,
+     "sha256": "c2ded9afe4647c2b05aceb9d30260100369cbba22f3d00e467a634546da3f610",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_maxi_2026-04.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_en_all_maxi_2026-04.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_maxi_2026-04.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_maxi_2026-04.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_en_all_maxi_2026-04.zim",
+     "size_estimate": 1192683829,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_fr_all_nopic",
+   "kind": "zim",
+   "title": "Wikilivres (nopic)",
+   "summary": "La bibliothèque de livres pédagogiques libres",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-14",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "4fdb05b1-9ae5-203c-3f84-d299a50fb4cb",
+    "name": "wikibooks_fr_all",
+    "flavour": "nopic",
+    "articles": 32097,
+    "media": 124
+   },
+   "files": [
+    {
+     "name": "wikibooks_fr_all_nopic_2026-10.zim",
+     "size": 332192024,
+     "sha256": "7433f600c6396bef4897f8e6586a42ac33978ba087f772c6252d55cb2e074812",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_fr_all_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_fr_all_nopic_2026-10.zim",
+     "size_estimate": 112945288,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_fr_all_maxi",
+   "kind": "zim",
+   "title": "Wikilivres (maxi)",
+   "summary": "La bibliothèque de livres pédagogiques libres",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-14",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "160fa1e9-eb1e-23ed-95dc-4f8a33b4db77",
+    "name": "wikibooks_fr_all",
+    "flavour": "maxi",
+    "articles": 32097,
+    "media": 93338
+   },
+   "files": [
+    {
+     "name": "wikibooks_fr_all_maxi_2026-10.zim",
+     "size": 1151934271,
+     "sha256": "55443b4673668168d19e770df124f955e94e6ee6621ae3742b9bd718ee5c739f",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_fr_all_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_fr_all_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_fr_all_maxi_2026-10.zim",
+     "size_estimate": 112945288,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikilibro (nopic)",
+   "summary": "Wikilibro en Español",
+   "lang": "es",
+   "version": "2025-10",
+   "date": "2025-10-29",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "ad3d7804-f40a-af09-11fc-0f50457520b4",
+    "name": "wikibooks_es_all",
+    "flavour": "nopic",
+    "articles": 20211,
+    "media": 35475
+   },
+   "files": [
+    {
+     "name": "wikibooks_es_all_nopic_2025-10.zim",
+     "size": 112043538,
+     "sha256": "c0e3749966b39be3dc3b7f3767aa61d2ba0e034afc87c19c8addbf6ae5dbe541",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_nopic_2025-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_es_all_nopic_2025-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_nopic_2025-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_nopic_2025-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_es_all_nopic_2025-10.zim",
+     "size_estimate": 38094802,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikibooks_es_all_maxi",
+   "kind": "zim",
+   "title": "Wikilibro (maxi)",
+   "summary": "Wikilibro en Español",
+   "lang": "es",
+   "version": "2025-10",
+   "date": "2025-10-29",
+   "topics": [
+    "education",
+    "repair"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikibooks contributors",
+   "homepage": "https://www.wikibooks.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "503d6b7c-81ce-f550-d84e-c50e915d2ceb",
+    "name": "wikibooks_es_all",
+    "flavour": "maxi",
+    "articles": 20211,
+    "media": 65673
+   },
+   "files": [
+    {
+     "name": "wikibooks_es_all_maxi_2025-10.zim",
+     "size": 349512049,
+     "sha256": "9323ec66fda85e40ff812408e6bff35e032c20081bd7e59b1e41382d006d907b",
+     "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_maxi_2025-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikibooks/wikibooks_es_all_maxi_2025-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_maxi_2025-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikibooks/wikibooks_es_all_maxi_2025-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikibooks_es_all_maxi_2025-10.zim",
+     "size_estimate": 38094802,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_en_all_nopic",
+   "kind": "zim",
+   "title": "Wikivoyage (nopic)",
+   "summary": "The collaborative travel guide",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-13",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "c5181ff1-fa01-053c-cf3c-9c4c66259687",
+    "name": "wikivoyage_en_all",
+    "flavour": "nopic",
+    "articles": 68182,
+    "media": 132
+   },
+   "files": [
+    {
+     "name": "wikivoyage_en_all_nopic_2026-09.zim",
+     "size": 272495142,
+     "sha256": "4305c50550f065d83e70f75fd1d2016a694f5d67aa1e0ef00fdf6bb74fc092ac",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_en_all_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_en_all_nopic_2026-09.zim",
+     "size_estimate": 92648348,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_en_all_maxi",
+   "kind": "zim",
+   "title": "Wikivoyage (maxi)",
+   "summary": "The collaborative travel guide",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-13",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "2d7d9c72-e77d-3ce3-b8f6-140790d36f7a",
+    "name": "wikivoyage_en_all",
+    "flavour": "maxi",
+    "articles": 68182,
+    "media": 90778
+   },
+   "files": [
+    {
+     "name": "wikivoyage_en_all_maxi_2026-09.zim",
+     "size": 1071168673,
+     "sha256": "ebaf235b4f95aa7f8666e0a613578577569eb6c81562ebcf397a7ba52173c848",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_maxi_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_en_all_maxi_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_maxi_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_en_all_maxi_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_en_all_maxi_2026-09.zim",
+     "size_estimate": 92648348,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_fr_all_nopic",
+   "kind": "zim",
+   "title": "Wikivoyage (nopic)",
+   "summary": "Guide de voyage et de tourisme collaboratif",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-22",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "1985c9fc-40e3-5546-ebe0-08bfc503d30d",
+    "name": "wikivoyage_fr_all",
+    "flavour": "nopic",
+    "articles": 14284,
+    "media": 149
+   },
+   "files": [
+    {
+     "name": "wikivoyage_fr_all_nopic_2026-10.zim",
+     "size": 68397127,
+     "sha256": "c25c4c616f4c283508d8fea1c4b8ef9f1df8ae7d3f72354e608be97f645356ad",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_fr_all_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_fr_all_nopic_2026-10.zim",
+     "size_estimate": 23255023,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_fr_all_maxi",
+   "kind": "zim",
+   "title": "Wikivoyage (maxi)",
+   "summary": "Guide de voyage et de tourisme collaboratif",
+   "lang": "fr",
+   "version": "2026-07c",
+   "date": "2026-07-23",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "49184a96-c8cf-bc54-d48d-662e3839c5a6",
+    "name": "wikivoyage_fr_all",
+    "flavour": "maxi",
+    "articles": 14135,
+    "media": 25964
+   },
+   "files": [
+    {
+     "name": "wikivoyage_fr_all_maxi_2026-07c.zim",
+     "size": 249456677,
+     "sha256": "f87c06e8f261881dc3640a8f384e2692a7b2008d9dc4969da275aad0afa58086",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_maxi_2026-07c.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_fr_all_maxi_2026-07c.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_maxi_2026-07c.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_fr_all_maxi_2026-07c.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_fr_all_maxi_2026-07c.zim",
+     "size_estimate": 23255023,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikiviajes (nopic)",
+   "summary": "An Offline Version of Wikivoyage in Spanish Language",
+   "lang": "es",
+   "version": "2026-09",
+   "date": "2026-09-17",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "39dc585b-6e05-0180-21d9-14d31b966cee",
+    "name": "wikivoyage_es_all",
+    "flavour": "nopic",
+    "articles": 4858,
+    "media": 144
+   },
+   "files": [
+    {
+     "name": "wikivoyage_es_all_nopic_2026-09.zim",
+     "size": 43135959,
+     "sha256": "6f39fcea4dcb213c8a42302e548349d0f835330b74c9e7253daa4821611a289c",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_es_all_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_es_all_nopic_2026-09.zim",
+     "size_estimate": 14666226,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikivoyage_es_all_maxi",
+   "kind": "zim",
+   "title": "Wikiviajes (maxi)",
+   "summary": "An Offline Version of Wikivoyage in Spanish Language",
+   "lang": "es",
+   "version": "2026-09",
+   "date": "2026-09-17",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikivoyage contributors",
+   "homepage": "https://www.wikivoyage.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "14f615a3-f40e-f24b-0054-4ec6c69500af",
+    "name": "wikivoyage_es_all",
+    "flavour": "maxi",
+    "articles": 4858,
+    "media": 12955
+   },
+   "files": [
+    {
+     "name": "wikivoyage_es_all_maxi_2026-09.zim",
+     "size": 139376586,
+     "sha256": "888a394fece4226fd5edb17838b72a43c397a7b6c7fcc7d7c823f49c89f040bd",
+     "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_maxi_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikivoyage/wikivoyage_es_all_maxi_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_maxi_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_es_all_maxi_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikivoyage_es_all_maxi_2026-09.zim",
+     "size_estimate": 14666226,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_knots_maxi",
+   "kind": "zim",
+   "title": "Knots by Wikipedia (maxi)",
+   "summary": "A subset of Wikipedia encyclopedia dedicated to knots",
+   "lang": "en",
+   "version": "2026-10",
+   "date": "2026-10-18",
+   "topics": [
+    "safety"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "b37270fd-f267-39ba-fc4f-9f3c720e5d8f",
+    "name": "wikipedia_en_knots",
+    "flavour": "maxi",
+    "articles": 1735,
+    "media": 3586
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_knots_maxi_2026-10.zim",
+     "size": 14093352,
+     "sha256": "29a3ffa52a725d0ef9dd5359d27b864ec8454c61430c0bfb15fd1929f4b73390",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_knots_maxi_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_knots_maxi_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_knots_maxi_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_knots_maxi_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_knots_maxi_2026-10.zim",
+     "size_estimate": 2395869,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_top_nopic",
+   "kind": "zim",
+   "title": "Best of Wikipedia (nopic)",
+   "summary": "A selection of the best 50,000 Wikipedia articles",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-14",
+   "topics": [
+    "general",
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "65d4124b-2288-7c85-1e69-e675a5bbd288",
+    "name": "wikipedia_en_top",
+    "flavour": "nopic",
+    "articles": 877754,
+    "media": 52909
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_top_nopic_2026-09.zim",
+     "size": 2745850723,
+     "sha256": "8369b95b6b2179051b56ebed0d43fd3646020d03367eb03d7fc34d84090c501b",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_top_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_top_nopic_2026-09.zim",
+     "size_estimate": 933589245,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_fr_top_nopic",
+   "kind": "zim",
+   "title": "Le meilleur de Wikipédia (nopic)",
+   "summary": "Une sélection des 50 000 meilleurs articles de Wikipédia en français",
+   "lang": "fr",
+   "version": "2026-10",
+   "date": "2026-10-07",
+   "topics": [
+    "general",
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "449376f5-4457-ffa8-c457-2ec8fbd3139e",
+    "name": "wikipedia_fr_top",
+    "flavour": "nopic",
+    "articles": 246997,
+    "media": 42285
+   },
+   "files": [
+    {
+     "name": "wikipedia_fr_top_nopic_2026-10.zim",
+     "size": 1481903360,
+     "sha256": "7b7da073fe62c73378719568555ed5bcbb484164e45f16e1a5051c8b5e6764ad",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_top_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_fr_top_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_top_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_top_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_fr_top_nopic_2026-10.zim",
+     "size_estimate": 503847142,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_es_top_nopic",
+   "kind": "zim",
+   "title": "Lo mejor de Wikipedia (nopic)",
+   "summary": "Una selección de los mejores 50,000 artículos de Wikipedia en español",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-10",
+   "topics": [
+    "general",
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "23658caa-7c73-fd5a-727d-29224ed70597",
+    "name": "wikipedia_es_top",
+    "flavour": "nopic",
+    "articles": 348403,
+    "media": 38308
+   },
+   "files": [
+    {
+     "name": "wikipedia_es_top_nopic_2026-10.zim",
+     "size": 1209173292,
+     "sha256": "88a4cf19f77552b001c8daef26ec760bb70f65869d08808a0679500426274822",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_top_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_es_top_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_top_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_top_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_es_top_nopic_2026-10.zim",
+     "size_estimate": 411118919,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_all_mini",
+   "kind": "zim",
+   "title": "Wikipedia (mini)",
+   "summary": "The free encyclopedia",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-09",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "299eb9dc-88e5-6494-1a4b-132d4e897f3d",
+    "name": "wikipedia_en_all",
+    "flavour": "mini",
+    "articles": 18095848,
+    "media": 33992
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_all_mini_2026-09.zim",
+     "size": 14386799064,
+     "sha256": "350d8956ee3d7abe2839c464c3a983f93d6934a16c7f04b10715b49439dfd349",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_mini_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_all_mini_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_mini_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_mini_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_all_mini_2026-09.zim",
+     "size_estimate": 4891511681,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_fr_all_mini",
+   "kind": "zim",
+   "title": "Wikipédia (mini)",
+   "summary": "L'encyclopédie libre",
+   "lang": "fr",
+   "version": "2026-05",
+   "date": "2026-05-18",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "a8a033e2-301b-863e-3c63-85d7a32bf051",
+    "name": "wikipedia_fr_all",
+    "flavour": "mini",
+    "articles": 4587655,
+    "media": 15219
+   },
+   "files": [
+    {
+     "name": "wikipedia_fr_all_mini_2026-05.zim",
+     "size": 3584080182,
+     "sha256": "b82d57cbbd19d568a5701eec1b4c96079c20e62a7cec70cdf150c0a20aff5fd1",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_mini_2026-05.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_fr_all_mini_2026-05.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_mini_2026-05.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_mini_2026-05.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_fr_all_mini_2026-05.zim",
+     "size_estimate": 1218587261,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_es_all_mini",
+   "kind": "zim",
+   "title": "Wikipedia (mini)",
+   "summary": "versión fuera de línea de Wikipedia en español",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-09",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "4079bb59-f1bd-b80c-f5d6-66c6d86d401e",
+    "name": "wikipedia_es_all",
+    "flavour": "mini",
+    "articles": 4205442,
+    "media": 14271
+   },
+   "files": [
+    {
+     "name": "wikipedia_es_all_mini_2026-10.zim",
+     "size": 4114469175,
+     "sha256": "132e9182656bcdde34429a1f09ab0c7284305c5afef19918ffd0a833d6c5a94c",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_mini_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_es_all_mini_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_mini_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_mini_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_es_all_mini_2026-10.zim",
+     "size_estimate": 1398919519,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_en_all_nopic",
+   "kind": "zim",
+   "title": "Wikipedia (nopic)",
+   "summary": "The free encyclopedia",
+   "lang": "en",
+   "version": "2026-06",
+   "date": "2026-06-17",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "c22094d0-6ad1-6360-36b7-dab953595143",
+    "name": "wikipedia_en_all",
+    "flavour": "nopic",
+    "articles": 19191219,
+    "media": 515775
+   },
+   "files": [
+    {
+     "name": "wikipedia_en_all_nopic_2026-06.zim",
+     "size": 52690706555,
+     "sha256": "441a56d9e05b2d98f8ae9acb7986a513ed47904d73852c92dc6b7d50baa122e5",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_nopic_2026-06.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_en_all_nopic_2026-06.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_nopic_2026-06.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_nopic_2026-06.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_en_all_nopic_2026-06.zim",
+     "size_estimate": 17914840228,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_fr_all_nopic",
+   "kind": "zim",
+   "title": "Wikipédia (nopic)",
+   "summary": "L'encyclopédie libre",
+   "lang": "fr",
+   "version": "2026-05",
+   "date": "2026-05-18",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "8c8b99c5-b74d-0394-e2e5-ece60123b369",
+    "name": "wikipedia_fr_all",
+    "flavour": "nopic",
+    "articles": 4587621,
+    "media": 227460
+   },
+   "files": [
+    {
+     "name": "wikipedia_fr_all_nopic_2026-05.zim",
+     "size": 12912822846,
+     "sha256": "c7c70f2af718455c3ff8a084c95395622d4c137c7fb0cf4f6bf122f362152b0c",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_nopic_2026-05.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_fr_all_nopic_2026-05.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_nopic_2026-05.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_fr_all_nopic_2026-05.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_fr_all_nopic_2026-05.zim",
+     "size_estimate": 4390359767,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/wikipedia_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikipedia (nopic)",
+   "summary": "versión fuera de línea de Wikipedia en español",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-09",
+   "topics": [
+    "general"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikipedia contributors",
+   "homepage": "https://www.wikipedia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "c32b05f0-de5d-be8f-585c-0f7c78bcbb15",
+    "name": "wikipedia_es_all",
+    "flavour": "nopic",
+    "articles": 4232654,
+    "media": 174933
+   },
+   "files": [
+    {
+     "name": "wikipedia_es_all_nopic_2026-10.zim",
+     "size": 13298215428,
+     "sha256": "5601ff9adc204f14e0abbd291287c7b98fc028f4d2d12e9b0181948df6f903c9",
+     "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikipedia/wikipedia_es_all_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikipedia/wikipedia_es_all_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikipedia_es_all_nopic_2026-10.zim",
+     "size_estimate": 4521393245,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/phet_en_all",
+   "kind": "zim",
+   "title": "PhET Interactive Simulations",
+   "summary": "Interactive simulations for Science and Math",
+   "lang": "en",
+   "version": "2026-08",
+   "date": "2026-08-25",
+   "topics": [
+    "education/science",
+    "education/math"
+   ],
+   "license": "CC-BY-4.0",
+   "license_note": "Simulations CC BY 4.0. PhET asks that its name and logo stay visible.",
+   "license_check": "site: phet.colorado.edu/en/licensing/html",
+   "attribution": "PhET Interactive Simulations, University of Colorado Boulder",
+   "homepage": "https://phet.colorado.edu",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "31b210ed-4584-ae30-88d8-773bfa3af6d7",
+    "name": "phet_en_all",
+    "flavour": "",
+    "articles": 120,
+    "media": 141
+   },
+   "files": [
+    {
+     "name": "phet_en_all_2026-08.zim",
+     "size": 108981169,
+     "sha256": "b102abf8af1c982c498c167efe6a9099e3cb543df184b93c99421b2fdef7e1a0",
+     "url": "https://download.kiwix.org/zim/phet/phet_en_all_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/phet/phet_en_all_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/phet/phet_en_all_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/phet/phet_en_all_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "phet_en_all_2026-08.zim",
+     "size_estimate": 6800000,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/phet_fr_all",
+   "kind": "zim",
+   "title": "Simulations interactives PhET",
+   "summary": "Simulations interactives pour les sciences et les mathématiques",
+   "lang": "fr",
+   "version": "2026-08",
+   "date": "2026-08-25",
+   "topics": [
+    "education/science",
+    "education/math"
+   ],
+   "license": "CC-BY-4.0",
+   "license_note": "Simulations CC BY 4.0. PhET asks that its name and logo stay visible.",
+   "license_check": "site: phet.colorado.edu/en/licensing/html",
+   "attribution": "PhET Interactive Simulations, University of Colorado Boulder",
+   "homepage": "https://phet.colorado.edu",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "2a4fca95-32d4-7ccc-77c8-23a380fce770",
+    "name": "phet_fr_all",
+    "flavour": "",
+    "articles": 120,
+    "media": 141
+   },
+   "files": [
+    {
+     "name": "phet_fr_all_2026-08.zim",
+     "size": 109151589,
+     "sha256": "f911e6f28089952ff49b2f54b66ad6db8a30a31ec6d70add37fddd303dc27cc1",
+     "url": "https://download.kiwix.org/zim/phet/phet_fr_all_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/phet/phet_fr_all_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/phet/phet_fr_all_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/phet/phet_fr_all_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "phet_fr_all_2026-08.zim",
+     "size_estimate": 6800000,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/phet_es_all",
+   "kind": "zim",
+   "title": "Simulaciones PhET interactivas",
+   "summary": "Simulaciones interactivas para Ciencias y Matemáticas",
+   "lang": "es",
+   "version": "2026-08",
+   "date": "2026-08-25",
+   "topics": [
+    "education/science",
+    "education/math"
+   ],
+   "license": "CC-BY-4.0",
+   "license_note": "Simulations CC BY 4.0. PhET asks that its name and logo stay visible.",
+   "license_check": "site: phet.colorado.edu/en/licensing/html",
+   "attribution": "PhET Interactive Simulations, University of Colorado Boulder",
+   "homepage": "https://phet.colorado.edu",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "5a044045-b54b-451a-0481-a9b053542507",
+    "name": "phet_es_all",
+    "flavour": "",
+    "articles": 120,
+    "media": 141
+   },
+   "files": [
+    {
+     "name": "phet_es_all_2026-08.zim",
+     "size": 109215764,
+     "sha256": "01edd09e5e98d51dd8e5d2caa92f55c843edc15bb6162cd3b045614b1335d952",
+     "url": "https://download.kiwix.org/zim/phet/phet_es_all_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/phet/phet_es_all_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/phet/phet_es_all_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/phet/phet_es_all_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "phet_es_all_2026-08.zim",
+     "size_estimate": 6800000,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_en_all_nopic",
+   "kind": "zim",
+   "title": "Vikidia (nopic)",
+   "summary": "The encyclopedia for Children",
+   "lang": "en",
+   "version": "2026-09a",
+   "date": "2026-09-11",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "16dc00df-6d5c-a923-de75-2ab3761c13ea",
+    "name": "vikidia_en_all",
+    "flavour": "nopic",
+    "articles": 9441,
+    "media": 25
+   },
+   "files": [
+    {
+     "name": "vikidia_en_all_nopic_2026-09a.zim",
+     "size": 10555427,
+     "sha256": "38858407a11076aa8c9651e14e08536cf7a755d735f38639a4e85039c56afcd6",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_nopic_2026-09a.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_en_all_nopic_2026-09a.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_nopic_2026-09a.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_nopic_2026-09a.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_en_all_nopic_2026-09a.zim",
+     "size_estimate": 3588845,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_en_all_maxi",
+   "kind": "zim",
+   "title": "Vikidia (maxi)",
+   "summary": "The encyclopedia for Children",
+   "lang": "en",
+   "version": "2026-09",
+   "date": "2026-09-14",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "6ea683ce-15bf-8036-74c6-3b5c1eeabde2",
+    "name": "vikidia_en_all",
+    "flavour": "maxi",
+    "articles": 9411,
+    "media": 6791
+   },
+   "files": [
+    {
+     "name": "vikidia_en_all_maxi_2026-09.zim",
+     "size": 77565163,
+     "sha256": "16728e6be34081f6c627b3cbf2c36ff31823defb0f30b68fab146b5ca68e591e",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_maxi_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_en_all_maxi_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_maxi_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_en_all_maxi_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_en_all_maxi_2026-09.zim",
+     "size_estimate": 3588845,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_fr_all_nopic",
+   "kind": "zim",
+   "title": "Vikidia (nopic)",
+   "summary": "L’encyclopédie des 8-13 ans",
+   "lang": "fr",
+   "version": "2026-09",
+   "date": "2026-09-03",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "d41e04c8-30e3-94c4-dab3-573d6ac30be9",
+    "name": "vikidia_fr_all",
+    "flavour": "nopic",
+    "articles": 87727,
+    "media": 22
+   },
+   "files": [
+    {
+     "name": "vikidia_fr_all_nopic_2026-09.zim",
+     "size": 102704105,
+     "sha256": "40db780f988689b63a6220b667930c3fd8a839079a9019bb084650d3fc3ea6f8",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_fr_all_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_fr_all_nopic_2026-09.zim",
+     "size_estimate": 34919395,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_fr_all_maxi",
+   "kind": "zim",
+   "title": "Vikidia (maxi)",
+   "summary": "L’encyclopédie des 8-13 ans",
+   "lang": "fr",
+   "version": "2026-09",
+   "date": "2026-09-03",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "671edf6a-d5bf-9cab-df42-4a562b065ae9",
+    "name": "vikidia_fr_all",
+    "flavour": "maxi",
+    "articles": 87727,
+    "media": 76854
+   },
+   "files": [
+    {
+     "name": "vikidia_fr_all_maxi_2026-09.zim",
+     "size": 1434987876,
+     "sha256": "07faf165a79e19cc0576bfaffaba4a2eb8801416f22dada533598424152584dd",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_maxi_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_fr_all_maxi_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_maxi_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_fr_all_maxi_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_fr_all_maxi_2026-09.zim",
+     "size_estimate": 34919395,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_es_all_nopic",
+   "kind": "zim",
+   "title": "Vikidia (nopic)",
+   "summary": "De Vikidia",
+   "lang": "es",
+   "version": "2026-09",
+   "date": "2026-09-08",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "89332759-bf5e-7579-cd26-b3d036b9afa0",
+    "name": "vikidia_es_all",
+    "flavour": "nopic",
+    "articles": 10524,
+    "media": 23
+   },
+   "files": [
+    {
+     "name": "vikidia_es_all_nopic_2026-09.zim",
+     "size": 15533320,
+     "sha256": "42038aa2c0ef3e78b8c31c61d594f4cebb80264dbc00a348628f29b187bf96ec",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_es_all_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_es_all_nopic_2026-09.zim",
+     "size_estimate": 5281328,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/vikidia_es_all_maxi",
+   "kind": "zim",
+   "title": "Vikidia (maxi)",
+   "summary": "De Vikidia",
+   "lang": "es",
+   "version": "2026-09",
+   "date": "2026-09-08",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-3.0",
+   "license_check": "site: en.vikidia.org and fr.vikidia.org footers, CC BY-SA 3.0 (es assumed the same)",
+   "attribution": "Vikidia contributors",
+   "homepage": "https://www.vikidia.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "c3c33ffa-d625-0c48-1528-fc7ec666e94d",
+    "name": "vikidia_es_all",
+    "flavour": "maxi",
+    "articles": 10523,
+    "media": 9926
+   },
+   "files": [
+    {
+     "name": "vikidia_es_all_maxi_2026-09.zim",
+     "size": 133548765,
+     "sha256": "3aedb556f184d1f0a3dbfb537c3998bea871377325beb581d1fead16d718052c",
+     "url": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_maxi_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/vikidia/vikidia_es_all_maxi_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_maxi_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/vikidia/vikidia_es_all_maxi_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "vikidia_es_all_maxi_2026-09.zim",
+     "size_estimate": 5281328,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikiversity_en_all_nopic",
+   "kind": "zim",
+   "title": "Wikiversity (nopic)",
+   "summary": "Wikiversity offers tutorials and other materials for the fostering of learning.",
+   "lang": "en",
+   "version": "2026-08",
+   "date": "2026-08-04",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikiversity contributors",
+   "homepage": "https://www.wikiversity.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "399587b0-7dbe-a3f7-c542-f6454f871b75",
+    "name": "wikiversity_en_all",
+    "flavour": "nopic",
+    "articles": 69476,
+    "media": 80660
+   },
+   "files": [
+    {
+     "name": "wikiversity_en_all_nopic_2026-08.zim",
+     "size": 1629888156,
+     "sha256": "8cf88cd467c77086d240f98ac495d3e398f6d2eaff2e6c339ff4f6bdd2769abf",
+     "url": "https://download.kiwix.org/zim/wikiversity/wikiversity_en_all_nopic_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikiversity/wikiversity_en_all_nopic_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/wikiversity/wikiversity_en_all_nopic_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikiversity/wikiversity_en_all_nopic_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikiversity_en_all_nopic_2026-08.zim",
+     "size_estimate": 554161973,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikiversity_fr_all_nopic",
+   "kind": "zim",
+   "title": "Wikiversité (nopic)",
+   "summary": "Un projet visant à produire et diffuser des documents pédagogiques.",
+   "lang": "fr",
+   "version": "2026-08",
+   "date": "2026-08-13",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikiversity contributors",
+   "homepage": "https://www.wikiversity.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "7d6b09be-c653-1224-b554-c8d518be2cad",
+    "name": "wikiversity_fr_all",
+    "flavour": "nopic",
+    "articles": 23559,
+    "media": 138418
+   },
+   "files": [
+    {
+     "name": "wikiversity_fr_all_nopic_2026-08.zim",
+     "size": 177361873,
+     "sha256": "ea7863ecb3a6e5075f036bacbdb485a6fa6d504392a05709bf5148375ee30336",
+     "url": "https://download.kiwix.org/zim/wikiversity/wikiversity_fr_all_nopic_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikiversity/wikiversity_fr_all_nopic_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/wikiversity/wikiversity_fr_all_nopic_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikiversity/wikiversity_fr_all_nopic_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikiversity_fr_all_nopic_2026-08.zim",
+     "size_estimate": 60303036,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikiversity_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikiversidad (nopic)",
+   "summary": "An Offline Version of Wikiversity in Spanish Language",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-16",
+   "topics": [
+    "education"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikiversity contributors",
+   "homepage": "https://www.wikiversity.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "d7109bd3-6ac3-d7d4-edcd-e9121085b609",
+    "name": "wikiversity_es_all",
+    "flavour": "nopic",
+    "articles": 4953,
+    "media": 112
+   },
+   "files": [
+    {
+     "name": "wikiversity_es_all_nopic_2026-10.zim",
+     "size": 15533980,
+     "sha256": "6071a32a0cbb28314c9804bc9061897f51f20e3a3c6b3e70e2d0953e6f0ea2c9",
+     "url": "https://download.kiwix.org/zim/wikiversity/wikiversity_es_all_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikiversity/wikiversity_es_all_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikiversity/wikiversity_es_all_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikiversity/wikiversity_es_all_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikiversity_es_all_nopic_2026-10.zim",
+     "size_estimate": 5281553,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wiktionary_en_all_nopic",
+   "kind": "zim",
+   "title": "Wiktionary (nopic)",
+   "summary": "The largest dictionary on the web.",
+   "lang": "en",
+   "version": "2026-08",
+   "date": "2026-08-13",
+   "topics": [
+    "education/languages"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wiktionary contributors",
+   "homepage": "https://www.wiktionary.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "f2c2fd4e-dba3-2b22-7318-3190feb051bc",
+    "name": "wiktionary_en_all",
+    "flavour": "nopic",
+    "articles": 9129949,
+    "media": 15
+   },
+   "files": [
+    {
+     "name": "wiktionary_en_all_nopic_2026-08.zim",
+     "size": 9156425592,
+     "sha256": "5276f63a2e451518ec5b7c4452ca9a4f72fae48991da3fe7ebc47df74bae760a",
+     "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_en_all_nopic_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wiktionary/wiktionary_en_all_nopic_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/wiktionary/wiktionary_en_all_nopic_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wiktionary/wiktionary_en_all_nopic_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wiktionary_en_all_nopic_2026-08.zim",
+     "size_estimate": 3113184701,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wiktionary_fr_all_nopic",
+   "kind": "zim",
+   "title": "Wiktionnaire (nopic)",
+   "summary": "Le plus grand dictionnaire en français",
+   "lang": "fr",
+   "version": "2026-08",
+   "date": "2026-08-20",
+   "topics": [
+    "education/languages"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wiktionary contributors",
+   "homepage": "https://www.wiktionary.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "a41ed4af-1bd5-9ec7-6176-bd7269a98977",
+    "name": "wiktionary_fr_all",
+    "flavour": "nopic",
+    "articles": 7037978,
+    "media": 43
+   },
+   "files": [
+    {
+     "name": "wiktionary_fr_all_nopic_2026-08.zim",
+     "size": 4935856722,
+     "sha256": "d44f79ef836f8bbc464f9369e1b8b8bdfced95968b42d15813579975c03f785b",
+     "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_fr_all_nopic_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wiktionary/wiktionary_fr_all_nopic_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/wiktionary/wiktionary_fr_all_nopic_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wiktionary/wiktionary_fr_all_nopic_2026-08.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wiktionary_fr_all_nopic_2026-08.zim",
+     "size_estimate": 1678191285,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wiktionary_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikcionario (nopic)",
+   "summary": "The biggest Wiki Dictionary in Spanish language",
+   "lang": "es",
+   "version": "2026-09",
+   "date": "2026-09-20",
+   "topics": [
+    "education/languages"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Text under CC BY-SA 4.0 (older revisions also GFDL). Images keep their own free licenses; nopic and mini files leave most of them out.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wiktionary contributors",
+   "homepage": "https://www.wiktionary.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "df43bdf4-82bb-1e83-999b-2d77113731d6",
+    "name": "wiktionary_es_all",
+    "flavour": "nopic",
+    "articles": 953170,
+    "media": 124
+   },
+   "files": [
+    {
+     "name": "wiktionary_es_all_nopic_2026-09.zim",
+     "size": 655846102,
+     "sha256": "8942ade424ee61e9d8ba83fdb16eddd3475033519495d56bacc0d565fe3408ae",
+     "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_es_all_nopic_2026-09.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wiktionary/wiktionary_es_all_nopic_2026-09.zim",
+     "meta4": "https://download.kiwix.org/zim/wiktionary/wiktionary_es_all_nopic_2026-09.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wiktionary/wiktionary_es_all_nopic_2026-09.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wiktionary_es_all_nopic_2026-09.zim",
+     "size_estimate": 222987674,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/gutenberg_fr_all",
+   "kind": "zim",
+   "title": "Projet Bibliothèque Gutenberg",
+   "summary": "Tous les livres en français du premier producteur d'ebooks gratuits",
+   "lang": "fr",
+   "version": "2026-01",
+   "date": "2026-01-04",
+   "topics": [
+    "culture/books"
+   ],
+   "license": "LicenseRef-PublicDomain-US",
+   "license_note": "Public domain in the USA. A few works may still be under copyright in countries with longer terms.",
+   "license_check": "known: Project Gutenberg license",
+   "attribution": "Project Gutenberg",
+   "homepage": "https://www.gutenberg.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "b57058e2-d074-29a6-d2f0-34f8cbf57c39",
+    "name": "gutenberg_fr_all",
+    "flavour": "",
+    "articles": 5472,
+    "media": 61409
+   },
+   "files": [
+    {
+     "name": "gutenberg_fr_all_2026-01.zim",
+     "size": 10534730590,
+     "sha256": "b069f54de2b004ad3e12be583895aaea0d22b449b88081af2b1bff3d6d0321aa",
+     "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_fr_all_2026-01.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/gutenberg/gutenberg_fr_all_2026-01.zim",
+     "meta4": "https://download.kiwix.org/zim/gutenberg/gutenberg_fr_all_2026-01.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/gutenberg/gutenberg_fr_all_2026-01.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gutenberg_fr_all_2026-01.zim",
+     "size_estimate": 3581808400,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "keyword",
+    "enhanced": "keyword",
+    "power": "keyword"
+   }
+  },
+  {
+   "id": "kiwix/gutenberg_es_all",
+   "kind": "zim",
+   "title": "Biblioteca Proyecto Gutenberg",
+   "summary": "Los libros en español del primer productor de libros electrónicos gratuitos",
+   "lang": "es",
+   "version": "2026-01",
+   "date": "2026-01-05",
+   "topics": [
+    "culture/books"
+   ],
+   "license": "LicenseRef-PublicDomain-US",
+   "license_note": "Public domain in the USA. A few works may still be under copyright in countries with longer terms.",
+   "license_check": "known: Project Gutenberg license",
+   "attribution": "Project Gutenberg",
+   "homepage": "https://www.gutenberg.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "66e35598-1437-f682-fd98-3fb051da3ee0",
+    "name": "gutenberg_es_all",
+    "flavour": "",
+    "articles": 1285,
+    "media": 12777
+   },
+   "files": [
+    {
+     "name": "gutenberg_es_all_2026-01.zim",
+     "size": 1860106016,
+     "sha256": "1000a5d6e5101c0b9772405dc192e98b0770681329c8c309051c1958eb9c7cd9",
+     "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_es_all_2026-01.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/gutenberg/gutenberg_es_all_2026-01.zim",
+     "meta4": "https://download.kiwix.org/zim/gutenberg/gutenberg_es_all_2026-01.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/gutenberg/gutenberg_es_all_2026-01.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "gutenberg_es_all_2026-01.zim",
+     "size_estimate": 632436045,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/wikisource_es_all_nopic",
+   "kind": "zim",
+   "title": "Wikisource (nopic)",
+   "summary": "An Offline Version of Wikisource in Spanish Language",
+   "lang": "es",
+   "version": "2026-10",
+   "date": "2026-10-12",
+   "topics": [
+    "culture/books"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "license_note": "Site contributions under CC BY-SA 4.0; most source texts are public domain.",
+   "license_check": "site: Wikimedia footer (checked on en.wikivoyage.org), CC BY-SA 4.0",
+   "attribution": "Wikisource contributors",
+   "homepage": "https://wikisource.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "a793dea0-8a6d-6f53-963e-c7c95a926459",
+    "name": "wikisource_es_all",
+    "flavour": "nopic",
+    "articles": 76398,
+    "media": 113
+   },
+   "files": [
+    {
+     "name": "wikisource_es_all_nopic_2026-10.zim",
+     "size": 399990401,
+     "sha256": "e7e3092904e9e586f49e5f66147cc086331b569c59c57dc5d22bd90c01630f9b",
+     "url": "https://download.kiwix.org/zim/wikisource/wikisource_es_all_nopic_2026-10.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/wikisource/wikisource_es_all_nopic_2026-10.zim",
+     "meta4": "https://download.kiwix.org/zim/wikisource/wikisource_es_all_nopic_2026-10.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/wikisource/wikisource_es_all_nopic_2026-10.zim.torrent"
+    }
+   ],
+   "derived": [
+    {
+     "kind": "search-index",
+     "producer": "nevo-index/1",
+     "for": "wikisource_es_all_nopic_2026-10.zim",
+     "size_estimate": 135996736,
+     "built_by": "seed",
+     "estimated": true
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full"
+   }
+  },
+  {
+   "id": "kiwix/maps_en_africa",
+   "kind": "zim",
+   "title": "Africa",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-21",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "54c3fae1-aabb-1928-1394-cbf14d9e38f6",
+    "name": "maps_en_africa",
+    "flavour": "",
+    "articles": 59760,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_africa_2026-08.zim",
+     "size": 8108075396,
+     "sha256": "d4cd43f8f87d57fb0d0d908d3660111fccb0c06f5ee2c692866ece97e320a629",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_africa_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_africa_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_africa_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_africa_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_asia",
+   "kind": "zim",
+   "title": "Asia",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-20",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "fd313201-b9d2-0750-06b9-3914ec207d34",
+    "name": "maps_en_asia",
+    "flavour": "",
+    "articles": 194923,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_asia_2026-08.zim",
+     "size": 21075887933,
+     "sha256": "5489e241ec053e9257f1187aaf381b7fb4a4ea4f47b2c1e0000e67d3414be0ac",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_asia_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_asia_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_asia_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_asia_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_europe",
+   "kind": "zim",
+   "title": "Europe",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-20",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "b97f0d05-a2ac-5561-c547-8131549f836f",
+    "name": "maps_en_europe",
+    "flavour": "",
+    "articles": 137471,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_europe_2026-08.zim",
+     "size": 26704567346,
+     "sha256": "2ffccda88021664fb6a5614b78a08ed279012eec9d7baf7fe88b707d4ff38760",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_europe_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_europe_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_europe_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_europe_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_north-america",
+   "kind": "zim",
+   "title": "North America",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-21",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "44328fd8-66ed-a832-2bc9-90e28e3c9e41",
+    "name": "maps_en_north-america",
+    "flavour": "",
+    "articles": 62925,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_north-america_2026-08.zim",
+     "size": 22652513201,
+     "sha256": "5df0e47180e540473373f3cc82e4280dfd79f1f61327ca00399d4be6050afd0e",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_north-america_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_north-america_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_north-america_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_north-america_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_central-america",
+   "kind": "zim",
+   "title": "Central America",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-21",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "d1b0e607-eaeb-d432-1504-b14bdc2bd701",
+    "name": "maps_en_central-america",
+    "flavour": "",
+    "articles": 13105,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_central-america_2026-08.zim",
+     "size": 1730559260,
+     "sha256": "398fd01f0fc322e142b9e75af7fad798fb29c6bc24a31c2a653c52f8681689b9",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_central-america_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_central-america_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_central-america_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_central-america_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_south-america",
+   "kind": "zim",
+   "title": "South America",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-21",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "481dbb33-8097-bf03-c619-44ed53bd8bc0",
+    "name": "maps_en_south-america",
+    "flavour": "",
+    "articles": 26454,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_south-america_2026-08.zim",
+     "size": 5461440366,
+     "sha256": "be58048c60bb7cd6b4ad5e26c37474542772294123e8a950234f6d9e1a2bf300",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_south-america_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_south-america_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_south-america_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_south-america_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_australia-oceania",
+   "kind": "zim",
+   "title": "Australia and Oceania",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-08",
+   "date": "2026-08-21",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "1b7d4a18-f4e4-9214-2b39-f8c5b6a415af",
+    "name": "maps_en_australia-oceania",
+    "flavour": "",
+    "articles": 153263,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_australia-oceania_2026-08.zim",
+     "size": 8575617981,
+     "sha256": "283621eff937dea8cb7b8f8c0ceccb23e30b4db52b70a857745d49a28d3b35c2",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_australia-oceania_2026-08.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_australia-oceania_2026-08.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_australia-oceania_2026-08.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_australia-oceania_2026-08.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  },
+  {
+   "id": "kiwix/maps_en_all",
+   "kind": "zim",
+   "title": "World",
+   "summary": "Full map, including roads and landmarks",
+   "lang": "mul",
+   "version": "2026-06",
+   "date": "2026-06-02",
+   "topics": [
+    "maps"
+   ],
+   "license": "ODbL-1.0",
+   "license_note": "Map data from OpenStreetMap under ODbL 1.0. Licenses of the map style, fonts and viewer inside the ZIM are not yet checked (open question).",
+   "license_check": "known: OSM data license; scraper github.com/openzim/maps",
+   "attribution": "(c) OpenStreetMap contributors",
+   "homepage": "https://www.openstreetmap.org",
+   "upstream": {
+    "library": "kiwix",
+    "uuid": "07f98309-b6af-3ac0-183d-200ba52a4503",
+    "name": "maps_en_all",
+    "flavour": "",
+    "articles": 441176,
+    "media": 3403
+   },
+   "files": [
+    {
+     "name": "maps_en_all_2026-06.zim",
+     "size": 77731456103,
+     "sha256": "399cf845a889018607423562ab467b2ece55b5532af4f5e105a07093866f2655",
+     "url": "https://download.kiwix.org/zim/maps/maps_en_all_2026-06.zim",
+     "mirror_set": "kiwix",
+     "path": "zim/maps/maps_en_all_2026-06.zim",
+     "meta4": "https://download.kiwix.org/zim/maps/maps_en_all_2026-06.zim.meta4",
+     "torrent": "https://download.kiwix.org/zim/maps/maps_en_all_2026-06.zim.torrent"
+    }
+   ],
+   "tier_fit": {
+    "standard": "full",
+    "enhanced": "full",
+    "power": "full",
+    "note": "Maps need no AI; any tier can show them."
+   }
+  }
+ ],
+ "models": [
+  {
+   "id": "hf/unsloth/Qwen3.5-4B-GGUF/Q4_K_M",
+   "kind": "model",
+   "format": "gguf",
+   "title": "Qwen3.5 4B Instruct, 4-bit (Q4_K_M)",
+   "role": "answer",
+   "license": "Apache-2.0",
+   "license_check": "Hugging Face model card metadata for the base model and the GGUF repo",
+   "license_url": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/LICENSE",
+   "base_model": "Qwen/Qwen3.5-4B",
+   "quantized_by": "unsloth",
+   "tiers": {
+    "standard": "default"
+   },
+   "ram_peak": 3400000000,
+   "decision": "D-031",
+   "benchmark_score": "143/160",
+   "files": [
+    {
+     "name": "Qwen3.5-4B-Q4_K_M.gguf",
+     "size": 2740937888,
+     "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+     "url": "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523/Qwen3.5-4B-Q4_K_M.gguf",
+     "mirror_set": "huggingface",
+     "path": "unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523/Qwen3.5-4B-Q4_K_M.gguf"
+    }
+   ],
+   "verified_note": "SHA-256 matches the file used in the Phase 0 benchmark."
+  },
+  {
+   "id": "hf/unsloth/Qwen3.5-2B-GGUF/Q4_K_M",
+   "kind": "model",
+   "format": "gguf",
+   "title": "Qwen3.5 2B Instruct, 4-bit (Q4_K_M)",
+   "role": "answer",
+   "license": "Apache-2.0",
+   "license_check": "Hugging Face model card metadata for the base model and the GGUF repo",
+   "license_url": "https://huggingface.co/Qwen/Qwen3.5-2B/blob/main/LICENSE",
+   "base_model": "Qwen/Qwen3.5-2B",
+   "quantized_by": "unsloth",
+   "tiers": {
+    "standard": "fallback"
+   },
+   "ram_peak": 1700000000,
+   "decision": "D-031",
+   "benchmark_score": "114/160",
+   "files": [
+    {
+     "name": "Qwen3.5-2B-Q4_K_M.gguf",
+     "size": 1280835840,
+     "sha256": "aaf42c8b7c3cab2bf3d69c355048d4a0ee9973d48f16c731c0520ee914699223",
+     "url": "https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/resolve/f6d5376be1edb4d416d56da11e5397a961aca8ae/Qwen3.5-2B-Q4_K_M.gguf",
+     "mirror_set": "huggingface",
+     "path": "unsloth/Qwen3.5-2B-GGUF/resolve/f6d5376be1edb4d416d56da11e5397a961aca8ae/Qwen3.5-2B-Q4_K_M.gguf"
+    }
+   ],
+   "verified_note": "SHA-256 matches the file used in the Phase 0 benchmark."
+  },
+  {
+   "id": "hf/unsloth/gemma-4-E4B-it-GGUF/Q4_K_M",
+   "kind": "model",
+   "format": "gguf",
+   "title": "Gemma 4 E4B Instruct, 4-bit (Q4_K_M)",
+   "role": "answer",
+   "license": "Apache-2.0",
+   "license_check": "Hugging Face model card metadata for the base model and the GGUF repo",
+   "license_url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+   "base_model": "google/gemma-4-E4B-it",
+   "quantized_by": "unsloth",
+   "tiers": {
+    "enhanced": "default",
+    "power": "default"
+   },
+   "ram_peak": 4300000000,
+   "decision": "D-032",
+   "benchmark_score": "148/160",
+   "files": [
+    {
+     "name": "gemma-4-E4B-it-Q4_K_M.gguf",
+     "size": 4977171584,
+     "sha256": "85a896a047553e842f25297ee5b031d64ff30147d9c4af17b1e4b394cd1fab87",
+     "url": "https://huggingface.co/unsloth/gemma-4-E4B-it-GGUF/resolve/bfc15c382204943c3a8fff0c750b94ae2364d7a3/gemma-4-E4B-it-Q4_K_M.gguf",
+     "mirror_set": "huggingface",
+     "path": "unsloth/gemma-4-E4B-it-GGUF/resolve/bfc15c382204943c3a8fff0c750b94ae2364d7a3/gemma-4-E4B-it-Q4_K_M.gguf"
+    }
+   ],
+   "verified_note": "SHA-256 matches the file used in the Phase 0 benchmark."
+  }
+ ],
+ "kits": [
+  {
+   "id": "medical",
+   "title": "Medical",
+   "topics": [
+    "medical"
+   ],
+   "about": "First aid, diseases, medicines, emergency care.",
+   "langs": {
+    "en": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_en_medicine_maxi",
+       "kiwix/mdwiki_en_all_maxi",
+       "kiwix/wikem_en_all_maxi"
+      ]
+     }
+    },
+    "fr": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_fr_medicine_nopic"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_fr_medicine_maxi"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic",
+       "kiwix/mdwiki_en_all_maxi"
+      ]
+     }
+    },
+    "es": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_es_medicine_nopic"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_es_medicine_maxi"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic",
+       "kiwix/mdwiki_en_all_maxi"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "farming-food",
+   "title": "Farming and food",
+   "topics": [
+    "farming",
+    "food",
+    "water"
+   ],
+   "about": "Growing food, gardening, cooking, food safety.",
+   "langs": {
+    "en": {
+     "compact": {
+      "packs": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/gutenberg_en_lcc-s"
+      ]
+     }
+    },
+    "fr": {
+     "compact": {
+      "packs": [],
+      "fallback": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [],
+      "fallback": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     }
+    },
+    "es": {
+     "compact": {
+      "packs": [],
+      "fallback": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [],
+      "fallback": [
+       "kiwix/gardening.stackexchange.com_en_all",
+       "kiwix/cooking.stackexchange.com_en_all",
+       "kiwix/gardenology_en_all",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "repair-build",
+   "title": "Repair and build",
+   "topics": [
+    "repair",
+    "energy",
+    "shelter",
+    "water"
+   ],
+   "about": "Fixing things, building, energy and water systems.",
+   "langs": {
+    "en": {
+     "compact": {
+      "packs": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_nopic",
+       "kiwix/restarters_en_all_maxi"
+      ],
+      "optional": [
+       "kiwix/wikibooks_en_all_nopic"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_maxi",
+       "kiwix/restarters_en_all_maxi",
+       "kiwix/wikibooks_en_all_maxi",
+       "kiwix/gutenberg_en_lcc-t"
+      ]
+     }
+    },
+    "fr": {
+     "compact": {
+      "packs": [
+       "kiwix/wikibooks_fr_all_nopic"
+      ],
+      "fallback": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_nopic",
+       "kiwix/restarters_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikibooks_fr_all_maxi"
+      ],
+      "fallback": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_nopic",
+       "kiwix/restarters_en_all_maxi"
+      ]
+     }
+    },
+    "es": {
+     "compact": {
+      "packs": [
+       "kiwix/wikibooks_es_all_nopic"
+      ],
+      "fallback": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_nopic",
+       "kiwix/restarters_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikibooks_es_all_maxi"
+      ],
+      "fallback": [
+       "kiwix/appropedia_en_all_maxi",
+       "kiwix/energypedia_en_all_nopic",
+       "kiwix/restarters_en_all_maxi"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "survival",
+   "title": "Survival basics",
+   "topics": [
+    "medical/first-aid",
+    "water",
+    "shelter",
+    "safety"
+   ],
+   "about": "The small first kit: first aid, water, shelter, knots, local travel info.",
+   "langs": {
+    "en": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_en_medicine_mini",
+       "kiwix/wikivoyage_en_all_nopic",
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_en_medicine_nopic",
+       "kiwix/wikem_en_all_nopic",
+       "kiwix/wikivoyage_en_all_maxi",
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     }
+    },
+    "fr": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_fr_medicine_nopic",
+       "kiwix/wikivoyage_fr_all_nopic"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_fr_medicine_maxi",
+       "kiwix/wikivoyage_fr_all_maxi"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     }
+    },
+    "es": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_es_medicine_nopic",
+       "kiwix/wikivoyage_es_all_nopic"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_es_medicine_maxi",
+       "kiwix/wikivoyage_es_all_maxi"
+      ],
+      "fallback": [
+       "kiwix/wikipedia_en_knots_maxi",
+       "kiwix/appropedia_en_all_maxi"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "education",
+   "title": "Education",
+   "topics": [
+    "education",
+    "general",
+    "culture"
+   ],
+   "about": "Encyclopedia, textbooks, science simulations, dictionary, books.",
+   "langs": {
+    "en": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_en_top_nopic",
+       "kiwix/phet_en_all",
+       "kiwix/vikidia_en_all_nopic",
+       "kiwix/wikibooks_en_all_nopic"
+      ],
+      "optional": [
+       "kiwix/wikipedia_en_all_mini"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_en_all_nopic",
+       "kiwix/phet_en_all",
+       "kiwix/vikidia_en_all_maxi",
+       "kiwix/wikibooks_en_all_maxi",
+       "kiwix/wikiversity_en_all_nopic",
+       "kiwix/wiktionary_en_all_nopic"
+      ]
+     }
+    },
+    "fr": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_fr_top_nopic",
+       "kiwix/phet_fr_all",
+       "kiwix/vikidia_fr_all_nopic",
+       "kiwix/wikibooks_fr_all_nopic"
+      ],
+      "optional": [
+       "kiwix/wikipedia_fr_all_mini"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_fr_all_nopic",
+       "kiwix/phet_fr_all",
+       "kiwix/vikidia_fr_all_maxi",
+       "kiwix/wikibooks_fr_all_maxi",
+       "kiwix/wikiversity_fr_all_nopic",
+       "kiwix/wiktionary_fr_all_nopic",
+       "kiwix/gutenberg_fr_all"
+      ]
+     }
+    },
+    "es": {
+     "compact": {
+      "packs": [
+       "kiwix/wikipedia_es_top_nopic",
+       "kiwix/phet_es_all",
+       "kiwix/vikidia_es_all_nopic",
+       "kiwix/wikibooks_es_all_nopic"
+      ],
+      "optional": [
+       "kiwix/wikipedia_es_all_mini"
+      ]
+     },
+     "full": {
+      "packs": [
+       "kiwix/wikipedia_es_all_nopic",
+       "kiwix/phet_es_all",
+       "kiwix/vikidia_es_all_maxi",
+       "kiwix/wikibooks_es_all_maxi",
+       "kiwix/wikiversity_es_all_nopic",
+       "kiwix/wiktionary_es_all_nopic",
+       "kiwix/gutenberg_es_all",
+       "kiwix/wikisource_es_all_nopic"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "maps",
+   "title": "Maps",
+   "topics": [
+    "maps"
+   ],
+   "about": "OpenStreetMap maps with roads and places. Pick one region; the world map is the full option.",
+   "region_choice": [
+    "kiwix/maps_en_africa",
+    "kiwix/maps_en_asia",
+    "kiwix/maps_en_europe",
+    "kiwix/maps_en_north-america",
+    "kiwix/maps_en_central-america",
+    "kiwix/maps_en_south-america",
+    "kiwix/maps_en_australia-oceania"
+   ],
+   "langs": {
+    "mul": {
+     "compact": {
+      "packs": [
+       "kiwix/maps_en_africa"
+      ],
+      "note": "Example region; Seed asks which region."
+     },
+     "full": {
+      "packs": [
+       "kiwix/maps_en_all"
+      ]
+     }
+    }
+   }
+  }
+ ],
+ "kit_sizes": [
+  {
+   "kit": "medical",
+   "lang": "en",
+   "variant": "compact",
+   "content": 1868837516,
+   "native": 1868837516,
+   "standard": {
+    "total": 8640611244,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9596009100,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "medical",
+   "lang": "en",
+   "variant": "full",
+   "content": 5407346693,
+   "native": 5407346693,
+   "standard": {
+    "total": 12179120421,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 13134518277,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "medical",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 2298778654,
+   "native": 429941138,
+   "standard": {
+    "total": 9070552382,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10025950238,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "medical",
+   "lang": "fr",
+   "variant": "full",
+   "content": 5536502767,
+   "native": 973343893,
+   "standard": {
+    "total": 12308276495,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 13263674351,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "medical",
+   "lang": "es",
+   "variant": "compact",
+   "content": 2098216070,
+   "native": 229378554,
+   "standard": {
+    "total": 8869989798,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9825387654,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "medical",
+   "lang": "es",
+   "variant": "full",
+   "content": 5090193977,
+   "native": 527035103,
+   "standard": {
+    "total": 11861967705,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 12817365561,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "en",
+   "variant": "compact",
+   "content": 2400671599,
+   "native": 2400671599,
+   "standard": {
+    "total": 9172445327,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10127843183,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "en",
+   "variant": "full",
+   "content": 8474466871,
+   "native": 8474466871,
+   "standard": {
+    "total": 15246240599,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 16201638455,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 2400671599,
+   "native": 0,
+   "standard": {
+    "total": 9172445327,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10127843183,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "fr",
+   "variant": "full",
+   "content": 2400671599,
+   "native": 0,
+   "standard": {
+    "total": 9172445327,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10127843183,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "es",
+   "variant": "compact",
+   "content": 2400671599,
+   "native": 0,
+   "standard": {
+    "total": 9172445327,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10127843183,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "farming-food",
+   "lang": "es",
+   "variant": "full",
+   "content": 2400671599,
+   "native": 0,
+   "standard": {
+    "total": 9172445327,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10127843183,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "en",
+   "variant": "compact",
+   "content": 1668733744,
+   "native": 1668733744,
+   "standard": {
+    "total": 8440507472,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9395905328,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "en",
+   "variant": "full",
+   "content": 26743841712,
+   "native": 26743841712,
+   "standard": {
+    "total": 33515615440,
+    "stick_gb": 64
+   },
+   "enhanced": {
+    "total": 34471013296,
+    "stick_gb": 64
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 2113871056,
+   "native": 445137312,
+   "standard": {
+    "total": 8885644784,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9841042640,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "fr",
+   "variant": "full",
+   "content": 2933613303,
+   "native": 1264879559,
+   "standard": {
+    "total": 9705387031,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10660784887,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "es",
+   "variant": "compact",
+   "content": 1818872084,
+   "native": 150138340,
+   "standard": {
+    "total": 8590645812,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9546043668,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "repair-build",
+   "lang": "es",
+   "variant": "full",
+   "content": 2056340595,
+   "native": 387606851,
+   "standard": {
+    "total": 8828114323,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9783512179,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "en",
+   "variant": "compact",
+   "content": 1295783235,
+   "native": 1295783235,
+   "standard": {
+    "total": 8067556963,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9022954819,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "en",
+   "variant": "full",
+   "content": 3729664138,
+   "native": 3729664138,
+   "standard": {
+    "total": 10501437866,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 11456835722,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 1218602889,
+   "native": 521593288,
+   "standard": {
+    "total": 7990376617,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 8945774473,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "fr",
+   "variant": "full",
+   "content": 1943065194,
+   "native": 1246055593,
+   "standard": {
+    "total": 8714838922,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9670236778,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "es",
+   "variant": "compact",
+   "content": 984190340,
+   "native": 287180739,
+   "standard": {
+    "total": 7755964068,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 8711361924,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "survival",
+   "lang": "es",
+   "variant": "full",
+   "content": 1378087516,
+   "native": 681077915,
+   "standard": {
+    "total": 8149861244,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9105259100,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "en",
+   "variant": "compact",
+   "content": 8509942854,
+   "native": 8509942854,
+   "standard": {
+    "total": 15281716582,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 16237114438,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "en",
+   "variant": "full",
+   "content": 92626691326,
+   "native": 92626691326,
+   "standard": {
+    "total": 99398465054,
+    "stick_gb": 128
+   },
+   "enhanced": {
+    "total": 100353862910,
+    "stick_gb": 128
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 2684462903,
+   "native": 2684462903,
+   "standard": {
+    "total": 9456236631,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 10411634487,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "fr",
+   "variant": "full",
+   "content": 41122172938,
+   "native": 41122172938,
+   "standard": {
+    "total": 47893946666,
+    "stick_gb": 64
+   },
+   "enhanced": {
+    "total": 48849344522,
+    "stick_gb": 64
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "es",
+   "variant": "compact",
+   "content": 1907260963,
+   "native": 1907260963,
+   "standard": {
+    "total": 8679034691,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 9634432547,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "education",
+   "lang": "es",
+   "variant": "full",
+   "content": 22390239888,
+   "native": 22390239888,
+   "standard": {
+    "total": 29162013616,
+    "stick_gb": 64
+   },
+   "enhanced": {
+    "total": 30117411472,
+    "stick_gb": 64
+   }
+  },
+  {
+   "kit": "maps",
+   "lang": "mul",
+   "variant": "compact",
+   "content": 8108075396,
+   "native": 8108075396,
+   "standard": {
+    "total": 14879849124,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 15835246980,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "maps",
+   "lang": "mul",
+   "variant": "full",
+   "content": 77731456103,
+   "native": 77731456103,
+   "standard": {
+    "total": 84503229831,
+    "stick_gb": 128
+   },
+   "enhanced": {
+    "total": 85458627687,
+    "stick_gb": 128
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "en",
+   "variant": "compact",
+   "content": 14382928188,
+   "standard": {
+    "total": 21154701916,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 22110099772,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "en",
+   "variant": "full",
+   "content": 128250421036,
+   "standard": {
+    "total": 135022194764,
+    "stick_gb": 256
+   },
+   "enhanced": {
+    "total": 135977592620,
+    "stick_gb": 256
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "fr",
+   "variant": "compact",
+   "content": 8480267891,
+   "standard": {
+    "total": 15252041619,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 16207439475,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "fr",
+   "variant": "full",
+   "content": 50336761589,
+   "standard": {
+    "total": 57108535317,
+    "stick_gb": 64
+   },
+   "enhanced": {
+    "total": 58063933173,
+    "stick_gb": 128
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "es",
+   "variant": "compact",
+   "content": 7468653402,
+   "standard": {
+    "total": 14240427130,
+    "stick_gb": 32
+   },
+   "enhanced": {
+    "total": 15195824986,
+    "stick_gb": 32
+   }
+  },
+  {
+   "kit": "all-except-maps",
+   "lang": "es",
+   "variant": "full",
+   "content": 31039850861,
+   "standard": {
+    "total": 37811624589,
+    "stick_gb": 64
+   },
+   "enhanced": {
+    "total": 38767022445,
+    "stick_gb": 64
+   }
+  }
+ ],
+ "flagged": [
+  {
+   "id": "kiwix/ifixit_en_all",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-SA-3.0",
+   "note": "Clear license, but NonCommercial: not open by the Open Definition. Best repair guides available; candidate for an opt-in noncommercial list (D-046).",
+   "title": "iFixit in English",
+   "lang": "en",
+   "size": 3570696192,
+   "date": "2025-12-21",
+   "url": "https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim"
+  },
+  {
+   "id": "kiwix/ifixit_fr_all",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-SA-3.0",
+   "note": "As iFixit English.",
+   "title": "iFixit en Français",
+   "lang": "fr",
+   "size": 3652281344,
+   "date": "2026-03-08",
+   "url": "https://download.kiwix.org/zim/ifixit/ifixit_fr_all_2026-03.zim"
+  },
+  {
+   "id": "kiwix/ifixit_es_all",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-SA-3.0",
+   "note": "As iFixit English.",
+   "title": "iFixit in Spanish",
+   "lang": "es",
+   "size": 3680870400,
+   "date": "2026-03-06",
+   "url": "https://download.kiwix.org/zim/ifixit/ifixit_es_all_2026-03.zim"
+  },
+  {
+   "id": "kiwix/khanacademy_en_all",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-SA-3.0",
+   "note": "NonCommercial, and 180 GB (100-161 GB for fr/es). Videos from 2023.",
+   "title": "Khan Academy (English - US curriculum)",
+   "lang": "en",
+   "size": 180007048192,
+   "date": "2023-03-01",
+   "url": "https://download.kiwix.org/zim/other/khanacademy_en_all_2023-03.zim"
+  },
+  {
+   "id": "kiwix/ted_mul_medicine",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-ND-4.0",
+   "note": "TED talks are NonCommercial-NoDerivatives. Same for ted_mul_agriculture, _farming, _food, _water.",
+   "title": "TED medicine",
+   "lang": "en,es,ara,zho,fr,kor,ita,por,vie,tur,rus,jpn,heb,fas,ron,hun,pol,deu,ind,ell,nld",
+   "size": 3607249920,
+   "date": "2026-09-14",
+   "url": "https://download.kiwix.org/zim/ted/ted_mul_medicine_2026-09.zim"
+  },
+  {
+   "id": "kiwix/wikivet.net_en_all_maxi",
+   "reason": "noncommercial",
+   "license": "CC-BY-NC-ND-3.0",
+   "note": "Site footer says CC BY-NC-ND 3.0.",
+   "title": "WikiVet",
+   "lang": "en",
+   "size": 56980480,
+   "date": "2026-07-09",
+   "url": "https://download.kiwix.org/zim/other/wikivet.net_en_all_maxi_2026-07a.zim"
+  },
+  {
+   "id": "kiwix/libretexts.org_en_med",
+   "reason": "mixed",
+   "license": null,
+   "note": "LibreTexts books each have their own license, many NonCommercial. Same for all libretexts.org_en_* packs.",
+   "title": "Medicine LibreTexts",
+   "lang": "en",
+   "size": 1192567808,
+   "date": "2025-01-16",
+   "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_med_2025-01.zim"
+  },
+  {
+   "id": "kiwix/zimgit-post-disaster_en",
+   "reason": "unclear",
+   "license": null,
+   "note": "Collection of PDFs from many sources; no per-document licenses. Same for zimgit-water, zimgit-medicine, zimgit-knots, zimgit-food-preparation.",
+   "title": "Post Disaster Resource Library",
+   "lang": "en",
+   "size": 644666368,
+   "date": "2024-05-25",
+   "url": "https://download.kiwix.org/zim/other/zimgit-post-disaster_en_2024-05.zim"
+  },
+  {
+   "id": "kiwix/cd3wdproject.org_en_all",
+   "reason": "unclear",
+   "license": null,
+   "note": "Archive of development documents from many publishers; licenses not stated.",
+   "title": "CD3WD Project",
+   "lang": "en",
+   "size": 581166080,
+   "date": "2025-11-12",
+   "url": "https://download.kiwix.org/zim/zimit/cd3wdproject.org_en_all_2025-11.zim"
+  },
+  {
+   "id": "kiwix/survivorlibrary.com_en_all",
+   "reason": "unclear",
+   "license": null,
+   "note": "Claims old public-domain books; not verified, and 220 GB.",
+   "title": "Survivor Library",
+   "lang": "en",
+   "size": 220347600896,
+   "date": "2026-09-08",
+   "url": "https://download.kiwix.org/zim/zimit/survivorlibrary.com_en_all_2026-09.zim"
+  },
+  {
+   "id": "kiwix/ready.gov_en_all",
+   "reason": "verify",
+   "license": null,
+   "note": "US federal work, probably public domain (17 U.S.C. 105), but includes third-party material; the site's policy page could not be fetched by script. Worth checking by hand: it also has Spanish (ready.gov_es_all).",
+   "title": "Ready.gov",
+   "lang": "en",
+   "size": 2063895552,
+   "date": "2026-10-14",
+   "url": "https://download.kiwix.org/zim/zimit/ready.gov_en_all_2026-10.zim"
+  },
+  {
+   "id": "kiwix/ready.gov_es_all",
+   "reason": "verify",
+   "license": null,
+   "note": "As ready.gov English. Would fill the Spanish survival gap.",
+   "title": "Ready.gov",
+   "lang": "es",
+   "size": 2065999872,
+   "date": "2026-10-14",
+   "url": "https://download.kiwix.org/zim/zimit/ready.gov_es_all_2026-10.zim"
+  },
+  {
+   "id": "kiwix/usda-2015_en",
+   "reason": "verify",
+   "license": null,
+   "note": "USDA home canning guide; US federal work, probably public domain. Check by hand.",
+   "title": "USDA Guide to Home Canning",
+   "lang": "en",
+   "size": 19787776,
+   "date": "2025-04-11",
+   "url": "https://download.kiwix.org/zim/other/usda-2015_en_2025-04.zim"
+  },
+  {
+   "id": "kiwix/irp.fas.org_en_military-medicine",
+   "reason": "verify",
+   "license": null,
+   "note": "US military medical manuals mirrored by FAS; probably public domain. Check by hand.",
+   "title": "Military Medicine",
+   "lang": "en",
+   "size": 75875328,
+   "date": "2026-05-04",
+   "url": "https://download.kiwix.org/zim/zimit/irp.fas.org_en_military-medicine_2026-05.zim"
+  },
+  {
+   "id": "kiwix/nhs.uk_en_medicines",
+   "reason": "unclear",
+   "license": null,
+   "note": "Crown copyright; reuse terms for this mirror not verified.",
+   "title": "NHS' Medicines A to Z",
+   "lang": "en",
+   "size": 15323136,
+   "date": "2026-09-18",
+   "url": "https://download.kiwix.org/zim/zimit/nhs.uk_en_medicines_2026-09b.zim"
+  },
+  {
+   "id": "kiwix/medlineplus.gov_es_all",
+   "reason": "unclear",
+   "license": null,
+   "note": "MedlinePlus mixes public-domain pages with licensed third-party content (e.g. the A.D.A.M. encyclopedia).",
+   "title": "MedlinePlus",
+   "lang": "es",
+   "size": 1767317504,
+   "date": "2024-12-26",
+   "url": "https://download.kiwix.org/zim/zimit/medlineplus.gov_es_all_2024-12.zim"
+  },
+  {
+   "id": "kiwix/cuisinelibre.org_fr_all",
+   "reason": "verify",
+   "license": null,
+   "note": "French recipes, reportedly under various free licenses per recipe; site blocked the scripted check.",
+   "title": "Cuisine libre",
+   "lang": "fr",
+   "size": 255952896,
+   "date": "2026-08-17",
+   "url": "https://download.kiwix.org/zim/other/cuisinelibre.org_fr_all_2026-08.zim"
+  },
+  {
+   "id": "kiwix/publicdomainrecipes.com_en_all",
+   "reason": "verify",
+   "license": null,
+   "note": "Name suggests public domain or CC0; not checked.",
+   "title": "Public Domain Recipes",
+   "lang": "en",
+   "size": 16972800,
+   "date": "2026-08-04",
+   "url": "https://download.kiwix.org/zim/zimit/publicdomainrecipes.com_en_all_2026-08.zim"
+  },
+  {
+   "id": "kiwix/lrnselfreliance_en_all",
+   "reason": "not-open",
+   "license": null,
+   "note": "YouTube channel; standard YouTube license. Same for canadian-prepper_*, urban-prepper_en_all, s2underground_en_all, cest-pas-sorcier_fr_*.",
+   "title": "Learning Self-Reliance",
+   "lang": "en",
+   "size": 3974044672,
+   "date": "2026-09-26",
+   "url": "https://download.kiwix.org/zim/videos/lrnselfreliance_en_all_2026-09.zim"
+  },
+  {
+   "id": "kiwix/gutenberg_en_lcc-r",
+   "reason": "safety",
+   "license": "LicenseRef-PublicDomain-US",
+   "note": "License is fine, but these are old medical books with outdated, sometimes dangerous advice. Kept out of the Medical kit.",
+   "title": "Project Gutenberg Library",
+   "lang": "en",
+   "size": 2019298304,
+   "date": "2026-03-06",
+   "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_lcc-r_2026-03.zim"
+  }
+ ]
+}
