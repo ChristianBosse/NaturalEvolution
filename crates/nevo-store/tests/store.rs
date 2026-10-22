@@ -634,3 +634,26 @@ fn forks_are_detected_and_kept_as_evidence() {
     assert!(matches!(c.put_object(honest2.bytes()), Err(StoreError::Forked { .. })));
     assert!(c.is_forked(node.public()).unwrap());
 }
+
+#[test]
+fn recent_tips_and_author_clock() {
+    let (_dir, store) = store();
+    let kp = key(1);
+    assert_eq!(store.author_clock(kp.public()).unwrap(), 0);
+    let a = seal(&revision(&kp, "A", &["general"], Id::of(b"a")), &kp).unwrap();
+    let b = seal(&revision(&kp, "B", &["general"], Id::of(b"b")), &kp).unwrap();
+    store.put_object(a.bytes()).unwrap();
+    store.put_object(b.bytes()).unwrap();
+    let a2 = seal(&edit(&kp, a.id(), vec![a.id()], 7, "A, edited"), &kp).unwrap();
+    store.put_object(a2.bytes()).unwrap();
+
+    let recent: Vec<String> = store
+        .recent_tips(10)
+        .unwrap()
+        .into_iter()
+        .map(|r| r.object.title)
+        .collect();
+    assert_eq!(recent, vec!["A, edited", "B"], "newest first, one entry per item");
+    assert_eq!(store.recent_tips(1).unwrap().len(), 1);
+    assert_eq!(store.author_clock(kp.public()).unwrap(), 7);
+}

@@ -48,6 +48,18 @@ Planned platforms: Linux (ARM and x86), Windows, macOS. Android later.
 - **Tantivy** for search, **SQLite** for data
 - Plain, open file formats, so the knowledge outlives the software
 
+## Status and trying it
+
+NEVO is early in Phase 1 ([roadmap](ROADMAP.md)). What works today: a node that stores signed content and serves a web page where you can browse topics, read guides and add your own (text, photos, PDFs, video). Search, the built-in AI, accounts and sync are next.
+
+To run it with Docker (no Rust install needed), from the repository folder:
+
+```bash
+docker run --rm -it -p 8080:8080 -v "$PWD:/src" -w /src rust:1-bookworm cargo run --release -p nevo-node -- --data /tmp/nevo
+```
+
+Then open http://localhost:8080 (or `http://<this computer's address>:8080` from a phone on the same Wi-Fi).
+
 ## Documents
 
 - [VISION.md](VISION.md): why NEVO exists, its principles and its design

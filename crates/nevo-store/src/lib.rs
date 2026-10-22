@@ -186,6 +186,43 @@ impl Store {
             .collect())
     }
 
+    /// The current versions (branch tips) of the most recently stored items, newest first.
+    /// Includes node-only and private items; pages decide what each reader may see.
+    pub fn recent_tips(&self, limit: usize) -> Result<Vec<Sealed<Revision>>> {
+        let limit = i64::try_from(limit).unwrap_or(i64::MAX);
+        let ids = {
+            let db = self.db();
+            let mut stmt = db.prepare(
+                "SELECT r.id FROM revisions r JOIN objects o ON o.id = r.id
+                 WHERE NOT EXISTS (
+                     SELECT 1 FROM revision_parents p JOIN revisions c ON c.id = p.rev
+                     WHERE p.parent = r.id AND c.item = r.item)
+                 ORDER BY o.rowid DESC LIMIT ?1",
+            )?;
+            let rows = stmt.query_map([limit], |r| r.get::<_, Vec<u8>>(0))?;
+            rows.collect::<rusqlite::Result<Vec<_>>>()?
+        };
+        ids.iter()
+            .filter_map(|d| id_from_db(d))
+            .filter_map(|id| self.get::<Revision>(id).transpose())
+            .collect()
+    }
+
+    /// The highest logical clock among objects signed by `author`. A new object by this author
+    /// must use a higher one (spec section 2).
+    pub fn author_clock(&self, author: PublicKey) -> Result<u64> {
+        let db = self.db();
+        let max: Option<i64> = db.query_row(
+            "SELECT MAX(c) FROM (
+                 SELECT MAX(clock) AS c FROM revisions WHERE author = ?1
+                 UNION ALL SELECT MAX(clock) FROM attestations WHERE author = ?1
+                 UNION ALL SELECT MAX(clock) FROM keys WHERE key = ?1)",
+            [author.as_bytes()],
+            |r| r.get(0),
+        )?;
+        Ok(max.map_or(0, |c| c as u64))
+    }
+
     /// Attestations about an object or a key.
     pub fn attestations_about(&self, subject: Subject) -> Result<Vec<Sealed<Attestation>>> {
         let (about, is_key) = subject_to_db(subject);

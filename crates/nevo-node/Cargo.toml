@@ -1,0 +1,26 @@
+[package]
+name = "nevo-node"
+description = "The NEVO node: a web server for browsing, reading and adding to the local library"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "nevo"
+path = "src/main.rs"
+
+[dependencies]
+nevo-format.workspace = true
+nevo-store.workspace = true
+axum.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+maud.workspace = true
+pulldown-cmark.workspace = true
+tower.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+http-body-util.workspace = true
