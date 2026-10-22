@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "qwen3.5-2b",
+    "file": "Qwen3.5-2B-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "cpu4",
+    "load_seconds": 26.8,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 37.8,
+    "memory": {
+      "cgroup_peak_mb": 1729,
+      "process_peak_rss_mb": 1511
+    }
+  },
+  "rows": [
+    {
+      "answer": "⚠️ **Important Safety Warning:** If you are currently burning, stop immediately and seek emergency medical help. Do not wait for the burn to cool down before seeking care.\n\nHere is what you should do based on the provided source:\n\n1.  **Cool the burn immediately:** Use cool or lukewarm running water for 20 minutes as soon as possible [S1].\n2.  **Remove restrictive items:** Take off rings, watches, or tight clothing near the burn unless they are stuck to the skin [S1].\n3.  **Avoid harmful substances:** Do not use ice, iced water, butter, oils, or creams on the burn [S1].\n4.  **Cover the area loosely:** After cooling, cover the burn loosely with cling film or a clean, non-fluffy material [S1].\n5.  **Seek medical attention if:** The burn is larger than your hand, located on the face, hands, feet, or genitals, or if it looks deep, white, or charred [S1].\n\n**You need:** Cool running water, removal of jewelry, a loose covering, and medical evaluation if the burn meets any of the \"seek help\" criteria listed above.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 418,
+        "prompt_ms": 853.637,
+        "prompt_per_token_ms": 2.042193779904306,
+        "prompt_per_second": 489.6694965190122,
+        "predicted_n": 256,
+        "predicted_ms": 6778.831,
+        "predicted_per_token_ms": 26.583650980392157,
+        "predicted_per_second": 37.61710536816746
+      },
+      "wall_seconds": 7.65,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Important Safety Warning:** This information is for reference only. If your child is very sleepy, has blood in the stool, cannot drink, or shows no improvement, **seek medical help immediately** [S1].\n\nTo make oral rehydration solution at home, follow these steps:\n1. **Gather Ingredients**: You need 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt [S1].\n2. **Mix**: Stir the ingredients together until the salt and sugar are completely dissolved [S1].\n3. **Administer**: Give small sips often to your child [S1].\n4. **Monitor**: Be careful not to use too much salt, as it can be dangerous for children [S1].\n\nYou need to:\n- Measure the salt and sugar carefully to avoid toxicity.\n- Seek medical help if the child cannot drink, has blood in the stool, is very sleepy, or does not improve [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 136,
+        "prompt_ms": 325.435,
+        "prompt_per_token_ms": 2.392904411764706,
+        "prompt_per_second": 417.90219245010525,
+        "predicted_n": 211,
+        "predicted_ms": 5498.469,
+        "predicted_per_token_ms": 26.183185714285713,
+        "predicted_per_second": 38.19244957096239
+      },
+      "wall_seconds": 5.83,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ This involves severe bleeding that requires immediate action.\n\n1.  **Call for help**: If you can, call for help immediately [S1].\n2.  **Apply pressure**: Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check [S1].\n3.  **Add more cloth**: If blood soaks through, add more cloth on top and keep pressing [S1].\n4.  **Use a tourniquet**: If bleeding from an arm or leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint [S1].\n5.  **Tighten until stopped**: Tighten it until the bleeding stops [S1].\n6.  **Record time**: Write down the time the tourniquet was applied [S1].\n7.  **Do not remove**: Do not remove the tourniquet; leave that to medical staff [S1].\n\nYou need to:\n*   Call for help if you can.\n*   Apply firm pressure to the wound for at least 10 minutes.\n*   Add more cloth if blood soaks through.\n*   Apply a tourniquet if pressure does not stop the bleeding.\n*   Record the time the tourniquet was applied.\n*   Leave the tourniquet in place for medical staff to remove.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 172,
+        "prompt_ms": 377.552,
+        "prompt_per_token_ms": 2.1950697674418604,
+        "prompt_per_second": 455.56638555748606,
+        "predicted_n": 311,
+        "predicted_ms": 8258.214,
+        "predicted_per_token_ms": 26.6394,
+        "predicted_per_second": 37.53838299661404
+      },
+      "wall_seconds": 8.64,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ There are conflicting instructions regarding the planting depth of bean seeds.\n\n*   **Source [S1]** (Community) suggests planting seeds **2 to 3 centimeters deep**.\n*   **Source [S2]** (Community) suggests planting beans **10 centimeters deep** to keep them out of reach of birds.\n\nYou need to follow the depth of **2 to 3 centimeters** as recommended by the more general gardening note [S1], while being aware that the specific advice in [S2] differs significantly.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 93,
+        "prompt_ms": 238.454,
+        "prompt_per_token_ms": 2.564021505376344,
+        "prompt_per_second": 390.0123294220268,
+        "predicted_n": 115,
+        "predicted_ms": 3073.109,
+        "predicted_per_token_ms": 26.957096491228068,
+        "predicted_per_second": 37.09598325344138
+      },
+      "wall_seconds": 3.31,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 113,
+        "prompt_ms": 264.068,
+        "prompt_per_token_ms": 2.3368849557522124,
+        "prompt_per_second": 427.92008119120834,
+        "predicted_n": 13,
+        "predicted_ms": 313.692,
+        "predicted_per_token_ms": 26.141000000000002,
+        "predicted_per_second": 38.2540836234268
+      },
+      "wall_seconds": 0.58,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Pour que l'eau soit potable, il faut la faire bouillir pendant **1 minute** à une altitude inférieure à 2 000 mètres [S1].\nSi l'altitude dépasse 2 000 mètres (6 500 pieds), il faut faire bouillir l'eau pendant **3 minutes** [S1].\nAprès le temps de cuisson, laissez l'eau refroidir naturellement et stockez-la dans des conteneurs propres et couverts [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 112,
+        "prompt_ms": 254.729,
+        "prompt_per_token_ms": 2.2743660714285716,
+        "prompt_per_second": 439.6829571819463,
+        "predicted_n": 107,
+        "predicted_ms": 2783.26,
+        "predicted_per_token_ms": 26.257169811320757,
+        "predicted_per_second": 38.084835768128016
+      },
+      "wall_seconds": 3.04,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

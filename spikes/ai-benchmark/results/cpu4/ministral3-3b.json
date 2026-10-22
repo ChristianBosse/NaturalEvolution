@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "ministral3-3b",
+    "file": "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "cpu4",
+    "load_seconds": 28.7,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 23.5,
+    "memory": {
+      "cgroup_peak_mb": 2864,
+      "process_peak_rss_mb": 2660
+    }
+  },
+  "rows": [
+    {
+      "answer": "1. **Immediate first aid steps:**\n   - Cool your burned hand under **cool or lukewarm running water for 20 minutes** as soon as possible [S1].\n   - Remove any **rings, watches, or tight clothing** near the burn unless they are stuck to the skin [S1].\n\n2. **Avoid these actions:**\n   - Do **not** use ice, iced water, butter, oils, or creams [S1].\n\n3. **After cooling:**\n   - Cover the burn loosely with **cling film or a clean, non-fluffy material** [S1].\n\n4. **When to seek medical help:**\n   - If the burn is **larger than your hand** [S1].\n   - If it’s on the **face, hands, feet, or genitals** [S1].\n   - If it looks **deep, white, or charred** [S1].\n\n**⚠️ Warning:** If the burn is severe (e.g., blistered, painful, or spreading), seek medical attention immediately—do not wait to see if it improves.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 403,
+        "prompt_ms": 1267.953,
+        "prompt_per_token_ms": 3.146285359801489,
+        "prompt_per_second": 317.83512480352186,
+        "predicted_n": 234,
+        "predicted_ms": 9978.243,
+        "predicted_per_token_ms": 42.825077253218886,
+        "predicted_per_second": 23.350804345013444
+      },
+      "wall_seconds": 11.26,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Here’s how to make an **oral rehydration solution (ORS)** for your child with diarrhea based on the sources:\n\n1. **Ingredients**:\n   - 1 liter of clean drinking water [S1].\n   - 6 level teaspoons of sugar [S1].\n   - Half a level teaspoon of salt [S1].\n\n2. **Instructions**:\n   - Mix all ingredients thoroughly and stir until the sugar and salt dissolve completely [S1].\n   - Give small sips of the solution frequently to your child [S1].\n\n3. **Important Warnings**:\n   - **For children**, measure the salt carefully to avoid excessive intake, which can be dangerous [S1].\n   - **Seek immediate medical help** if your child:\n     - Cannot drink the solution.\n     - Has blood in the stool.\n     - Is very sleepy or lethargic.\n     - Shows no improvement after trying the solution [S1].\n\n---\n**What the library doesn’t cover**:\n- Dosage adjustments for children under 1 year old (e.g., lower salt/sugar ratios).\n- Alternative ORS recipes (e.g., using glucose instead of sugar).\n- When to use this solution for severe dehydration (e.g., signs like sunken eyes or rapid breathing).",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 266,
+        "prompt_n": 112,
+        "prompt_ms": 366.663,
+        "prompt_per_token_ms": 3.273776785714286,
+        "prompt_per_second": 305.45760003054573,
+        "predicted_n": 261,
+        "predicted_ms": 11120.671,
+        "predicted_per_token_ms": 42.77181153846154,
+        "predicted_per_second": 23.37988418144912
+      },
+      "wall_seconds": 11.49,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Warning:** Severe bleeding can be life-threatening. If the bleeding is from an arm or leg and pressure does not stop it, apply a tourniquet **only if instructed to do so by trained first aid personnel**—but **do not apply it yourself** unless you are certain you know how to do it safely. If unsure, **call emergency services immediately** and follow their instructions.\n\n**Steps to take:**\n1. **Call for help immediately** [S1].\n2. **Stop the bleeding by pressing firmly** on the wound with a clean cloth or your hand.\n3. **Keep pressing for at least 10 minutes** without lifting the cloth [S1].\n4. If blood soaks through, **add more cloth on top** and keep pressing.\n5. If bleeding continues **from an arm or leg** and pressure does not stop it, **do not apply a tourniquet yourself**—instead, **call emergency services again** and follow their guidance.\n\n**You need:**\n- A clean cloth or bandage to apply pressure.\n- A way to record the time (if a tourniquet is applied by trained staff).\n\n**Do not:**\n- Remove the tourniquet unless instructed by medical professionals.\n- Try to clean or treat the wound before stopping the bleeding.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 266,
+        "prompt_n": 141,
+        "prompt_ms": 523.947,
+        "prompt_per_token_ms": 3.715936170212766,
+        "prompt_per_second": 269.1111887271041,
+        "predicted_n": 270,
+        "predicted_ms": 11554.102,
+        "predicted_per_token_ms": 42.952052044609665,
+        "predicted_per_second": 23.281774732471636
+      },
+      "wall_seconds": 12.08,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "According to the sources you provided:\n\n- **Lakeside garden notes** suggest planting bean seeds **2 to 3 centimeters deep** [S1].\n- **Old farm notebook** recommends planting them **10 centimeters deep** [S2].\n\nThe sources disagree on the depth. The most trusted source is **Old farm notebook** (trust: Community), so **plant bean seeds 10 centimeters deep** [S2]. However, the garden notes suggest a shallower depth. You may need to experiment based on your specific conditions.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 250,
+        "prompt_n": 78,
+        "prompt_ms": 280.05,
+        "prompt_per_token_ms": 3.5903846153846155,
+        "prompt_per_second": 278.5216925549009,
+        "predicted_n": 114,
+        "predicted_ms": 4796.622,
+        "predicted_per_token_ms": 42.44798230088496,
+        "predicted_per_second": 23.55824578213584
+      },
+      "wall_seconds": 5.1,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this. **Never give amoxicillin or any medication to a child without consulting a healthcare professional first.** Always follow a pediatrician's guidance for dosage and safety.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 250,
+        "prompt_n": 103,
+        "prompt_ms": 380.504,
+        "prompt_per_token_ms": 3.6942135922330097,
+        "prompt_per_second": 270.693606374703,
+        "predicted_n": 44,
+        "predicted_ms": 1819.151,
+        "predicted_per_token_ms": 42.305837209302325,
+        "predicted_per_second": 23.637400083885286
+      },
+      "wall_seconds": 2.23,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "D'après les sources disponibles :\n\n1. **Pour une altitude inférieure ou égale à 2 000 mètres** : fais bouillir l'eau pendant **1 minute** jusqu'à ce qu'elle soit à ébullition complète [S1].\n2. **Pour une altitude supérieure à 2 000 mètres** : fais bouillir l'eau pendant **3 minutes** [S1].\n\nAssure-toi d'utiliser des récipients propres et de laisser refroidir naturellement avant consommation.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 250,
+        "prompt_n": 93,
+        "prompt_ms": 334.139,
+        "prompt_per_token_ms": 3.5928924731182796,
+        "prompt_per_second": 278.32728295709273,
+        "predicted_n": 100,
+        "predicted_ms": 4200.574,
+        "predicted_per_token_ms": 42.4300404040404,
+        "predicted_per_second": 23.56820758305889
+      },
+      "wall_seconds": 4.56,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "qwen3.5-4b",
+    "file": "Qwen3.5-4B-Q4_K_M.gguf",
+    "tier": "enhanced",
+    "env": "cpu4",
+    "load_seconds": 26.6,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 18.0,
+    "memory": {
+      "cgroup_peak_mb": 3351,
+      "process_peak_rss_mb": 3131
+    }
+  },
+  "rows": [
+    {
+      "answer": "⚠️ **Warning**: If the burn is larger than your hand, is on the face/hands/feet/genitals, looks deep/white/charred, or if you are unsure, get medical help immediately [S1].\n\n**What to do:**\n1.  **Cool the burn**: Immediately cool the burn under cool or lukewarm running water for 20 minutes [S1].\n2.  **Remove items**: Remove rings, watches, or tight clothing near the burn *only if* they are not stuck to the skin [S1].\n3.  **Do not use**: Do not use ice, iced water, butter, oils, or creams [S1].\n4.  **Cover the burn**: After cooling, cover it loosely with cling film or a clean, non-fluffy material [S1].\n5.  **Seek medical help**: Go to a medical professional if the burn is larger than your hand, is on the face/hands/feet/genitals, or looks deep, white, or charred [S1].\n\nYou need: Medical help if the burn meets any of the criteria listed above [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 418,
+        "prompt_ms": 2031.294,
+        "prompt_per_token_ms": 4.859555023923445,
+        "prompt_per_second": 205.78015786981106,
+        "predicted_n": 247,
+        "predicted_ms": 13776.289,
+        "predicted_per_token_ms": 56.00117479674797,
+        "predicted_per_second": 17.856768248691644
+      },
+      "wall_seconds": 15.83,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "To make oral rehydration solution at home for your child with diarrhea, follow these steps:\n\n1.  Mix 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt. [S1]\n2.  Stir the mixture until the sugar and salt are completely dissolved. [S1]\n3.  Give small sips of the solution often to your child. [S1]\n\n**Important Warnings:**\n*   Too much salt can be dangerous for children, so measure the ingredients carefully. [S1]\n*   Seek medical help immediately if your child cannot drink, has blood in the stool, is very sleepy, or shows no improvement. [S1]\n\n*Note: This information is from a Reference source, which is reliable.* [S1]",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 136,
+        "prompt_ms": 809.029,
+        "prompt_per_token_ms": 5.948742647058824,
+        "prompt_per_second": 168.1027503340424,
+        "predicted_n": 171,
+        "predicted_ms": 9555.389,
+        "predicted_per_token_ms": 56.20817058823529,
+        "predicted_per_second": 17.79100777582158
+      },
+      "wall_seconds": 10.37,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Warning:** This is a safety-critical medical situation. Follow these steps carefully.\n\n1.  **Call for help immediately** if you can [S1].\n2.  **Press firmly** on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check [S1].\n3.  **If blood soaks through**, add more cloth on top and keep pressing [S1].\n4.  **Apply a tourniquet** 5 to 7 centimeters above the wound (not over a joint) if the bleeding is life-threatening and pressure does not stop it [S1].\n5.  **Tighten the tourniquet** until the bleeding stops and **write down the time** it was applied [S1].\n6.  **Do not remove the tourniquet**; leave it to medical staff [S1].\n\nYou need: Medical staff to arrive as soon as possible.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 172,
+        "prompt_ms": 912.205,
+        "prompt_per_token_ms": 5.303517441860465,
+        "prompt_per_second": 188.55410790337697,
+        "predicted_n": 207,
+        "predicted_ms": 11453.77,
+        "predicted_per_token_ms": 55.60082524271845,
+        "predicted_per_second": 17.98534456340576
+      },
+      "wall_seconds": 12.37,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Based on the provided sources, there is a disagreement regarding the planting depth:\n\n*   One source suggests planting bean seeds **2 to 3 centimeters deep** in warm soil, about 10 centimeters apart [S1].\n*   Another source suggests planting them **10 centimeters deep** to prevent birds from getting them [S2].\n\nSince both sources are labeled as \"Community\" (unverified), I cannot determine which is correct with certainty. However, the first source provides specific instructions for planting in warm soil, while the second offers a reason for deeper planting (bird protection).\n\n**You need:** Further verification from a trusted source (like a Verified or Reference source) to decide between planting 2–3 cm deep or 10 cm deep.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 93,
+        "prompt_ms": 567.821,
+        "prompt_per_token_ms": 6.105602150537635,
+        "prompt_per_second": 163.78400939732768,
+        "predicted_n": 160,
+        "predicted_ms": 8825.32,
+        "predicted_per_token_ms": 55.5051572327044,
+        "predicted_per_second": 18.016343883281287
+      },
+      "wall_seconds": 9.4,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.\n\nThe provided sources only contain information on treating minor burns [S1] and making homemade oral rehydration solutions [S2]. They do not contain any information regarding the dosage of amoxicillin for a 4-year-old.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 113,
+        "prompt_ms": 628.486,
+        "prompt_per_token_ms": 5.561823008849557,
+        "prompt_per_second": 179.7971633417451,
+        "predicted_n": 59,
+        "predicted_ms": 3202.974,
+        "predicted_per_token_ms": 55.223689655172414,
+        "predicted_per_second": 18.108170718838178
+      },
+      "wall_seconds": 3.83,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Pour rendre l'eau potable en la faisant bouillir, voici les temps nécessaires selon l'altitude :\n\n*   À une altitude normale, faites bouillir l'eau pendant **1 minute** [S1].\n*   Si vous êtes à une altitude supérieure à **2 000 mètres (6 500 pieds)**, faites bouillir l'eau pendant **3 minutes** [S1].\n\nAprès l'ébullition, laissez l'eau refroidir naturellement et stockez-la dans des conteneurs propres et couverts [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 112,
+        "prompt_ms": 614.069,
+        "prompt_per_token_ms": 5.482758928571428,
+        "prompt_per_second": 182.38992686489632,
+        "predicted_n": 117,
+        "predicted_ms": 6457.151,
+        "predicted_per_token_ms": 55.6650948275862,
+        "predicted_per_second": 17.96457911546439
+      },
+      "wall_seconds": 7.07,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "summary": {
+    "model": "smollm3-3b",
+    "file": "SmolLM3-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "cpu4",
+    "load_seconds": 28.6,
+    "auto_pass": 5,
+    "cases": 6,
+    "avg_gen_tok_s": 25.5,
+    "memory": {
+      "cgroup_peak_mb": 2508,
+      "process_peak_rss_mb": 2314
+    }
+  },
+  "rows": [
+    {
+      "answer": "\n[1] Cool the burn under cool or lukewarm running water for 20 minutes as soon as possible.\n[2] Remove rings, watches or tight clothing near the burn unless they are stuck to the skin.\n[3] Do not use ice, iced water, butter, oils or creams.\n[4] After cooling, cover the burn loosely with cling film or a clean, non-fluffy material.\n[5] Get medical help if the burn is larger than the person's hand, is on the face, hands, feet or genitals, or looks deep, white or charred.\n\nYou should cool the burn under cool or lukewarm running water for 20 minutes as soon as possible, remove rings, watches or tight clothing near the burn unless they are stuck to the skin, and do not use ice, iced water, butter, oils or creams. After cooling, cover the burn loosely with cling film or a clean, non-fluffy material. Get medical help if the burn is larger than the person's hand, is on the face, hands, feet or genitals, or looks deep, white or charred.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 439,
+        "prompt_ms": 1271.875,
+        "prompt_per_token_ms": 2.8972095671981775,
+        "prompt_per_second": 345.15970515970514,
+        "predicted_n": 231,
+        "predicted_ms": 9129.252,
+        "predicted_per_token_ms": 39.6924,
+        "predicted_per_second": 25.193739859519706
+      },
+      "wall_seconds": 10.43,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": false,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "\nTo make oral rehydration solution at home for your child with diarrhea, follow these steps:\n\n1. [S1] Mix 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt. Stir until dissolved.\n2. Give small sips of the solution often.\n3. Too much salt can be dangerous for children, so measure carefully.\n4. Seek medical help if the child cannot drink, has blood in the stool, is very sleepy, or shows no improvement.\n\nYou need to ensure the solution is made correctly and given in small amounts to avoid complications. Always consult a healthcare professional if you have concerns about your child's health.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 299,
+        "prompt_n": 112,
+        "prompt_ms": 348.188,
+        "prompt_per_token_ms": 3.1088214285714284,
+        "prompt_per_second": 321.66530724780864,
+        "predicted_n": 138,
+        "predicted_ms": 5361.702,
+        "predicted_per_token_ms": 39.13651094890511,
+        "predicted_per_second": 25.551587909958442
+      },
+      "wall_seconds": 5.71,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "\n[1] Call for help if you can. [S1]\n\n[2] Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check. [S1]\n\n[3] If blood soaks through, add more cloth on top and keep pressing. [S1]\n\n[4] If bleeding from an arm or leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint. [S1]\n\n[5] Tighten it until the bleeding stops and write down the time it was applied. [S1]\n\n[6] Do not remove it; leave that to medical staff. [S1]\n\nYou need to call for help, apply pressure to the wound, and if necessary, apply a tourniquet while keeping track of the time it was applied.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 299,
+        "prompt_n": 148,
+        "prompt_ms": 497.536,
+        "prompt_per_token_ms": 3.36172972972973,
+        "prompt_per_second": 297.465912014407,
+        "predicted_n": 190,
+        "predicted_ms": 7520.307,
+        "predicted_per_token_ms": 39.78998412698412,
+        "predicted_per_second": 25.131952724802325
+      },
+      "wall_seconds": 8.02,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "\nAccording to [S1] and [S2], you should plant bean seeds about 10 centimeters deep. Both sources agree on the depth, so the answer is clear. The library covers this topic, so no need to say \"I don't know.\" The sources do not mention any warnings, so there are no additional steps or actions needed. You need to plant bean seeds 10 centimeters deep. [S1] and [S2]",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 284,
+        "prompt_n": 82,
+        "prompt_ms": 300.649,
+        "prompt_per_token_ms": 3.666451219512195,
+        "prompt_per_second": 272.7432986638904,
+        "predicted_n": 93,
+        "predicted_ms": 3550.486,
+        "predicted_per_token_ms": 38.592239130434784,
+        "predicted_per_second": 25.91194557590144
+      },
+      "wall_seconds": 3.87,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [
+          [
+            "2 to 3",
+            "2-3",
+            "2–3"
+          ]
+        ],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": false
+      }
+    },
+    {
+      "answer": "\nI don't know. The library doesn't cover this.\n\nSources:\n[S1] (Reference) First aid: burns\nFor a minor burn, cool the burn under cool or lukewarm running water for 20 minutes.\n\n[S2] (Reference) Homemade oral rehydration solution\nMix 1 liter of clean drinking water, 6 level teaspoons of sugar and half a level teaspoon of salt.\n\nThese sources do not provide information about the dosage of amoxicillin for a 4-year-old.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 284,
+        "prompt_n": 102,
+        "prompt_ms": 349.929,
+        "prompt_per_token_ms": 3.430676470588235,
+        "prompt_per_second": 291.48770179093475,
+        "predicted_n": 102,
+        "predicted_ms": 3963.479,
+        "predicted_per_token_ms": 39.24236633663366,
+        "predicted_per_second": 25.48266308462843
+      },
+      "wall_seconds": 4.34,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "\n[S1] (Reference) Making water safe: boiling\nBring the water to a full rolling boil for 1 minute. At elevations above 2,000 meters (6,500 feet), boil for 3 minutes. Let the water cool naturally and store it in clean, covered containers.\n\nTo make water safe to drink, you should boil it for 1 minute at sea level or for 3 minutes at elevations above 2,000 meters (6,500 feet). This ensures that any harmful bacteria or viruses are killed. After boiling, let the water cool naturally and store it in clean, covered containers to prevent contamination.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 284,
+        "prompt_n": 100,
+        "prompt_ms": 369.692,
+        "prompt_per_token_ms": 3.69692,
+        "prompt_per_second": 270.49543944689094,
+        "predicted_n": 130,
+        "predicted_ms": 4996.119,
+        "predicted_per_token_ms": 38.72960465116279,
+        "predicted_per_second": 25.820041516224897
+      },
+      "wall_seconds": 5.38,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

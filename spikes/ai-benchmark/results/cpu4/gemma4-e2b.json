@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "gemma4-e2b",
+    "file": "gemma-4-E2B-it-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "cpu4",
+    "load_seconds": 316.4,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 30.5,
+    "memory": {
+      "cgroup_peak_mb": 3517,
+      "process_peak_rss_mb": 3286
+    }
+  },
+  "rows": [
+    {
+      "answer": "⚠️ First aid for a minor burn:\n1. Cool the burn under cool or lukewarm running water for 20 minutes as soon as possible [S1].\n2. Remove rings, watches, or tight clothing near the burn unless they are stuck to the skin [S1].\n3. Do not use ice, iced water, butter, oils, or creams [S1].\n4. After cooling, cover the burn loosely with cling film or a clean, non-fluffy material [S1].\n5. Get medical help if the burn is larger than the person's hand, is on the face, hands, feet, or genitals, or looks deep, white, or charred [S1].\nYou need: Seek medical help if the burn meets any of the criteria listed above [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 412,
+        "prompt_ms": 1111.9,
+        "prompt_per_token_ms": 2.6987864077669905,
+        "prompt_per_second": 370.53691878766074,
+        "predicted_n": 169,
+        "predicted_ms": 5531.337,
+        "predicted_per_token_ms": 32.924625000000006,
+        "predicted_per_second": 30.372403634058095
+      },
+      "wall_seconds": 6.65,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "1. Mix 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt [S1].\n2. Stir until dissolved [S1].\n3. Give small sips often [S1].\n4. Be careful with salt as too much can be dangerous for children [S1].\n5. Seek medical help if the child cannot drink, has blood in the stool, is very sleepy, or shows no improvement [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 133,
+        "prompt_ms": 409.432,
+        "prompt_per_token_ms": 3.078436090225564,
+        "prompt_per_second": 324.84026651556303,
+        "predicted_n": 101,
+        "predicted_ms": 3244.296,
+        "predicted_per_token_ms": 32.44296,
+        "predicted_per_second": 30.82332808103823
+      },
+      "wall_seconds": 3.66,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ First aid for severe bleeding:\n1. Call for help if you can [S1].\n2. Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check [S1].\n3. If blood soaks through, add more cloth on top and keep pressing [S1].\n4. If bleeding from an arm or leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint [S1].\n5. Tighten the tourniquet until the bleeding stops and write down the time it was applied [S1].\n6. Do not remove the tourniquet; leave that to medical staff [S1].\nYou need: To apply pressure to the wound and potentially use a tourniquet if the bleeding is life-threatening and pressure fails.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 169,
+        "prompt_ms": 552.856,
+        "prompt_per_token_ms": 3.271337278106509,
+        "prompt_per_second": 305.68538642973937,
+        "predicted_n": 188,
+        "predicted_ms": 6187.367,
+        "predicted_per_token_ms": 33.08752406417113,
+        "predicted_per_second": 30.22287186132647
+      },
+      "wall_seconds": 6.74,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "1. Plant bean seeds 2 to 3 centimeters deep in warm soil, about 10 centimeters apart [S1].\n2. Beans should go in 10 centimeters deep so birds can't get them [S2].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 89,
+        "prompt_ms": 336.651,
+        "prompt_per_token_ms": 3.782595505617978,
+        "prompt_per_second": 264.36873795117197,
+        "predicted_n": 50,
+        "predicted_ms": 1584.807,
+        "predicted_per_token_ms": 32.343,
+        "predicted_per_second": 30.918591348978143
+      },
+      "wall_seconds": 1.95,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 111,
+        "prompt_ms": 385.297,
+        "prompt_per_token_ms": 3.4711441441441444,
+        "prompt_per_second": 288.0894478804662,
+        "predicted_n": 15,
+        "predicted_ms": 459.968,
+        "predicted_per_token_ms": 32.85485714285714,
+        "predicted_per_second": 30.436899958257968
+      },
+      "wall_seconds": 0.87,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "1. Faites bouillir l'eau pendant 1 minute [S1].\n2. Aux altitudes supérieures à 2 000 mètres (6 500 pieds), faites bouillir pendant 3 minutes [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 110,
+        "prompt_ms": 389.826,
+        "prompt_per_token_ms": 3.5438727272727273,
+        "prompt_per_second": 282.17717648386713,
+        "predicted_n": 52,
+        "predicted_ms": 1670.93,
+        "predicted_per_token_ms": 32.763333333333335,
+        "predicted_per_second": 30.521924916064705
+      },
+      "wall_seconds": 2.07,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

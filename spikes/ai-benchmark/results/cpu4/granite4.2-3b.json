@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "granite4.2-3b",
+    "file": "granite-4.2-3b-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "cpu4",
+    "load_seconds": 50.7,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 22.9,
+    "memory": {
+      "cgroup_peak_mb": 2832,
+      "process_peak_rss_mb": 2633
+    }
+  },
+  "rows": [
+    {
+      "answer": "I'll help you with your burn. Based on the guidelines provided:\n\n1. Cool the burn under cool or lukewarm running water for at least 20 minutes as soon as possible.\n2. Remove any rings, watches, or tight clothing near the burn unless they are stuck to the skin.\n3. Do not use ice, iced water, butter, oils, or creams on the burn.\n4. After cooling, cover the burn loosely with cling film or a clean, non-fluffy material.\n5. Get medical help if the burn is larger than the person's hand, is on the face, hands, feet, or genitals, or looks deep, white, or charred.\n\nSince you burned your hand on a pot, it's important to follow these steps carefully. If the burn meets any of the criteria in step 5 (e.g., is larger than the person's hand, is on the face, hands, feet, or genitals, or looks deep, white, or charred), you should seek medical help immediately.\n\n[S1] provides the necessary instructions for handling a minor burn, which applies to your situation.\n\nYou need:\n- Cool the burn with running water for at least 20 minutes.\n- Remove rings, watches, or tight clothing (unless stuck to skin).\n- Do not apply ice, iced water, butter, oils, or creams.\n- Cover loosely with cling film or clean non-fluffy material.\n- Seek medical help if the burn is large, on face/hands/feet/genitals, or looks deep, white, or charred.\n\nIf you have any concerns about the severity of the burn or need further guidance, please consult a healthcare professional.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 421,
+        "prompt_ms": 1452.289,
+        "prompt_per_token_ms": 3.4496175771971496,
+        "prompt_per_second": 289.88720564570826,
+        "predicted_n": 369,
+        "predicted_ms": 16369.34,
+        "predicted_per_token_ms": 44.48190217391304,
+        "predicted_per_second": 22.48105299297345
+      },
+      "wall_seconds": 17.83,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I'll help you make the oral rehydration solution for your child.\n\nTo make oral rehydration solution at home, mix 1 liter of clean drinking water, 6 level teaspoons of sugar and half a level teaspoon of salt. Stir until dissolved. Give small sips often. [S1]\n\nThis is the correct method as described in the source.\n\nYou need:\n1. 1 liter of clean drinking water\n2. 6 level teaspoons of sugar\n3. Half a level teaspoon of salt\n\nSteps:\n1. Measure and mix the ingredients as specified.\n2. Stir until fully dissolved.\n3. Give small sips often.\n\n⚠️ If your child shows any of these signs, seek medical help immediately:\n- Cannot drink\n- Has blood in the stool\n- Is very sleepy\n- Shows no improvement\n\nThis information comes directly from the reliable source [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 279,
+        "prompt_n": 113,
+        "prompt_ms": 495.996,
+        "prompt_per_token_ms": 4.389345132743363,
+        "prompt_per_second": 227.82441793885437,
+        "predicted_n": 196,
+        "predicted_ms": 8512.232,
+        "predicted_per_token_ms": 43.65247179487179,
+        "predicted_per_second": 22.908210208556344
+      },
+      "wall_seconds": 9.01,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I'll help you with the steps for severe bleeding from a leg wound.\n\n[S1] says:  \n- Call for help if you can.  \n- Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check.  \n- If blood soaks through, add more cloth on top and keep pressing.  \n- If bleeding from an arm or leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint.  \n- Tighten it until the bleeding stops and write down the time it was applied. Do not remove it; leave that to medical staff.\n\nSince the person cut their leg badly and it's bleeding a lot, the steps from [S1] apply directly: press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check. If the blood soaks through, add more cloth on top and keep pressing. Because it's a leg wound and the bleeding is life-threatening, you should also apply a tourniquet 5 to 7 centimeters above the wound, not over a joint, tighten it until the bleeding stops, and write down the time it was applied (do not remove it).\n\nYou need:  \n1. Call for help if you can.  \n2. Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check.  \n3. If blood soaks through, add more cloth on top and keep pressing.  \n4. Apply a tourniquet 5 to 7 centimeters above the wound, not over a joint, tighten it until the bleeding stops, and write down the time it was applied (do not remove it).\n\nThese steps are based on the reliable source [S1].\n\nI don't know. The library doesn't cover this.  \n(Actually, the library does cover this—see above. No need to say I don't know.)\n\nI'll just present the clear, actionable steps from the source as above.\n\n[S1] is reliable (Reference). So I'll stick to the steps from it.\n\nFinal answer (with citations):\n\nFor a badly cut leg that is bleeding a lot:\n\n1. Call for help if you can.  \n2. Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check.  \n3. If blood soaks through, add more cloth on top and keep pressing.  \n4. Because the bleeding is life-threatening from a leg wound, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint, tighten it until the bleeding stops, and write down the time it was applied (do not remove it; leave that to medical staff).\n\nThese steps come from [S1].\n\n(No additional sources are needed; the question is fully answered by [S1].)\n\nIf you need further clarification, let me know.\n\nBut per the instructions, I should just give the answer with citations.\n\nSo I'll output the steps clearly with citations",
+      "reasoning_chars": 0,
+      "finish_reason": "length",
+      "timings": {
+        "cache_n": 279,
+        "prompt_n": 151,
+        "prompt_ms": 620.172,
+        "prompt_per_token_ms": 4.107099337748345,
+        "prompt_per_second": 243.48084079900414,
+        "predicted_n": 700,
+        "predicted_ms": 31684.715,
+        "predicted_per_token_ms": 45.32863376251788,
+        "predicted_per_second": 22.06111053863038
+      },
+      "wall_seconds": 32.32,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Both sources state that bean seeds should be planted at a depth of 10 centimeters.\n\n[S1] Plant bean seeds 2 to 3 centimeters deep in warm soil, about 10 centimeters apart.  \n[S2] Beans should go in 10 centimeters deep so birds can't get them.\n\nYou need:\n1. Plant bean seeds 10 centimeters deep.\n\nI don't know. The library doesn't cover this. (No further information needed as the question is answered by the sources.)",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 260,
+        "prompt_n": 89,
+        "prompt_ms": 364.956,
+        "prompt_per_token_ms": 4.100629213483146,
+        "prompt_per_second": 243.86501386468504,
+        "predicted_n": 114,
+        "predicted_ms": 4884.81,
+        "predicted_per_token_ms": 43.22840707964602,
+        "predicted_per_second": 23.132936593234945
+      },
+      "wall_seconds": 5.25,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 260,
+        "prompt_n": 112,
+        "prompt_ms": 420.93,
+        "prompt_per_token_ms": 3.7583035714285713,
+        "prompt_per_second": 266.0774950704392,
+        "predicted_n": 13,
+        "predicted_ms": 513.267,
+        "predicted_per_token_ms": 42.77225000000001,
+        "predicted_per_second": 23.379644512505184
+      },
+      "wall_seconds": 0.96,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "[S1] states that you should bring the water to a full rolling boil for 1 minute (or 3 minutes at elevations above 2,000 meters). Therefore, the boiling time required to make the water safe is 1 minute at sea level, or 3 minutes at higher elevations.\n\nYou need:\n1. Boil the water for 1 minute if at or below 2,000 meters elevation.\n2. Boil the water for 3 minutes if above 2,000 meters elevation.\n3. Let the water cool naturally before storing in clean, covered containers.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 260,
+        "prompt_n": 108,
+        "prompt_ms": 407.745,
+        "prompt_per_token_ms": 3.7754166666666666,
+        "prompt_per_second": 264.87142699481296,
+        "predicted_n": 127,
+        "predicted_ms": 5444.714,
+        "predicted_per_token_ms": 43.21201587301587,
+        "predicted_per_second": 23.141711392003327
+      },
+      "wall_seconds": 5.86,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

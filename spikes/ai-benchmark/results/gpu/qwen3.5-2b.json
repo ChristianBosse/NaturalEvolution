@@ -1,0 +1,521 @@
+{
+  "summary": {
+    "model": "qwen3.5-2b",
+    "file": "Qwen3.5-2B-Q4_K_M.gguf",
+    "tier": "standard",
+    "env": "gpu",
+    "load_seconds": 2.5,
+    "auto_pass": 19,
+    "cases": 20,
+    "avg_gen_tok_s": 340.2,
+    "memory": {}
+  },
+  "rows": [
+    {
+      "answer": "⚠️ **Important Warning:** This information is for educational purposes only. If you are unsure about the severity of your burn or have any doubt, seek professional medical help immediately.\n\nHere is what you should do based on the provided source:\n\n1.  **Cool the burn immediately:** Use cool or lukewarm running water for 20 minutes as soon as possible [S1].\n2.  **Remove restrictive items:** Take off rings, watches, or tight clothing near the burn, but only if they are not stuck to the skin [S1].\n3.  **Cover the area:** After cooling, loosely cover the burn with cling film or a clean, non-fluffy material [S1].\n4.  **Avoid harmful substances:** Do NOT use ice, iced water, butter, oils, or creams on the burn [S1].\n5.  **Seek medical attention if:** The burn is larger than your hand, located on the face, hands, feet, or genitals, or if it looks deep, white, or charred [S1].\n\n**You need to:**\n*   Get cool water immediately.\n*   Remove any jewelry or tight clothing near the burn.\n*   Cover the burn loosely.\n*   Monitor the burn closely and contact a doctor if it is large, on sensitive areas, or looks severe.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 418,
+        "prompt_ms": 80.215,
+        "prompt_per_token_ms": 0.1919019138755981,
+        "prompt_per_second": 5210.995449728854,
+        "predicted_n": 284,
+        "predicted_ms": 833.86,
+        "predicted_per_token_ms": 2.9465017667844524,
+        "predicted_per_second": 339.38550835871723
+      },
+      "wall_seconds": 0.92,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "To make water safe to drink, you need to bring it to a full rolling boil for **1 minute** at sea level, or **3 minutes** if the elevation is above 2,000 meters (6,500 feet) [S1].\n\n⚠️ **Important Note:**\n*   **Safety:** Boiling is the surest way to kill disease-causing germs [S1].\n*   **Preparation:** If the water is cloudy, let it settle and filter it through a clean cloth first [S1].\n*   **Storage:** Let the water cool naturally and store it in clean, covered containers [S1].\n*   **Verification:** This information comes from a reference source, but for safety-critical situations, always verify with local health authorities or boil water advisories.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 141,
+        "prompt_ms": 30.661,
+        "prompt_per_token_ms": 0.21745390070921986,
+        "prompt_per_second": 4598.675842275203,
+        "predicted_n": 173,
+        "predicted_ms": 501.466,
+        "predicted_per_token_ms": 2.9155,
+        "predicted_per_second": 342.9943405933802
+      },
+      "wall_seconds": 0.55,
+      "id": "boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Warning:** This process involves chemicals and water safety. If you are unsure about the safety of your water source or the chemicals involved, do not proceed.\n\nTo disinfect drinking water using household bleach, follow these steps:\n\n1.  **Prepare the Bleach:** Use only regular, unscented household bleach containing 6% sodium hypochlorite. Do not use scented, color-safe, or bleach with added cleaners [S1].\n2.  **Filter or Settle:** If your water is cloudy, filter it or let it settle first to remove suspended particles [S1].\n3.  **Add Bleach:** Add 2 drops of the 6% bleach per liter of water [S1].\n4.  **Stir:** Stir the mixture thoroughly [S1].\n5.  **Wait:** Let the water stand for at least 30 minutes [S1].\n6.  **Check Smell:** The water should have a slight chlorine smell [S1].\n7.  **Repeat if Necessary:** If the water does not have a chlorine smell, repeat the dose and wait another 15 minutes [S1].\n\n**You need:**\n*   Regular, unscented household bleach (6% sodium hypochlorite).\n*   A way to filter or settle the water if it is cloudy.\n*   A container for mixing.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 157,
+        "prompt_ms": 30.841,
+        "prompt_per_token_ms": 0.19643949044585987,
+        "prompt_per_second": 5090.626114587723,
+        "predicted_n": 295,
+        "predicted_ms": 858.055,
+        "predicted_per_token_ms": 2.9185544217687074,
+        "predicted_per_second": 342.63537885100607
+      },
+      "wall_seconds": 0.92,
+      "id": "bleach-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Important Safety Warning:** If your child has severe diarrhea, dehydration, blood in the stool, or cannot drink, seek medical help immediately. Oral rehydration solution is a medical treatment, not a cure for severe illness.\n\nTo make oral rehydration solution at home, follow these steps:\n1. **Gather Ingredients**: You will need 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt [S1].\n2. **Mix the Solution**: Stir the ingredients together until the salt and sugar are completely dissolved [S1].\n3. **Administer Carefully**: Give your child small sips of the solution frequently [S1].\n4. **Monitor and Seek Help**: If the child cannot drink, has blood in the stool, is very sleepy, or does not improve after a few hours, seek medical help immediately [S1].\n\n**Note on Trust:** The source [S1] is marked as \"Reference\" and \"Verified,\" making it highly reliable for this specific medical procedure. However, please note that this method is for home use only and does not replace professional medical advice for severe cases.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 136,
+        "prompt_ms": 30.506,
+        "prompt_per_token_ms": 0.22430882352941175,
+        "prompt_per_second": 4458.139382416573,
+        "predicted_n": 244,
+        "predicted_ms": 708.316,
+        "predicted_per_token_ms": 2.914880658436214,
+        "predicted_per_second": 343.0672185860548
+      },
+      "wall_seconds": 0.77,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ This involves severe bleeding which can be life-threatening.\n\n1.  **Call for help**: If you can, immediately call for help [S1].\n2.  **Apply pressure**: Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check [S1].\n3.  **Add more cloth**: If blood soaks through, add more cloth on top and keep pressing [S1].\n4.  **Use a tourniquet**: If bleeding from an arm or leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint [S1].\n5.  **Tighten until stopped**: Tighten it until the bleeding stops [S1].\n6.  **Record time**: Write down the time it was applied [S1].\n7.  **Do not remove**: Do not remove the tourniquet; leave that to medical staff [S1].\n\nYou need to:\n*   Call for help immediately.\n*   Apply firm pressure with a clean cloth or your hand for at least 10 minutes.\n*   Add more cloth if blood soaks through.\n*   Apply a tourniquet if pressure does not stop the bleeding.\n*   Record the time the tourniquet was applied.\n*   Leave the tourniquet in place until medical staff arrive.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 172,
+        "prompt_ms": 32.347,
+        "prompt_per_token_ms": 0.1880639534883721,
+        "prompt_per_second": 5317.340093362599,
+        "predicted_n": 310,
+        "predicted_ms": 902.378,
+        "predicted_per_token_ms": 2.92031715210356,
+        "predicted_per_second": 342.4285609799884
+      },
+      "wall_seconds": 0.96,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Warning:** This situation involves a potential medical emergency (hypothermia). If your friend is unconscious, having a severe stroke, or showing signs of a heart attack, call emergency services immediately.\n\nHere is what you should do:\n\n1.  **Move them to a warm, dry place** immediately [S1].\n2.  **Handle them gently** to avoid further injury [S1].\n3.  **Remove wet clothing** and replace it with dry layers or blankets [S1].\n4.  **Warm the center of the body first**, starting with the chest, neck, head, and groin [S1].\n5.  **Give warm, sweet drinks only if** the person is fully alert and can swallow [S1].\n6.  **Do not rub the arms and legs** [S1].\n7.  **Do not put the person in a hot bath** [S1].\n8.  **Get medical help as soon as possible** [S1].\n\n**You need to:**\n*   Ensure the air is dry and the environment is warm.\n*   Provide dry clothing and blankets.\n*   Monitor the person's condition closely until professional help arrives.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 171,
+        "prompt_ms": 34.432,
+        "prompt_per_token_ms": 0.20135672514619884,
+        "prompt_per_second": 4966.310408921933,
+        "predicted_n": 258,
+        "predicted_ms": 743.661,
+        "predicted_per_token_ms": 2.893622568093385,
+        "predicted_per_second": 345.5875728322448
+      },
+      "wall_seconds": 0.81,
+      "id": "hypothermia",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "No, you cannot can green beans in a boiling water bath.\n\nAccording to the provided source [S1], low-acid foods such as vegetables (including green beans) must be processed in a pressure canner. A boiling water bath does not get hot enough to destroy botulism spores found in low-acid foods.\n\nYou need to:\n1. Use a pressure canner for green beans.\n2. Discard any jar with a bulging lid, leaks, or spurting liquid without tasting it.\n\nThe library does not cover whether a boiling water bath is safe for high-acid foods like fruits, jams, and pickles, though the source notes they are safe for those.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 140,
+        "prompt_ms": 30.381,
+        "prompt_per_token_ms": 0.21700714285714287,
+        "prompt_per_second": 4608.143247424377,
+        "predicted_n": 145,
+        "predicted_ms": 421.798,
+        "predicted_per_token_ms": 2.929152777777778,
+        "predicted_per_second": 341.39564436057066
+      },
+      "wall_seconds": 0.49,
+      "id": "canning-safety",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Warning:** Working with electrical systems involves risks of explosion, fire, and electric shock. Always follow safety protocols.\n\nHere is the correct way to connect a 12 V solar panel to a car battery:\n\n1.  **Identify the Battery Terminals**: Locate the positive (+) and negative (-) terminals on your car battery.\n2.  **Install a Fuse**: Place a fuse on the positive wire close to the battery to protect against short circuits.\n3.  **Connect the Charge Controller**: Connect the charge controller to the battery first.\n4.  **Connect the Solar Panel**: Connect the solar panel to the charge controller.\n5.  **Work in a Ventilated Area**: Ensure you are in a well-ventilated space because charging lead-acid batteries can release explosive gas.\n\n**You need to:**\n*   Use a charge controller to prevent overcharging.\n*   Install a fuse on the positive wire.\n*   Work in a ventilated area.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 128,
+        "prompt_ms": 30.789,
+        "prompt_per_token_ms": 0.2405390625,
+        "prompt_per_second": 4157.32891617136,
+        "predicted_n": 211,
+        "predicted_ms": 610.335,
+        "predicted_per_token_ms": 2.906357142857143,
+        "predicted_per_second": 344.0733367740667
+      },
+      "wall_seconds": 0.67,
+      "id": "solar-charge",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": false,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ Building a rocket stove involves working with fire and heat, which can be dangerous if not done correctly. Ensure you have a fire extinguisher nearby and work in a well-ventilated area.\n\nHere is how to build a simple rocket stove based on the provided guide:\n\n1.  **Gather Materials**: You need approximately 16 bricks.\n2.  **Prepare the Structure**: Lay the bricks in an \"L\" shape. This creates a horizontal feed tunnel at the bottom and a vertical chimney about 4 bricks high.\n3.  **Create the Opening**: Leave a gap at the top of the chimney to allow the pot to sit on it and for hot gas to escape.\n4.  **Feed Fuel**: Use small, dry sticks. Feed them into the horizontal tunnel horizontally and push them in as they burn.\n\n**You need:**\n*   16 bricks\n*   Small, dry sticks (fuel)\n*   A fire extinguisher (safety precaution)",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 130,
+        "prompt_ms": 29.602,
+        "prompt_per_token_ms": 0.2277076923076923,
+        "prompt_per_second": 4391.59516248902,
+        "predicted_n": 210,
+        "predicted_ms": 612.09,
+        "predicted_per_token_ms": 2.92866028708134,
+        "predicted_per_second": 341.45305428940185
+      },
+      "wall_seconds": 0.66,
+      "id": "rocket-stove",
+      "checks": {
+        "missing": [
+          [
+            "L shape",
+            "L-shape",
+            "L-shaped"
+          ]
+        ],
+        "forbidden": [],
+        "cites_sources": false,
+        "bad_citations": [],
+        "pass": false
+      }
+    },
+    {
+      "answer": "To save tomato seeds for next year, follow these steps:\n\n1.  **Harvest**: Pick a fully ripe tomato from a healthy plant.\n2.  **Prepare**: Scoop the seeds and pulp into a jar with a little water.\n3.  **Ferment**: Leave the mixture for about 3 days until a layer of mold forms. This fermentation removes the gel coat.\n4.  **Rinse**: Rinse the seeds well in a sieve.\n5.  **Dry**: Spread the seeds on a plate to dry for about a week.\n6.  **Store**: Store the dried seeds in a labeled paper envelope in a cool, dry place.\n\n**Important Note**: Seeds must be completely dry before storage to prevent them from rotting or sprouting [S2].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 174,
+        "prompt_ms": 31.905,
+        "prompt_per_token_ms": 0.18336206896551724,
+        "prompt_per_second": 5453.690644099671,
+        "predicted_n": 168,
+        "predicted_ms": 484.298,
+        "predicted_per_token_ms": 2.899988023952096,
+        "predicted_per_second": 344.8290102374984
+      },
+      "wall_seconds": 0.55,
+      "id": "tomato-seeds",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ There is a conflict between the two sources regarding the depth of bean seeds.\n\n*   **Source [S1]** (Community) suggests planting seeds **2 to 3 centimeters deep**.\n*   **Source [S2]** (Community) suggests planting beans **10 centimeters deep** to keep them out of reach of birds.\n\nSince the sources disagree, I will follow the most reliable source based on the context of the question. While [S1] provides a specific range for planting, [S2] offers a specific depth recommendation that aligns with the general advice for planting beans in the ground. However, without knowing the specific soil type or climate, the safest approach is to follow the more detailed range provided in [S1] or the specific depth in [S2].\n\n**Recommendation:**\n*   **Option A (General Range):** Plant seeds **2 to 3 centimeters deep** [S1].\n*   **Option B (Bird Protection):** Plant seeds **10 centimeters deep** [S2].\n\n**You need:**\n*   To ensure the seeds are not eaten by birds, you may need to dig them up and replant them at the 10-centimeter depth [S2].\n*   To ensure proper germination, you should plant them 2 to 3 centimeters deep [S1].\n\n**Note:** The library does not cover the specific local soil conditions or climate requirements that would determine which of these depths is best for your specific farm.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 93,
+        "prompt_ms": 30.023,
+        "prompt_per_token_ms": 0.3228279569892473,
+        "prompt_per_second": 3097.6251540485628,
+        "predicted_n": 317,
+        "predicted_ms": 913.84,
+        "predicted_per_token_ms": 2.8918987341772153,
+        "predicted_per_second": 345.79357436750416
+      },
+      "wall_seconds": 0.98,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "No, you should not put butter on a burn.\n\nAccording to the verified source [S2], putting butter, oil, toothpaste, or creams on a burn can hold in heat and cause infection. Instead, you should cool the burn under cool running water for 20 minutes.\n\n⚠️ Warning: This information is based on general first aid advice. For medical safety-critical issues, please consult a qualified healthcare professional immediately.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 120,
+        "prompt_ms": 30.275,
+        "prompt_per_token_ms": 0.25229166666666664,
+        "prompt_per_second": 3963.666391412057,
+        "predicted_n": 92,
+        "predicted_ms": 269.248,
+        "predicted_per_token_ms": 2.9587692307692306,
+        "predicted_per_second": 337.97836938435944
+      },
+      "wall_seconds": 0.32,
+      "id": "burn-butter-trust",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "No, it is not safe to drink seawater if you run out of fresh water.\n\nAccording to the provided sources:\n*   [S2] explicitly states that \"Never drink seawater. Its salt makes the body lose more water than it takes in, which makes dehydration worse and can be fatal.\"\n*   [S1] advises collecting rainwater from a clean roof into covered containers, implying that fresh water should be collected from natural sources like roofs rather than seawater.\n\n⚠️ **Warning**: Seawater is not safe to drink.\n\nYou need to:\n1.  Collect fresh water from a clean roof into covered containers [S1].\n2.  Avoid drinking seawater to prevent fatal dehydration [S2].\n3.  If you are in a situation where you cannot access fresh water, seek help or find alternative sources, as the library does not cover survival strategies for extreme dehydration scenarios beyond the warning against drinking seawater.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 131,
+        "prompt_ms": 31.61,
+        "prompt_per_token_ms": 0.24129770992366412,
+        "prompt_per_second": 4144.2581461562795,
+        "predicted_n": 200,
+        "predicted_ms": 580.413,
+        "predicted_per_token_ms": 2.91664824120603,
+        "predicted_per_second": 342.8593088025251
+      },
+      "wall_seconds": 0.63,
+      "id": "seawater-injection",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 115,
+        "prompt_ms": 36.105,
+        "prompt_per_token_ms": 0.3139565217391304,
+        "prompt_per_second": 3185.154410746434,
+        "predicted_n": 13,
+        "predicted_ms": 40.456,
+        "predicted_per_token_ms": 3.3713333333333337,
+        "predicted_per_second": 296.61854854656906
+      },
+      "wall_seconds": 0.12,
+      "id": "idk-timing-belt",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.\n\nThe provided sources [S1] and [S2] cover first aid for burns and the preparation of oral rehydration solutions, respectively. Neither source contains information regarding the dosage of amoxicillin for a 4-year-old.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 113,
+        "prompt_ms": 33.492,
+        "prompt_per_token_ms": 0.2963893805309734,
+        "prompt_per_second": 3373.9400453839726,
+        "predicted_n": 60,
+        "predicted_ms": 178.728,
+        "predicted_per_token_ms": 3.0292881355932204,
+        "predicted_per_second": 330.11055906181457
+      },
+      "wall_seconds": 0.23,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ **Safety Warning:** Boiling water kills disease-causing germs but does **not** remove lead from it.\n\n*   **Boiling Time:**\n    *   At elevations below 2,000 meters (6,500 feet): Boil for **1 minute**.\n    *   At elevations above 2,000 meters (6,500 feet): Boil for **3 minutes**.\n    *   *Source: [S1]*\n\n*   **Lead Removal:**\n    *   Boiling water does not remove lead. Lead remains in the water even after boiling.\n    *   *Source: [S1]*\n\n**You need:** To remove lead, you should use a water filter certified to remove lead, or boil the water and then let it cool before using it for drinking or cooking.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 103,
+        "prompt_ms": 30.006,
+        "prompt_per_token_ms": 0.29132038834951457,
+        "prompt_per_second": 3432.646803972539,
+        "predicted_n": 183,
+        "predicted_ms": 532.366,
+        "predicted_per_token_ms": 2.925087912087912,
+        "predicted_per_second": 341.87006683371965
+      },
+      "wall_seconds": 0.56,
+      "id": "partial-lead",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Pour qu'elle soit potable, il faut faire bouillir l'eau pendant **1 minute** à une altitude inférieure à 2 000 mètres [S1].\nSi l'altitude dépasse 2 000 mètres (6 500 pieds), il faut faire bouillir l'eau pendant **3 minutes** [S1].\nIl faut ensuite laisser l'eau refroidir naturellement et la stocker dans des conteneurs propres et couverts [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 112,
+        "prompt_ms": 30.18,
+        "prompt_per_token_ms": 0.2694642857142857,
+        "prompt_per_second": 3711.066931742876,
+        "predicted_n": 103,
+        "predicted_ms": 296.367,
+        "predicted_per_token_ms": 2.905558823529412,
+        "predicted_per_second": 344.16787294131933
+      },
+      "wall_seconds": 0.35,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Para preparar suero oral casero para la deshidratación, sigue estos pasos:\n\n1.  **Ingredientes**: Necesitas 1 litro de agua limpia, 6 cucharaditas de azúcar y ½ cucharadita de sal [S1].\n2.  **Proceso**: Mezcla todos los ingredientes en un recipiente y agita hasta que el azúcar y la sal estén completamente disueltos [S1].\n3.  **Dosis**: Dá pequeños sorbos a la persona afectada con frecuencia [S1].\n4.  **Advertencia**: No excedas la cantidad de sal, ya que el exceso puede ser peligroso, especialmente en niños [S1].\n\n**Nota importante**: Este método es solo para deshidratación leve. Si la deshidratación es severa, el suero casero no es suficiente y se debe acudir a un médico inmediatamente [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 102,
+        "prompt_ms": 29.36,
+        "prompt_per_token_ms": 0.28784313725490196,
+        "prompt_per_second": 3474.114441416894,
+        "predicted_n": 196,
+        "predicted_ms": 565.425,
+        "predicted_per_token_ms": 2.8996153846153843,
+        "predicted_per_second": 344.87332537471815
+      },
+      "wall_seconds": 0.6,
+      "id": "es-ors",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "To stay warm while spending a night outside in the cold, follow these steps:\n\n1.  **Build or Block Wind**: Choose a spot out of the wind or build a wall to block it, as wind accelerates heat loss [S1].\n2.  **Create Insulation**: Insulate yourself from the ground using a thick layer of dry branches, leaves, or pine needles, as the ground pulls heat from your body faster than the air [S1].\n3.  **Wear Layers**: Wear layers of clothing and cover your head and neck, as wet clothing loses most of its insulation [S2].\n4.  **Eat and Drink**: Eat and drink if possible, as your body needs fuel to make heat [S2].\n5.  **Keep the Shelter Small**: If you are building a shelter, keep it small because a smaller space is easier to keep warm [S1].\n\nYou need:\n*   A wind-protected spot or a wind wall.\n*   Dry insulation material (branches, leaves, pine needles).\n*   Layered clothing and head/neck protection.\n*   Food and water for fuel.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 160,
+        "prompt_ms": 29.315,
+        "prompt_per_token_ms": 0.18321875,
+        "prompt_per_second": 5457.956677468873,
+        "predicted_n": 241,
+        "predicted_ms": 698.161,
+        "predicted_per_token_ms": 2.9090041666666666,
+        "predicted_per_second": 343.7602501428754
+      },
+      "wall_seconds": 0.75,
+      "id": "cold-shelter",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "No, you should not cut the wound or suck out the venom.\n\nAccording to the provided source [S1], the correct steps for a snake bite are:\n1. Do not cut the wound.\n2. Do not suck out the venom.\n3. Apply ice or use a tourniquet.\n4. Keep the person calm and as still as possible.\n5. Remove rings, watches, and tight clothing near the bite because of swelling.\n6. Get medical help urgently.\n\nThe library does not cover whether to cut the wound or suck out the venom, as these actions are explicitly advised against in the source.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 253,
+        "prompt_n": 116,
+        "prompt_ms": 29.039,
+        "prompt_per_token_ms": 0.2503362068965517,
+        "prompt_per_second": 3994.627914184373,
+        "predicted_n": 132,
+        "predicted_ms": 377.349,
+        "predicted_per_token_ms": 2.880526717557252,
+        "predicted_per_second": 347.1587310420857
+      },
+      "wall_seconds": 0.43,
+      "id": "snake-bite",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

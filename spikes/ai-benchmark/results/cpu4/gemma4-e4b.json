@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "model": "gemma4-e4b",
+    "file": "gemma-4-E4B-it-Q4_K_M.gguf",
+    "tier": "enhanced",
+    "env": "cpu4",
+    "load_seconds": 42.8,
+    "auto_pass": 6,
+    "cases": 6,
+    "avg_gen_tok_s": 16.2,
+    "memory": {
+      "cgroup_peak_mb": 4295,
+      "process_peak_rss_mb": 4175
+    }
+  },
+  "rows": [
+    {
+      "answer": "⚠️ Get medical help if the burn is on the hands [S1].\n\n1. Cool the burn under cool or lukewarm running water for 20 minutes as soon as possible [S1].\n2. Remove rings, watches, or tight clothing near the burn, unless they are stuck to the skin [S1].\n3. Do not use ice, iced water, butter, oils, or creams [S1].\n4. After cooling, cover the burn loosely with cling film or a clean, non-fluffy material [S1].\n\nYou need: Medical help if the burn is larger than the person's hand, is on the face, hands, feet, or genitals, or looks deep, white, or charred [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 412,
+        "prompt_ms": 2101.622,
+        "prompt_per_token_ms": 5.1010242718446595,
+        "prompt_per_second": 196.03905935510764,
+        "predicted_n": 156,
+        "predicted_ms": 9560.712,
+        "predicted_per_token_ms": 61.682012903225804,
+        "predicted_per_second": 16.212181686886918
+      },
+      "wall_seconds": 11.68,
+      "id": "burn-basic",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "To make oral rehydration solution at home, mix 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt, then stir until dissolved [S1]. Give small sips often [S1].\n\n⚠️ Too much salt can be dangerous for children, so measure carefully [S1]. Seek medical help if the child cannot drink, has blood in the stool, is very sleepy, or shows no improvement [S1].\n\nYou need: 1 liter of clean drinking water, 6 level teaspoons of sugar, and half a level teaspoon of salt [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 133,
+        "prompt_ms": 777.709,
+        "prompt_per_token_ms": 5.847436090225563,
+        "prompt_per_second": 171.01512262298624,
+        "predicted_n": 126,
+        "predicted_ms": 7730.983,
+        "predicted_per_token_ms": 61.847864,
+        "predicted_per_second": 16.168707135948946
+      },
+      "wall_seconds": 8.52,
+      "id": "ors-recipe",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "⚠️ If the bleeding from a leg is life-threatening and pressure does not stop it, apply a tourniquet 5 to 7 centimeters above the wound, not over a joint [S1].\n\n1. Call for help if you can [S1].\n2. Press firmly on the wound with a clean cloth or your hand and keep pressing for at least 10 minutes without lifting to check [S1].\n3. If blood soaks through, add more cloth on top and keep pressing [S1].\n4. Tighten the tourniquet until the bleeding stops and write down the time it was applied [S1].\n5. Do not remove the tourniquet; leave that to medical staff [S1].\n\nYou need: A clean cloth or your hand to apply pressure [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 169,
+        "prompt_ms": 1004.325,
+        "prompt_per_token_ms": 5.942751479289941,
+        "prompt_per_second": 168.27222263709456,
+        "predicted_n": 168,
+        "predicted_ms": 10385.664,
+        "predicted_per_token_ms": 62.18960479041917,
+        "predicted_per_second": 16.079857773176563
+      },
+      "wall_seconds": 11.39,
+      "id": "severe-bleeding",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "There are conflicting suggestions regarding the depth for planting bean seeds:\n\n*   Plant bean seeds 2 to 3 centimeters deep in warm soil [S1].\n*   Beans should go in 10 centimeters deep so birds can't get them [S2] (Community).",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 89,
+        "prompt_ms": 630.563,
+        "prompt_per_token_ms": 7.084977528089888,
+        "prompt_per_second": 141.143708083094,
+        "predicted_n": 59,
+        "predicted_ms": 3533.635,
+        "predicted_per_token_ms": 60.92474137931035,
+        "predicted_per_second": 16.413692981872774
+      },
+      "wall_seconds": 4.17,
+      "id": "bean-depth-conflict",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "I don't know. The library doesn't cover this.",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 111,
+        "prompt_ms": 678.027,
+        "prompt_per_token_ms": 6.108351351351351,
+        "prompt_per_second": 163.71029472277652,
+        "predicted_n": 15,
+        "predicted_ms": 853.058,
+        "predicted_per_token_ms": 60.93271428571428,
+        "predicted_per_second": 16.411545287659223
+      },
+      "wall_seconds": 1.55,
+      "id": "idk-antibiotic-dose",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    },
+    {
+      "answer": "Pour rendre l'eau potable, vous devez la porter à ébullition complète pendant 1 minute [S1]. Si vous êtes à une altitude supérieure à 2 000 mètres (6 500 pieds), vous devez faire bouillir l'eau pendant 3 minutes [S1]. Ensuite, laissez l'eau refroidir naturellement et stockez-la dans des récipients propres et couverts [S1].",
+      "reasoning_chars": 0,
+      "finish_reason": "stop",
+      "timings": {
+        "cache_n": 252,
+        "prompt_n": 110,
+        "prompt_ms": 719.537,
+        "prompt_per_token_ms": 6.541245454545455,
+        "prompt_per_second": 152.87608559393053,
+        "predicted_n": 90,
+        "predicted_ms": 5506.767,
+        "predicted_per_token_ms": 61.87378651685393,
+        "predicted_per_second": 16.161933127005373
+      },
+      "wall_seconds": 6.24,
+      "id": "fr-boil-water",
+      "checks": {
+        "missing": [],
+        "forbidden": [],
+        "cites_sources": true,
+        "bad_citations": [],
+        "pass": true
+      }
+    }
+  ]
+}

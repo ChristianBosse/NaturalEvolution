@@ -171,3 +171,34 @@ OCR, transcripts and embeddings take hours or days on a 4 GB Pi but minutes on a
 *2026-10-21*
 
 Playback is cheap; processing is expensive. Seed pre-digests videos into a light format, so even 4 GB nodes only stream them. Videos uploaded directly to a node are processed slowly, when power allows.
+
+## AI model and safety (Phase 0 benchmark)
+
+### D-031: Standard-tier model is Qwen3.5 4B, pending a Pi test
+*2026-10-22*
+
+Seven Apache-2.0 models were tested on 20 grounded-answer cases and in a 4 GB, 4-core container (see `spikes/ai-benchmark/RESULTS.md`). Qwen3.5 4B (Q4_K_M) scored 143/160, had the best behavior score, and peaked at 3.4 GB. Qwen3.5 2B (1.7 GB, 114/160) is the fallback if the 4B model is too slow or too tight on a real Pi.
+*Considered:* Gemma 4 E2B (bigger, worse, slow to load), Ministral 3 3B, SmolLM3 3B and Granite 4.2 3B (lower quality, invented facts with fake citations).
+
+### D-032: Enhanced tier and up use Gemma 4 E4B
+*2026-10-22*
+
+Best quality in the benchmark (148/160) and the only model with no dangerous mistakes. It doesn't fit in 4 GB.
+
+### D-033: Memory-saving llama.cpp settings on every node
+*2026-10-22*
+
+One request at a time, no prompt cache in RAM, and no repacked second copy of the weights (`-np 1 --cache-ram 0 --no-repack` in llama-server terms). This cut Ministral 3B from 4.1 GB to 2.7 GB at the same speed. ARM may repack differently, so this is rechecked on a Pi.
+
+### D-034: Code checks on safety-critical answers
+*2026-10-22*
+
+Every model under 4B made at least one dangerous mistake, and the common ones are predictable: a lost "do not", and amounts or units changed in translation. On safety-critical topics, NEVO checks the answer in code before showing it:
+
+1. Negations in cited sources must survive in the answer.
+2. Every amount and unit must match a cited source, using a fixed unit-translation table.
+3. Warnings from Verified and Reference sources are shown as exact quotes.
+4. Citations must point to sources that were actually given.
+
+If a check fails, NEVO shows the source text instead of the AI answer. Seed also prepares checked summary cards for the most important procedures.
+*Considered:* relying on a bigger model or a better prompt. Rejected: even the best model is not guaranteed safe, and the checks are cheap.
