@@ -45,7 +45,7 @@ button { font: inherit; margin-top: 1.2rem; padding: .6rem 1.2rem; border: 0; bo
 footer { max-width: 46rem; margin: 2rem auto; padding: 0 1rem; color: var(--muted); font-size: .85rem; }
 "#;
 
-fn layout(title: &str, body: Markup) -> Markup {
+pub(crate) fn layout(title: &str, body: Markup) -> Markup {
     html! {
         (DOCTYPE)
         html lang="en" {
@@ -197,8 +197,12 @@ pub fn item(view: &ItemView) -> Markup {
                 span { "License: " (r.license) }
                 @if r.vis == Visibility::Node { span { "Only on this NEVO" } }
             }
+            p { a href={ "/item/" (view.item) "/edit" } { "Edit" } " · " a href={ "/item/" (view.item) "/history" } { "History" } }
             @if view.tips > 1 {
-                p.notice { "This item has " (view.tips) " versions that were edited separately and haven't been merged. You are seeing the newest." }
+                p.notice {
+                    "This item has " (view.tips) " versions that were edited separately and haven't been merged. You are seeing the newest. "
+                    a href={ "/item/" (view.item) "/merge" } { "Compare and merge" }
+                }
             }
             @if let Some(guide) = &view.guide_html {
                 div.guide { (PreEscaped(guide)) }
@@ -261,12 +265,6 @@ pub struct AddForm {
 }
 
 pub fn add(form: &AddForm) -> Markup {
-    let lang = if form.lang.is_empty() { "en" } else { &form.lang };
-    let license = if form.license.is_empty() {
-        "CC-BY-SA-4.0"
-    } else {
-        &form.license
-    };
     layout(
         "Add a guide",
         html! {
@@ -274,28 +272,7 @@ pub fn add(form: &AddForm) -> Markup {
             p.muted { "Write steps in the text box, attach files (PDF, photos, video), or both." }
             @if let Some(error) = &form.error { p.error role="alert" { (error) } }
             form method="post" action="/add" enctype="multipart/form-data" {
-                label for="title" { "Title" }
-                input type="text" id="title" name="title" required maxlength="500" value=(form.title);
-                label for="summary" { "Summary " span.hint { "(optional, one or two sentences)" } }
-                input type="text" id="summary" name="summary" maxlength="1000" value=(form.summary);
-                label for="topics" { "Topics " span.hint { "(pick one or more)" } }
-                select id="topics" name="topics" multiple size="8" required {
-                    @for (top, subs) in STARTING_TOPICS {
-                        optgroup label=(top) {
-                            option value=(top) selected[form.topics.iter().any(|t| t == top)] { (top) }
-                            @for sub in subs.iter() {
-                                @let path = format!("{top}/{sub}");
-                                option value=(path) selected[form.topics.contains(&path)] { (top) " / " (sub) }
-                            }
-                        }
-                    }
-                }
-                label for="text" { "Text " span.hint { "(Markdown: **bold**, 1. numbered steps, ![photo](photo.jpg) for an attached photo)" } }
-                textarea id="text" name="text" { (form.text) }
-                label for="lang" { "Language " span.hint { "(code such as en, fr, es)" } }
-                input type="text" id="lang" name="lang" maxlength="35" value=(lang);
-                label for="license" { "License " span.hint { "(CC-BY-SA-4.0 lets others share and improve it)" } }
-                input type="text" id="license" name="license" maxlength="200" value=(license);
+                (guide_fields(form))
                 label { input type="checkbox" name="node_only" value="1" checked[form.node_only]; " Keep it on this NEVO only (don't share with other nodes)" }
                 // Files come last: browsers send fields in page order, so the server can check the
                 // typed fields before it stores any upload.
@@ -305,6 +282,40 @@ pub fn add(form: &AddForm) -> Markup {
             }
         },
     )
+}
+
+/// The typed fields the add and edit forms share, from the title to the license.
+pub(crate) fn guide_fields(form: &AddForm) -> Markup {
+    let lang = if form.lang.is_empty() { "en" } else { &form.lang };
+    let license = if form.license.is_empty() {
+        "CC-BY-SA-4.0"
+    } else {
+        &form.license
+    };
+    html! {
+        label for="title" { "Title" }
+        input type="text" id="title" name="title" required maxlength="500" value=(form.title);
+        label for="summary" { "Summary " span.hint { "(optional, one or two sentences)" } }
+        input type="text" id="summary" name="summary" maxlength="1000" value=(form.summary);
+        label for="topics" { "Topics " span.hint { "(pick one or more)" } }
+        select id="topics" name="topics" multiple size="8" required {
+            @for (top, subs) in STARTING_TOPICS {
+                optgroup label=(top) {
+                    option value=(top) selected[form.topics.iter().any(|t| t == top)] { (top) }
+                    @for sub in subs.iter() {
+                        @let path = format!("{top}/{sub}");
+                        option value=(path) selected[form.topics.contains(&path)] { (top) " / " (sub) }
+                    }
+                }
+            }
+        }
+        label for="text" { "Text " span.hint { "(Markdown: **bold**, 1. numbered steps, ![photo](photo.jpg) for an attached photo)" } }
+        textarea id="text" name="text" { (form.text) }
+        label for="lang" { "Language " span.hint { "(code such as en, fr, es)" } }
+        input type="text" id="lang" name="lang" maxlength="35" value=(lang);
+        label for="license" { "License " span.hint { "(CC-BY-SA-4.0 lets others share and improve it)" } }
+        input type="text" id="license" name="license" maxlength="200" value=(license);
+    }
 }
 
 pub fn error(status: u16, message: &str) -> Markup {
