@@ -12,3 +12,6 @@ blake3.workspace = true
 ed25519-dalek.workspace = true
 getrandom.workspace = true
 unicode-normalization.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
