@@ -6,6 +6,7 @@ saves answers, speed and memory use. Throwaway spike code: stdlib only.
   python run_bench.py --env gpu            # quality run on the NVIDIA GPU
   python run_bench.py --env cpu4           # Docker: 4 CPU cores, 4 GB RAM cap
   python run_bench.py --env gpu --models qwen3.5-2b --cases burn-basic
+  python run_bench.py --env gpu --models gemma4-e4b --cases-file cases_v2.json
 """
 
 import argparse
@@ -19,7 +20,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-LOCAL = REPO / ".local"
+LOCAL = REPO / ".local"  # replaced by --local (e.g. when running from a git worktree)
 LLAMA_BUILD = "llama-b11803"
 
 MODELS = {
@@ -147,17 +148,26 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--env", choices=["gpu", "cpu4"], required=True)
     ap.add_argument("--models", default="all")
-    ap.add_argument("--cases", default="all")
+    ap.add_argument("--cases", default="all", help="comma-separated case ids, or all")
+    ap.add_argument("--cases-file", default="cases.json",
+                    help="case file next to this script; cases_v2.json writes to results/<env>_v2/")
+    ap.add_argument("--local", help="folder with llama.cpp and models (default: <repo>/.local)")
     args = ap.parse_args()
+    if args.local:
+        global LOCAL
+        LOCAL = Path(args.local).resolve()
 
     system_prompt = (HERE / "prompt.md").read_text(encoding="utf-8")
-    cases = json.loads((HERE / "cases.json").read_text(encoding="utf-8"))["cases"]
+    cases_path = HERE / args.cases_file
+    cases = json.loads(cases_path.read_text(encoding="utf-8"))["cases"]
     if args.cases != "all":
         wanted = set(args.cases.split(","))
         cases = [c for c in cases if c["id"] in wanted]
     names = list(MODELS) if args.models == "all" else args.models.split(",")
 
-    out_dir = HERE / "results" / args.env
+    # cases.json -> results/<env>; cases_v2.json -> results/<env>_v2 (never overwrite v1 results)
+    suffix = cases_path.stem.removeprefix("cases")
+    out_dir = HERE / "results" / (args.env + suffix)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     for name in names:

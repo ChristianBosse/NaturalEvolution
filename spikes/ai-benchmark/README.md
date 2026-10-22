@@ -51,3 +51,5 @@ python run_bench.py --env cpu4   # Docker: 4 cores, 4 GB RAM cap
 ```
 
 Answers, speed and memory are saved in `results/<env>/<model>.json`. Findings are in [RESULTS.md](RESULTS.md).
+
+A larger set of 100 cases (safety traps, units, injections, more languages) is in [cases_v2.json](cases_v2.json). Run it with `--cases-file cases_v2.json`. See [CASES_V2.md](CASES_V2.md).
