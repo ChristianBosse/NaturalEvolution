@@ -36,9 +36,9 @@ NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
 With Rust installed:
 
 ```bash
-cargo test
-cargo clippy --all-targets -- -D warnings
-cargo fmt --check
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+cargo fmt --all --check
 ```
 
 Without installing Rust, use Docker:
@@ -46,6 +46,39 @@ Without installing Rust, use Docker:
 ```bash
 docker run --rm -v "$PWD:/src" -w /src rust:1-bookworm cargo test
 ```
+
+### CI
+
+GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every push and pull request to `main`:
+
+- format, clippy and tests on Linux, Windows and macOS (Rust 1.99.1);
+- `cargo check` on Rust 1.85, our minimum version. The workspace uses resolver 3, so `cargo update` only picks dependency versions that support 1.85;
+- release builds of `nevo` for Linux x86_64, ARM 32-bit, ARM 64-bit and Windows x86_64. The binaries are kept as workflow artifacts for 14 days.
+
+Actions are pinned to a full commit SHA. When you update one, use a release that is at least 14 days old.
+
+### Cross-builds
+
+From an x86_64 Debian or Ubuntu machine (or the `rust:1-bookworm` Docker image):
+
+```bash
+# Raspberry Pi, 32-bit and 64-bit
+apt-get install gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+rustup target add armv7-unknown-linux-gnueabihf aarch64-unknown-linux-gnu
+export CC_armv7_unknown_linux_gnueabihf=arm-linux-gnueabihf-gcc
+export CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=arm-linux-gnueabihf-gcc
+export CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
+export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
+cargo build --release -p nevo-node --target armv7-unknown-linux-gnueabihf
+cargo build --release -p nevo-node --target aarch64-unknown-linux-gnu
+
+# Windows x86_64
+apt-get install gcc-mingw-w64-x86-64
+rustup target add x86_64-pc-windows-gnu
+cargo build --release -p nevo-node --target x86_64-pc-windows-gnu
+```
+
+The program is at `target/<target>/release/nevo` (`nevo.exe` on Windows). Install the cross compilers with their recommended packages: those include the target's C headers, which the bundled SQLite needs.
 
 `spikes/` holds throwaway Phase 0 experiments. They aren't part of the workspace.
 
