@@ -66,6 +66,14 @@ Then open http://localhost:8080 (or `http://<this computer's address>:8080` from
 - [ROADMAP.md](ROADMAP.md): phases from first prototype to v1.0 and beyond
 - [DECISIONS.md](DECISIONS.md): every major decision so far and the reasoning behind it
 
+### Guides
+
+Printable guides for people who run and use a node:
+
+- [Setting up a NEVO node](docs/guide/setup.md): hardware, power, installing, Wi-Fi hotspot, starting at boot, backups
+- [Using NEVO](docs/guide/using.md): browsing, reading and adding guides
+- [Looking after a NEVO](docs/guide/admin.md): disk space, updates, moving to new hardware, recovery
+
 ## Contributing
 
 NEVO is in the planning phase. If you care about offline knowledge, open an issue or a discussion. Not all help is code: curating knowledge packs (medical, farming, repair) and translating will matter as much as programming. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
