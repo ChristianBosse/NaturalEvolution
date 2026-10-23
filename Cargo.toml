@@ -59,3 +59,5 @@ qrcode = { version = "=0.14.1", default-features = false, features = ["svg"] }
 zeroize = "=1.9.0"
 pdf-extract = "=0.12.1"
 zip = { version = "=7.3.0", default-features = false, features = ["deflate-flate2"] }
+llama-cpp-2 = { version = "=0.1.159", default-features = false }
+llama-cpp-sys-2 = { version = "=0.1.159", default-features = false }
