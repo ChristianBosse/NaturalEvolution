@@ -15,6 +15,7 @@ path = "src/main.rs"
 nevo-format.workspace = true
 nevo-store.workspace = true
 nevo-search.workspace = true
+nevo-trust.workspace = true
 nevo-extract.workspace = true
 serde.workspace = true
 axum.workspace = true

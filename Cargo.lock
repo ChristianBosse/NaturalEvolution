@@ -1540,6 +1540,7 @@ dependencies = [
  "nevo-format",
  "nevo-search",
  "nevo-store",
+ "nevo-trust",
  "pulldown-cmark",
  "qrcode",
  "rusqlite",

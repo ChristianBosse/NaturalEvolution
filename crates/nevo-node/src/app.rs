@@ -269,9 +269,15 @@ async fn item(State(state): State<AppState>, viewer: Viewer, Path(id): Path<Stri
             },
             None => None,
         };
+        // The label is advice: if it can't be worked out, the page still shows, without it.
+        let trust = nevo_trust::Trust::new(store, nevo_trust::TrustConfig::new(state.node.public()))
+            .assess(&tip, None)
+            .ok()
+            .map(|a| trust_view(&a));
         let view = pages::ItemView {
             item,
             tip: &tip,
+            trust,
             tips: visible_tips,
             history: &history,
             local_author: tip.object.author == state.node.public()
@@ -282,6 +288,62 @@ async fn item(State(state): State<AppState>, viewer: Viewer, Path(id): Path<Stri
     })
     .await?;
     Ok(Html(page))
+}
+
+/// Turns a trust assessment into the plain sentences the item page shows.
+fn trust_view(a: &nevo_trust::Assessment) -> pages::TrustView {
+    use nevo_trust::{FlagKind, Reason, Source};
+    let who = |s: &Source| match &s.name {
+        // Names are self-chosen, so the key is always shown next to them.
+        Some(name) => format!("{name} ({})", pages::short_key(&s.key)),
+        None => pages::short_key(&s.key),
+    };
+    let reasons = a
+        .reasons
+        .iter()
+        .map(|r| match r {
+            Reason::Catalog { by, topic } => format!("From the catalog {}, trusted for {topic}", who(by)),
+            Reason::Verified { by, topic, .. } => format!("Verified by {} for {topic}", who(by)),
+            Reason::TrustedAuthor { by, topic } => format!("Written by {}, trusted for {topic}", who(by)),
+            Reason::TrustedNode { by, topic } => format!("Shared by the NEVO {}, trusted for {topic}", who(by)),
+            Reason::NoTrustedSource { topic } => format!("Nobody this NEVO trusts vouches for it in {topic}"),
+            Reason::UnknownTopic { topic } => format!("{topic} comes from a newer NEVO version, so no trust applies"),
+            Reason::Revoked { key, .. } => format!(
+                "The key {} was revoked; what it signed later is ignored",
+                pages::short_key(key)
+            ),
+            Reason::Forked { node } => format!(
+                "The NEVO {} signed two different histories, so it isn't trusted",
+                pages::short_key(node)
+            ),
+        })
+        .collect();
+    let warnings = a
+        .flags
+        .iter()
+        .map(|f| {
+            let what = match f.kind {
+                FlagKind::Dangerous => "Marked dangerous",
+                FlagKind::Outdated => "Marked outdated",
+                FlagKind::Hide => "Hidden by default",
+            };
+            match &f.note {
+                Some(note) => format!("{what} by {}: {note}", who(&f.by)),
+                None => format!("{what} by {}", who(&f.by)),
+            }
+        })
+        .collect();
+    let label = match a.label {
+        nevo_trust::Label::Reference => "Reference",
+        nevo_trust::Label::Verified => "Verified",
+        nevo_trust::Label::Community => "Community",
+        nevo_trust::Label::Unknown => "Unknown",
+    };
+    pages::TrustView {
+        label,
+        reasons,
+        warnings,
+    }
 }
 
 /// Media types a browser may display inline. Anything else (HTML, SVG, scripts, unknown

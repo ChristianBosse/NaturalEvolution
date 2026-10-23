@@ -551,3 +551,13 @@ async fn added_guides_can_be_searched() {
     let empty = get(&n.app, "/search?q=zzzqqqxxx").await.text();
     assert!(empty.contains("Nothing in the library matches"));
 }
+
+#[tokio::test]
+async fn item_pages_show_a_trust_label() {
+    let n = node();
+    let url = add_burns_guide(&n.app, &[]).await;
+    let page = get(&n.app, &url).await.text();
+    // Published in this node's own log, and the node trusts itself: Community, with the reason.
+    assert!(page.contains("Trust: <strong>"), "{page}");
+    assert!(page.contains("Community") || page.contains("Verified"), "{page}");
+}

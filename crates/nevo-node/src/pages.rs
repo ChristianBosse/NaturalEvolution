@@ -204,9 +204,18 @@ pub fn topic(topic: &Topic, items: &[(Id, Sealed<Revision>)]) -> Markup {
 }
 
 /// What the item page shows.
+/// A trust label with its reasons and any warnings, in plain sentences (app.rs).
+pub struct TrustView {
+    /// Reference, Verified, Community or Unknown.
+    pub label: &'static str,
+    pub reasons: Vec<String>,
+    pub warnings: Vec<String>,
+}
+
 pub struct ItemView<'a> {
     pub item: Id,
     pub tip: &'a Sealed<Revision>,
+    pub trust: Option<TrustView>,
     pub tips: usize,
     pub history: &'a [Sealed<Revision>],
     pub local_author: bool,
@@ -238,6 +247,13 @@ pub fn item(view: &ItemView) -> Markup {
             }
             h1 { (r.title) }
             @if let Some(summary) = &r.summary { p { (summary) } }
+            @if let Some(trust) = &view.trust {
+                @for warning in &trust.warnings { p.notice role="alert" { "⚠ " (warning) } }
+                details.trust {
+                    summary { "Trust: " strong { (trust.label) } }
+                    ul { @for reason in &trust.reasons { li { (reason) } } }
+                }
+            }
             p.meta {
                 span { (if view.local_author { "Added on this NEVO" } else { "From another NEVO" }) }
                 span { "Language: " (r.lang) }
