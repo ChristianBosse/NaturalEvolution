@@ -1,0 +1,14 @@
+{
+ "model": "qwen3-emb-0.6b",
+ "file": "Qwen3-Embedding-0.6B-Q8_0.gguf",
+ "file_mb": 639,
+ "load_s": 28.2,
+ "dim": 1024,
+ "passages": 300,
+ "passages_per_s": 1.1,
+ "query_ms_median": 206,
+ "memory": {
+  "cgroup_peak_mb": 1342,
+  "process_peak_rss_mb": 1202
+ }
+}

@@ -1,0 +1,5 @@
+# Rebuilt by extract.py and run_emb.py --env gpu
+data/
+results/vectors/
+results/rerank/
+results/server.log

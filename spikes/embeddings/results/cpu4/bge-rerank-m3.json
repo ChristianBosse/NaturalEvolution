@@ -1,0 +1,14 @@
+{
+ "model": "bge-rerank-m3",
+ "file": "bge-reranker-v2-m3-Q8_0.gguf",
+ "file_mb": 636,
+ "load_s": 35.3,
+ "queries": 10,
+ "rerank50_s_median": 31.44,
+ "rerank50_s_max": 70.67,
+ "avg_words_per_doc": 145,
+ "memory": {
+  "cgroup_peak_mb": 1007,
+  "process_peak_rss_mb": 847
+ }
+}

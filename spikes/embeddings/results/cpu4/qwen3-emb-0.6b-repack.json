@@ -1,0 +1,16 @@
+{
+ "model": "qwen3-emb-0.6b",
+ "file": "Qwen3-Embedding-0.6B-Q8_0.gguf",
+ "file_mb": 639,
+ "load_s": 18.2,
+ "dim": 1024,
+ "passages": 300,
+ "passages_per_s": 2.9,
+ "query_ms_median": 95,
+ "memory": {
+  "cgroup_peak_mb": 1326,
+  "process_peak_rss_mb": 1203
+ },
+ "small_settings": false,
+ "repack": true
+}

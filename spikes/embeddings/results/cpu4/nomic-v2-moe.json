@@ -1,0 +1,14 @@
+{
+ "model": "nomic-v2-moe",
+ "file": "nomic-embed-text-v2-moe.Q8_0.gguf",
+ "file_mb": 512,
+ "load_s": 33.3,
+ "dim": 768,
+ "passages": 300,
+ "passages_per_s": 3.3,
+ "query_ms_median": 71,
+ "memory": {
+  "cgroup_peak_mb": 855,
+  "process_peak_rss_mb": 749
+ }
+}

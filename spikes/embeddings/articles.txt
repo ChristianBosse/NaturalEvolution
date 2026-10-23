@@ -1,0 +1,85 @@
+# Articles cut into passages for the test. All their passages go in the pool,
+# so the right passage competes with its own siblings. Random articles fill the rest.
+# First aid
+Snakebite
+Snake venom
+Antivenom
+Venom
+Burn
+Bleeding
+Tourniquet
+Hypothermia
+Frostbite
+Heat stroke
+Heat exhaustion
+Cardiopulmonary resuscitation
+Choking
+Heimlich maneuver
+Bone fracture
+Splint (medicine)
+Sprain
+Recovery position
+Drowning
+Electrical injury
+Anaphylaxis
+Bee sting
+Spider bite
+Scorpion sting
+Dog bite
+Nosebleed
+Concussion
+Chemical burn
+Sunburn
+First aid
+Shock (circulatory)
+Wound
+# Water and hygiene
+Oral rehydration therapy
+Dehydration
+Diarrhea
+Cholera
+Drinking water
+Chlorine
+Sodium hypochlorite
+Ceramic water filter
+Water fluoridation
+Giardiasis
+Schistosomiasis
+Hepatitis A
+Sanitation
+Open defecation
+Portable water purification
+Arsenic poisoning
+Blue baby syndrome
+Typhoid fever
+Hand washing
+Pit latrine
+Waterborne disease
+Dracunculiasis
+# Farming and food
+Organophosphate poisoning
+Pesticide poisoning
+Leptospirosis
+Brucellosis
+Anthrax
+Mycotoxin
+Mycotoxicosis
+Botulism
+Hypersensitivity pneumonitis
+Zoonosis
+Rabies
+Tetanus
+Foodborne illness
+Ergotism
+Malnutrition
+Vitamin A deficiency
+# Repair and workshop
+Carbon monoxide poisoning
+Lead poisoning
+Silicosis
+Hearing loss
+Eye injury
+Laceration
+Asbestosis
+Photokeratitis
+Metal fume fever
