@@ -36,9 +36,9 @@ These settle future arguments. When a feature conflicts with a principle, the pr
  └──────────────────────┬───────────────────────┘
                         │ USB seed stick
                         ▼
- NEVO NODE (strictly offline)          ◄── browsers on Wi-Fi
+ NEVO NODE (strictly offline)          ◄── browsers on Wi-Fi (optional)
  ┌──────────────────────────────────────────────┐
- │ Web UI · Import queue · Search · Built-in AI │
+ │ Screen app · Web UI · Search · Built-in AI   │
  │ Sync engine · Trust · Power governor · Setup │
  │──────────────────────────────────────────────│
  │ Storage: ZIM packs · Blob store · SQLite     │
@@ -52,7 +52,9 @@ These settle future arguments. When a feature conflicts with a principle, the pr
 
 ### Clients
 
-Any device with a web browser joins the node's Wi-Fi and opens `nevo.local` (or is sent there by a captive portal). Pages are built on the node, so they work on old phones and with JavaScript turned off. Phones can optionally save articles for offline reading.
+**The node's own screen comes first.** A node is a complete NEVO by itself: a box with a small screen, a Raspberry Pi, an SSD and its own solar power works with no other device, because after a collapse people's phones may be dead (D-061). The screen runs NEVO's own touch-friendly app, drawn straight to the display with no desktop or browser (D-062). Everything works there: reading, search, the AI, adding guides, imports and admin.
+
+**Other devices are a bonus.** Any device with a web browser can also join the node's Wi-Fi and open `nevo.local` (or be sent there by a captive portal). Pages are built on the node, so they work on old phones and with JavaScript turned off. Phones can optionally save articles for offline reading.
 
 ### Roles
 

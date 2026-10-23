@@ -60,7 +60,7 @@ use std::time::Duration;
 pub use error::{ExtractError, Rejected};
 pub use image::Dimensions;
 pub use sniff::{is_executable_name, safe_file_name, sniff, Detected, Disposition, Kind, TextEncoding, SNIFF_LEN};
-pub use text::{passages, Passage, MAX_PASSAGE, MIN_PASSAGE};
+pub use text::{passages, reading_text, Passage, MAX_PASSAGE, MIN_PASSAGE};
 
 /// The `producer` of derived data made by this crate. Bump it whenever the output for the same
 /// input changes, so nodes know to recompute instead of mixing old and new text.

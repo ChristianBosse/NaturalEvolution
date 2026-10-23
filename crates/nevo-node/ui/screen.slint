@@ -1,0 +1,555 @@
+// The node's own screen (D-062): touch first, readable outdoors, usable at 800x480.
+//
+// Pages are switched by `page` ("home", "topic", "search", "item"); Rust (src/screen.rs) fills
+// the data and handles every callback.
+
+import { LineEdit } from "std-widgets.slint";
+
+export struct TopicTile {
+    key: string,
+    label: string,
+}
+
+export struct TopicRow {
+    tiles: [TopicTile],
+}
+
+export struct Card {
+    id: string,
+    title: string,
+    detail: styled-text,
+    topic: string,
+}
+
+// One block of a guide: a heading, or a paragraph or list as styled text.
+export struct Block {
+    heading: bool,
+    text: string,
+    body: styled-text,
+}
+
+export struct Guide {
+    title: string,
+    summary: string,
+    topic: string,
+    trust: string,
+    reasons: [string],
+    warnings: [string],
+    blocks: [Block],
+}
+
+global Theme {
+    // A light, warm theme: dark text on a pale background stays readable in sunlight.
+    out property <color> bg: #f5f2ea;
+    out property <color> surface: #ffffff;
+    out property <color> pressed: #ebe5d7;
+    out property <color> ink: #1c1a15;
+    out property <color> muted: #5b564b;
+    out property <color> line: #d8d1c2;
+    out property <color> accent: #2d6a4f;
+    out property <color> accent-pressed: #1f4d39;
+    out property <color> accent-soft: #e3efe8;
+    out property <color> warn: #7a4200;
+    out property <color> warn-soft: #fbecd6;
+    out property <length> pad: 16px;
+    // Fingers need targets of about 9 mm.
+    out property <length> touch: 52px;
+}
+
+component Pressable inherits Rectangle {
+    in property <string> label;
+    in property <bool> primary;
+    in property <length> font-size: 18px;
+    callback clicked();
+    min-height: Theme.touch;
+    min-width: Theme.touch;
+    border-radius: 10px;
+    background: root.primary ? (ta.pressed ? Theme.accent-pressed : Theme.accent) : (ta.pressed ? Theme.pressed : Theme.surface);
+    border-width: root.primary ? 0px : 1px;
+    border-color: Theme.line;
+    HorizontalLayout {
+        padding-left: 16px;
+        padding-right: 16px;
+        Text {
+            text: root.label;
+            font-size: root.font-size;
+            font-weight: 600;
+            color: root.primary ? #ffffff : Theme.ink;
+            vertical-alignment: center;
+            horizontal-alignment: center;
+        }
+    }
+    ta := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component TopBar inherits Rectangle {
+    in property <string> node-name;
+    in property <bool> can-back;
+    callback back();
+    callback home();
+    height: 64px;
+    background: Theme.surface;
+    Rectangle {
+        y: parent.height - 1px;
+        height: 1px;
+        background: Theme.line;
+    }
+    HorizontalLayout {
+        padding: 6px;
+        padding-left: 8px;
+        padding-right: 8px;
+        spacing: 8px;
+        if root.can-back: Pressable {
+            label: "‹ Back";
+            clicked => {
+                root.back();
+            }
+        }
+        VerticalLayout {
+            alignment: center;
+            padding-left: 8px;
+            horizontal-stretch: 1;
+            Text {
+                text: "NEVO";
+                font-size: 20px;
+                font-weight: 800;
+                color: Theme.accent;
+            }
+            Text {
+                text: root.node-name;
+                font-size: 14px;
+                color: Theme.muted;
+                overflow: elide;
+            }
+        }
+        Pressable {
+            label: "Home";
+            clicked => {
+                root.home();
+            }
+        }
+    }
+}
+
+component SearchBar inherits HorizontalLayout {
+    in-out property <string> query;
+    callback search(string);
+    callback toggle-keyboard();
+    spacing: 8px;
+    LineEdit {
+        text <=> root.query;
+        placeholder-text: "Search: water, burns, seeds…";
+        font-size: 18px;
+        min-height: Theme.touch;
+        horizontal-stretch: 1;
+        accepted(text) => {
+            root.search(text);
+        }
+    }
+    Pressable {
+        label: "Keys";
+        clicked => {
+            root.toggle-keyboard();
+        }
+    }
+    Pressable {
+        label: "Search";
+        primary: true;
+        clicked => {
+            root.search(root.query);
+        }
+    }
+}
+
+component CardView inherits Rectangle {
+    in property <Card> card;
+    callback clicked();
+    background: ta.pressed ? Theme.pressed : Theme.surface;
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: Theme.line;
+    VerticalLayout {
+        padding: 14px;
+        spacing: 4px;
+        Text {
+            text: root.card.title;
+            font-size: 20px;
+            font-weight: 700;
+            color: Theme.accent;
+            wrap: word-wrap;
+        }
+        StyledText {
+            text: root.card.detail;
+            default-color: Theme.ink;
+            default-font-size: 16px;
+            max-lines: 3;
+        }
+        if root.card.topic != "": Text {
+            text: root.card.topic;
+            font-size: 14px;
+            color: Theme.muted;
+        }
+    }
+    ta := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}
+
+component TopicGrid inherits VerticalLayout {
+    in property <[TopicRow]> rows;
+    callback open(string);
+    spacing: 8px;
+    for row in root.rows: HorizontalLayout {
+        spacing: 8px;
+        for tile in row.tiles: Rectangle {
+            // Equal widths, whatever the label: four per row, as COLUMNS in screen.rs.
+            width: (root.width - 3 * 8px) / 4;
+            min-height: Theme.touch + 4px;
+            // Empty tiles only fill out the last row.
+            background: tile.key == "" ? transparent : (ta.pressed ? Theme.accent-pressed : Theme.accent);
+            border-radius: 12px;
+            Text {
+                text: tile.label;
+                color: #ffffff;
+                font-size: 18px;
+                font-weight: 700;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                wrap: word-wrap;
+            }
+            ta := TouchArea {
+                enabled: tile.key != "";
+                clicked => {
+                    root.open(tile.key);
+                }
+            }
+        }
+    }
+}
+
+component Key inherits Rectangle {
+    in property <string> label;
+    in property <string> value: self.label;
+    callback pressed-key(string);
+    preferred-width: 0px;
+    horizontal-stretch: 1;
+    min-height: 48px;
+    border-radius: 8px;
+    background: ta.pressed ? Theme.pressed : Theme.surface;
+    border-width: 1px;
+    border-color: Theme.line;
+    Text {
+        text: root.label;
+        font-size: 20px;
+        color: Theme.ink;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+    ta := TouchArea {
+        clicked => {
+            root.pressed-key(root.value);
+        }
+    }
+}
+
+// An on-screen keyboard: a box with only a touchscreen has no other way to type.
+component Keyboard inherits Rectangle {
+    in property <bool> accents;
+    callback key(string);
+    background: #e4ded0;
+    VerticalLayout {
+        padding: 6px;
+        spacing: 6px;
+        for row in (root.accents ? [["é", "è", "ê", "ë", "à", "â", "ç", "ô", "î", "û"], ["á", "í", "ó", "ú", "ñ", "ü", "ï", "'", "-", "?"]] : [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"], ["a", "s", "d", "f", "g", "h", "j", "k", "l", "'"]]): HorizontalLayout {
+            spacing: 6px;
+            for k in row: Key {
+                label: k;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+        }
+        HorizontalLayout {
+            spacing: 6px;
+            for k in ["z", "x", "c", "v", "b", "n", "m", ",", "."]: Key {
+                label: k;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+            Key {
+                label: "Delete";
+                value: "back";
+                horizontal-stretch: 2;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+        }
+        HorizontalLayout {
+            spacing: 6px;
+            Key {
+                label: root.accents ? "abc" : "éàñ";
+                value: "accents";
+                horizontal-stretch: 2;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+            Key {
+                label: "Space";
+                value: "space";
+                horizontal-stretch: 6;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+            Key {
+                label: "Search";
+                value: "search";
+                horizontal-stretch: 2;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+            Key {
+                label: "Hide";
+                value: "hide";
+                horizontal-stretch: 2;
+                pressed-key(v) => {
+                    root.key(v);
+                }
+            }
+        }
+    }
+}
+
+component SectionTitle inherits Text {
+    font-size: 20px;
+    font-weight: 700;
+    color: Theme.ink;
+}
+
+export component Screen inherits Window {
+    title: "NEVO";
+    preferred-width: 800px;
+    preferred-height: 480px;
+    min-width: 480px;
+    min-height: 320px;
+    background: Theme.bg;
+    default-font-size: 18px;
+
+    in property <string> node-name;
+    in property <string> page: "home";
+    in property <bool> can-back;
+    in-out property <string> query;
+    in-out property <bool> keyboard-open;
+    in-out property <bool> accents;
+
+    in property <[TopicRow]> topic-rows;
+    in property <[Card]> recent;
+    in property <string> heading;
+    in property <[TopicRow]> subtopic-rows;
+    in property <[Card]> cards;
+    in property <string> empty-text;
+    in property <Guide> guide;
+
+    callback back();
+    callback home();
+    callback search(string);
+    callback open-topic(string);
+    callback open-item(string);
+    callback key(string);
+
+    VerticalLayout {
+        TopBar {
+            node-name: root.node-name;
+            can-back: root.can-back;
+            back => {
+                root.back();
+            }
+            home => {
+                root.home();
+            }
+        }
+
+        Rectangle {
+            vertical-stretch: 1;
+
+            if root.page == "home": home := Flickable {
+                content-width: self.width;
+                content-height: home-col.preferred-height;
+                home-col := VerticalLayout {
+                    width: home.width;
+                    padding: Theme.pad;
+                    spacing: 14px;
+                    SearchBar {
+                        query <=> root.query;
+                        search(q) => {
+                            root.search(q);
+                        }
+                        toggle-keyboard => {
+                            root.keyboard-open = !root.keyboard-open;
+                        }
+                    }
+                    SectionTitle {
+                        text: "Topics";
+                    }
+                    TopicGrid {
+                        rows: root.topic-rows;
+                        open(t) => {
+                            root.open-topic(t);
+                        }
+                    }
+                    SectionTitle {
+                        text: "Recently added";
+                    }
+                    if root.recent.length == 0: Text {
+                        text: "Nothing has been added to this library yet.";
+                        color: Theme.muted;
+                        wrap: word-wrap;
+                    }
+                    for c in root.recent: CardView {
+                        card: c;
+                        clicked => {
+                            root.open-item(c.id);
+                        }
+                    }
+                }
+            }
+
+            if root.page == "topic" || root.page == "search": list := Flickable {
+                content-width: self.width;
+                content-height: list-col.preferred-height;
+                list-col := VerticalLayout {
+                    width: list.width;
+                    padding: Theme.pad;
+                    spacing: 12px;
+                    if root.page == "search": SearchBar {
+                        query <=> root.query;
+                        search(q) => {
+                            root.search(q);
+                        }
+                        toggle-keyboard => {
+                            root.keyboard-open = !root.keyboard-open;
+                        }
+                    }
+                    Text {
+                        text: root.heading;
+                        font-size: 26px;
+                        font-weight: 800;
+                        color: Theme.ink;
+                        wrap: word-wrap;
+                    }
+                    if root.subtopic-rows.length > 0: TopicGrid {
+                        rows: root.subtopic-rows;
+                        open(t) => {
+                            root.open-topic(t);
+                        }
+                    }
+                    if root.cards.length == 0: Text {
+                        text: root.empty-text;
+                        color: Theme.muted;
+                        wrap: word-wrap;
+                    }
+                    for c in root.cards: CardView {
+                        card: c;
+                        clicked => {
+                            root.open-item(c.id);
+                        }
+                    }
+                }
+            }
+
+            if root.page == "item": item := Flickable {
+                content-width: self.width;
+                content-height: item-col.preferred-height;
+                item-col := VerticalLayout {
+                    width: item.width;
+                    padding: Theme.pad;
+                    padding-left: Theme.pad + 8px;
+                    padding-right: Theme.pad + 8px;
+                    spacing: 12px;
+                    if root.guide.topic != "": Text {
+                        text: root.guide.topic;
+                        color: Theme.muted;
+                        font-size: 15px;
+                    }
+                    Text {
+                        text: root.guide.title;
+                        font-size: 28px;
+                        font-weight: 800;
+                        color: Theme.ink;
+                        wrap: word-wrap;
+                    }
+                    if root.guide.summary != "": Text {
+                        text: root.guide.summary;
+                        color: Theme.muted;
+                        wrap: word-wrap;
+                    }
+                    for w in root.guide.warnings: Rectangle {
+                        background: Theme.warn-soft;
+                        border-radius: 10px;
+                        HorizontalLayout {
+                            padding: 12px;
+                            Text {
+                                text: "Warning: " + w;
+                                color: Theme.warn;
+                                font-weight: 700;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    if root.guide.trust != "": Rectangle {
+                        background: Theme.accent-soft;
+                        border-radius: 10px;
+                        VerticalLayout {
+                            padding: 12px;
+                            spacing: 4px;
+                            Text {
+                                text: "Trust: " + root.guide.trust;
+                                font-weight: 700;
+                                color: Theme.accent;
+                            }
+                            for r in root.guide.reasons: Text {
+                                text: "• " + r;
+                                font-size: 15px;
+                                color: Theme.muted;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    for b in root.guide.blocks: VerticalLayout {
+                        padding-top: b.heading ? 10px : 0px;
+                        if b.heading: Text {
+                            text: b.text;
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: Theme.ink;
+                            wrap: word-wrap;
+                        }
+                        if !b.heading: StyledText {
+                            text: b.body;
+                            default-color: Theme.ink;
+                            default-font-size: 18px;
+                            link-color: Theme.accent;
+                        }
+                    }
+                }
+            }
+        }
+
+        if root.keyboard-open: Keyboard {
+            accents: root.accents;
+            key(k) => {
+                root.key(k);
+            }
+        }
+    }
+}

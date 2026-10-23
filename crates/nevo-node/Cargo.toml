@@ -32,6 +32,14 @@ argon2.workspace = true
 chacha20poly1305.workspace = true
 qrcode.workspace = true
 zeroize.workspace = true
+slint = { workspace = true, optional = true }
+
+[build-dependencies]
+slint-build = { workspace = true, optional = true }
+
+[features]
+# The node's own screen (D-062): `nevo --screen`.
+screen = ["dep:slint", "dep:slint-build"]
 
 [dev-dependencies]
 tempfile.workspace = true

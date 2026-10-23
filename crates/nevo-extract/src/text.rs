@@ -212,6 +212,28 @@ fn parse_block(block: &str) -> Block<'_> {
     Block::Para(para)
 }
 
+/// Clean text as a person reads it, for search snippets: heading marks, escapes and page breaks
+/// removed, and list dashes shown as bullets.
+pub fn reading_text(clean: &str) -> String {
+    let mut out = Vec::new();
+    for block in clean.split("\n\n") {
+        match parse_block(block) {
+            Block::Heading(_, text) => out.push(text.to_string()),
+            Block::Page => {}
+            Block::Para(para) => out.push(
+                para.lines()
+                    .map(|l| match l.strip_prefix("- ") {
+                        Some(item) => format!("• {item}"),
+                        None => l.to_string(),
+                    })
+                    .collect::<Vec<_>>()
+                    .join("\n"),
+            ),
+        }
+    }
+    out.join("\n\n")
+}
+
 // ---------------------------------------------------------------------------------------------
 // Passages
 
@@ -539,6 +561,15 @@ mod tests {
         d.para("6789012345");
         assert!(d.truncated);
         assert_eq!(d.finish(), "12345");
+    }
+
+    #[test]
+    fn reading_text_drops_marks() {
+        let clean = "# Burns\n\nCool it.\n\n- one\n- two\n\n\\# not a heading\n\n\x0c";
+        assert_eq!(
+            reading_text(clean),
+            "Burns\n\nCool it.\n\n• one\n• two\n\n# not a heading"
+        );
     }
 
     #[test]

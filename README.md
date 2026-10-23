@@ -44,7 +44,7 @@ Planned platforms: Linux (ARM and x86), Windows, macOS. Android later.
 
 ## How it's built
 
-- **Rust** core, shipped as a single program per platform (Rust 1.88 or newer)
+- **Rust** core, shipped as a single program per platform (Rust 1.92 or newer)
 - **llama.cpp** compiled in for the AI, running small open models (Qwen3.5, Gemma 4)
 - **Kiwix ZIM** files for large reference libraries
 - **Tantivy** for search, **SQLite** for data
@@ -55,7 +55,7 @@ The code is a Rust workspace in [`crates/`](crates):
 
 | Crate | What it does |
 |---|---|
-| `nevo-node` | The `nevo` program: the web server people use |
+| `nevo-node` | The `nevo` program: the node's own screen, and the web server for other devices |
 | `nevo-format` | The content format: IDs, signatures, objects |
 | `nevo-store` | Storage: objects, files, sync logs, integrity checks |
 | `nevo-search` | Multilingual search, with passages for the AI |
@@ -74,6 +74,7 @@ NEVO is in Phase 1 ([roadmap](ROADMAP.md)).
 
 **Works today in the `nevo` program:**
 
+- The node's own touch screen (`nevo --screen`, built with `--features screen`), so a box with a screen works with no other device: topics, search with an on-screen keyboard (with accents), and reading guides
 - A setup wizard on first start (it needs a one-time code printed in the console), with accounts for contributors and admins
 - Browsing by topic, reading guides (with photos, video and audio), and search across guides and the text of uploaded PDFs, EPUBs and web pages
 - Adding and editing guides; when two people edit offline, comparing and merging their versions; full history

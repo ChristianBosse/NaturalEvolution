@@ -1,7 +1,8 @@
-//! The NEVO node: a web server for the local library.
+//! The NEVO node: the local library, on its own screen and as a web server.
 //!
-//! Anyone on the local network opens it in a browser to browse and read; people with an account
-//! add guides. This is the first slice of Phase 1; search, the built-in AI and sync come next.
+//! The node's own screen (`screen`, D-062) works with no other device. Anyone on the local
+//! network can also open it in a browser to browse and read; people with an account add guides.
+//! The built-in AI and sync come next.
 
 mod account_pages;
 pub mod accounts;
@@ -13,6 +14,8 @@ pub mod housekeeping;
 pub mod identity;
 mod markdown;
 mod pages;
+#[cfg(feature = "screen")]
+pub mod screen;
 pub mod search;
 mod setup;
 

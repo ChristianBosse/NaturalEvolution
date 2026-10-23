@@ -291,7 +291,7 @@ async fn item(State(state): State<AppState>, viewer: Viewer, Path(id): Path<Stri
 }
 
 /// Turns a trust assessment into the plain sentences the item page shows.
-fn trust_view(a: &nevo_trust::Assessment) -> pages::TrustView {
+pub(crate) fn trust_view(a: &nevo_trust::Assessment) -> pages::TrustView {
     use nevo_trust::{FlagKind, Reason, Source};
     let who = |s: &Source| match &s.name {
         // Names are self-chosen, so the key is always shown next to them.

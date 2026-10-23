@@ -357,3 +357,21 @@ The good rerankers took 30–40 s to rerank 50 passages on 4 desktop cores (minu
 *2026-10-22*
 
 Reloading the chat model per question would take about 30 s or more, so models are not swapped per question. The e5-small embedder stays loaded with one 512-token slot. If that is too tight on a real Pi, the fallbacks are a 3072-token chat context, the Qwen3.5 2B model, or keyword search with translation only. Embedding new content on a node happens only while the chat model is unloaded, like indexing (D-036).
+
+## The node's own screen
+
+### D-061: The node works on its own, with its own screen
+*2026-10-23*
+
+A NEVO node must be usable with no other device: a box with a small screen, a Raspberry Pi, an SSD and its own solar power is a complete NEVO. After a collapse, people's phones and laptops may be dead or uncharged, so the node's screen (touch, or a keyboard and mouse) is the main way in. Phones and laptops joining over Wi-Fi are a bonus. Every feature (reading, search, the AI, adding guides, imports, admin) must work on the node's screen. This updates the "browsers on Wi-Fi" picture in D-018: the web pages stay, for other devices.
+
+### D-062 (Proposed): The screen app is native, built with Slint, in the same program
+*2026-10-23*
+
+The node's screen runs a native Rust app built with [Slint](https://slint.dev), inside the same `nevo` program as the web server, so the library, search index and AI model are loaded once. On Linux it draws straight to the display (Slint's `linuxkms` backend): no desktop, no window manager, no browser. It is designed for touch first (big targets, readable outdoors, works with a 5–7" screen) and also works with a keyboard and mouse. Slint uses tens of MB, which matters on 4 GB, where the chat model takes about 3 GB (D-058). Slint is used under its GPL-3.0 option, which may be combined with NEVO's AGPL-3.0 code. Slint 1.18 needs Rust 1.92, so NEVO's minimum Rust version rises from 1.88 to 1.92.
+*Considered:* a full-screen kiosk browser showing the web pages (reuses them, but Chromium needs roughly 300–500 MB, too much next to the model on 4 GB; WPE is lighter but still several times Slint); egui or iced (need a desktop or Wayland compositor on Linux); GTK (heavy, needs a desktop).
+
+### D-063: Seed may connect to a node directly when the node allows it
+*2026-10-23*
+
+Besides USB sticks, NEVO Seed may send content to a node over the local network, but only when the node's admin turns this on. The node still never reaches the internet (D-005): Seed connects to the node on the local network and the node only receives. What Seed sends goes through the same import checks as a USB stick.

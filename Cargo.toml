@@ -1,5 +1,5 @@
 [workspace]
-# Resolver 3 only picks dependency versions that support our rust-version (1.88).
+# Resolver 3 only picks dependency versions that support our rust-version (1.92).
 resolver = "3"
 members = ["crates/*"]
 # Spikes are throwaway experiments with their own Cargo.toml.
@@ -14,7 +14,7 @@ opt-level = 3
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.88"
+rust-version = "1.92"
 license = "AGPL-3.0-only"
 repository = "https://github.com/ChristianBosse/NaturalEvolution"
 
@@ -32,6 +32,9 @@ axum = { version = "=0.8.9", features = ["multipart"] }
 tokio = { version = "=1.53.2", features = ["rt-multi-thread", "macros", "net", "signal", "sync", "time"] }
 tower-http = { version = "=0.6.11", features = ["fs", "set-header"] }
 maud = "=0.27.0"
+# The node's own screen (D-062). No libseat/libinput C libraries: compat-1-18, not compat-1-2.
+slint = { version = "=1.18.1", default-features = false, features = ["std", "compat-1-18", "backend-winit", "renderer-femtovg", "renderer-software"] }
+slint-build = "=1.18.1"
 pulldown-cmark = { version = "=0.13.4", default-features = false, features = ["html"] }
 tower = { version = "=0.5.3", features = ["util"] }
 http-body-util = "=0.1.5"

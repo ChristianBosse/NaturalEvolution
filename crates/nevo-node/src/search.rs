@@ -140,7 +140,7 @@ pub(crate) async fn page(State(state): State<AppState>, Query(query): Query<Sear
                 continue;
             };
             let (text, _) = item_text(&state.store, &tip.object);
-            let snippet = nevo_search::snippet(&q, &text, &hit.lang, 240);
+            let snippet = nevo_search::snippet(&q, &nevo_extract::reading_text(&text), &hit.lang, 240);
             out.push(pages::SearchResult {
                 item,
                 title: hit.title,
