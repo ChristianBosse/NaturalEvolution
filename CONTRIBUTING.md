@@ -32,6 +32,7 @@ NEVO is a Rust workspace (Rust 1.85 or newer). The code lives in `crates/`:
 | `nevo-format` | The content format ([spec](docs/spec/content-model.md)): IDs, signatures, objects |
 | `nevo-store` | Node storage: objects in SQLite, blob files, sync logs |
 | `nevo-node` | The `nevo` program: web server for browsing, reading and adding guides |
+| `nevo-llm` | Runs the AI model (GGUF) with llama.cpp built in; the engine needs `--features llama`, cmake and clang |
 
 With Rust installed:
 

@@ -1,0 +1,21 @@
+[package]
+name = "nevo-llm"
+description = "Runs the NEVO AI model (a GGUF file) inside the node with llama.cpp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+# The llama.cpp engine. Off by default: building it needs cmake and clang and takes minutes. See src/lib.rs.
+llama = ["dep:llama-cpp-2", "dep:llama-cpp-sys-2"]
+
+[dependencies]
+llama-cpp-2 = { workspace = true, optional = true }
+# Not used directly. Listed to pin the llama.cpp version, which llama-cpp-2 only asks for loosely.
+llama-cpp-sys-2 = { workspace = true, optional = true }
+
+[[example]]
+name = "ask"
+required-features = ["llama"]

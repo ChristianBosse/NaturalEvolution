@@ -1,0 +1,6 @@
+# Read by llama.cpp's build (crates/nevo-llm, feature `llama`). Builds without that feature ignore it.
+[env]
+# No repacked second copy of the model weights (D-033, `--no-repack` in llama-server terms). On x86 the copy sits
+# next to the memory-mapped file and doubles the model's RAM. The Rust bindings can't switch it off at load time, so
+# it is left out of the build. Set GGML_CPU_REPACK=ON in the environment to override.
+GGML_CPU_REPACK = { value = "OFF", force = false }

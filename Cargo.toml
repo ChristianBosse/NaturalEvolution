@@ -27,3 +27,5 @@ maud = "=0.27.0"
 pulldown-cmark = { version = "=0.13.4", default-features = false, features = ["html"] }
 tower = { version = "=0.5.3", features = ["util"] }
 http-body-util = "=0.1.5"
+llama-cpp-2 = { version = "=0.1.159", default-features = false }
+llama-cpp-sys-2 = { version = "=0.1.159", default-features = false }
