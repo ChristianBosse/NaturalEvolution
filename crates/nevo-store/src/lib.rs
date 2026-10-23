@@ -27,6 +27,7 @@
 //! [`Store::reserve`], so a full disk can't break the database.
 
 mod blobs;
+mod check;
 mod error;
 mod gc;
 mod schema;
@@ -44,6 +45,7 @@ use nevo_format::{
 use rusqlite::{params, Connection, OptionalExtension, Transaction};
 
 pub use blobs::BlobInfo;
+pub use check::{CheckOptions, CheckReport, Problem};
 pub use error::{Result, StoreError};
 pub use gc::{GcReport, GC_GRACE};
 pub use space::MIN_RESERVE;
