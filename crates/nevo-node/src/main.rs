@@ -14,6 +14,7 @@ use std::sync::Arc;
 
 use nevo_node::accounts::{Accounts, ACCOUNTS_FILE};
 use nevo_node::{housekeeping, identity, router, AppState};
+use nevo_search::{Config as SearchConfig, SearchIndex};
 use nevo_store::Store;
 
 struct Args {
@@ -67,7 +68,19 @@ async fn run() -> Result<(), String> {
 
     let store = Arc::new(store);
     housekeeping::spawn(store.clone());
-    let app = router(AppState::new(store, Arc::new(node), Arc::new(accounts)));
+    let search = Arc::new(
+        SearchIndex::open(args.data.join("search"), SearchConfig::default())
+            .map_err(|e| format!("search index: {e}"))?,
+    );
+    if search.num_docs() == 0 {
+        // First start, or the index was deleted to rebuild it: index the library in the background.
+        let (store, search) = (store.clone(), search.clone());
+        tokio::task::spawn_blocking(move || match nevo_node::search::reindex_all(&store, &search) {
+            Ok(n) => println!("search: indexed {n} items"),
+            Err(_) => eprintln!("search: indexing the library failed"),
+        });
+    }
+    let app = router(AppState::new(store, Arc::new(node), Arc::new(accounts)).with_search(search));
     let listener = tokio::net::TcpListener::bind(args.listen)
         .await
         .map_err(|e| format!("can't listen on {}: {e}", args.listen))?;

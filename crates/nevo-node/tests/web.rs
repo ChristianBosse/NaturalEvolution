@@ -523,3 +523,31 @@ async fn simultaneous_additions_get_distinct_clocks() {
     // The author's key record has clock 1.
     assert_eq!(clocks, (2..=9).collect::<Vec<_>>());
 }
+
+/// Search is updated in the background after a change, so poll briefly.
+async fn search_until(app: &Router, query: &str, want: &str) -> String {
+    for _ in 0..50 {
+        let page = get(app, &format!("/search?q={query}")).await.text();
+        if page.contains(want) {
+            return page;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+    }
+    get(app, &format!("/search?q={query}")).await.text()
+}
+
+#[tokio::test]
+async fn added_guides_can_be_searched() {
+    let n = node();
+    assert!(
+        get(&n.app, "/").await.text().contains("action=\"/search\""),
+        "home has a search box"
+    );
+    add_burns_guide(&n.app, &[]).await;
+    let page = search_until(&n.app, "running%20water", "Treating a small burn").await;
+    assert!(page.contains("Treating a small burn"), "{page}");
+    assert!(page.contains("<b>"), "matches are highlighted");
+    assert!(!page.contains("<script>alert"), "guide text in snippets is escaped");
+    let empty = get(&n.app, "/search?q=zzzqqqxxx").await.text();
+    assert!(empty.contains("Nothing in the library matches"));
+}

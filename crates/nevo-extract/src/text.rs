@@ -36,7 +36,7 @@ fn latin1(bytes: &[u8]) -> String {
 }
 
 fn utf16(bytes: &[u8], little_endian: bool) -> String {
-    let units = bytes.chunks_exact(2).map(|p| {
+    let units = bytes.as_chunks::<2>().0.iter().map(|p| {
         if little_endian {
             u16::from_le_bytes([p[0], p[1]])
         } else {

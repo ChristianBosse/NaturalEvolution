@@ -516,7 +516,7 @@ struct Awkward<'a> {
 impl Read for Awkward<'_> {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         self.calls += 1;
-        if self.calls % 5 == 0 {
+        if self.calls.is_multiple_of(5) {
             return Err(io::ErrorKind::Interrupted.into());
         }
         if self.fail_at.is_some_and(|at| self.pos >= at) {

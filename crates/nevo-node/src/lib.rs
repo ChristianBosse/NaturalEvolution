@@ -13,6 +13,7 @@ pub mod housekeeping;
 pub mod identity;
 mod markdown;
 mod pages;
+pub mod search;
 mod setup;
 
 pub use app::{router, AppState};

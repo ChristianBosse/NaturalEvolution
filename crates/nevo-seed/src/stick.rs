@@ -380,7 +380,7 @@ fn read_full(file: &mut File, buf: &mut [u8]) -> io::Result<usize> {
 
 /// The test pattern for `buf`, which starts at byte `pos` of the test (a multiple of 8).
 fn fill(buf: &mut [u8], seed: u64, pos: u64) {
-    for (i, word) in buf.chunks_exact_mut(8).enumerate() {
+    for (i, word) in buf.as_chunks_mut::<8>().0.iter_mut().enumerate() {
         word.copy_from_slice(&splitmix64(seed ^ (pos + 8 * i as u64)).to_le_bytes());
     }
 }
@@ -409,7 +409,7 @@ fn load(dir: &Path) -> io::Result<Option<State>> {
     };
     let state: State = serde_json::from_slice(&bytes)
         .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, format!("{STATE}: {e}")))?;
-    if state.version != 1 || state.file_size == 0 || state.file_size % SECTOR != 0 {
+    if state.version != 1 || state.file_size == 0 || !state.file_size.is_multiple_of(SECTOR) {
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
             format!("{STATE}: unsupported test state"),

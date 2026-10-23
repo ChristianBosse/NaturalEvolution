@@ -393,7 +393,7 @@ impl SyncServer {
     }
 
     fn blob(&self, req: BlobRequest) -> Result<BlobResponse, Refusal> {
-        if req.from % PIECE != 0 {
+        if !req.from.is_multiple_of(PIECE) {
             return Err(refuse(StatusCode::BAD_REQUEST, "blob parts start at a piece boundary"));
         }
         if !self.blob_shareable(req.id)? {

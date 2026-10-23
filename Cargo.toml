@@ -41,6 +41,7 @@ serde_json = "=1.0.151"
 tar = { version = "=0.4.46", default-features = false }
 tantivy = { version = "=0.26.2", default-features = false, features = ["mmap", "stopwords", "lz4-compression", "stemmer"] }
 nevo-search = { path = "crates/nevo-search" }
+nevo-extract = { path = "crates/nevo-extract" }
 similar = "=3.2.0"
 ureq = { version = "=3.4.2", default-features = false, features = ["rustls"] }
 sha2 = "=0.11.0"

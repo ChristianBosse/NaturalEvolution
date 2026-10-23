@@ -164,7 +164,7 @@ impl Listed {
         if listing.len() % 4 != 0 {
             return Err(corrupt("article listing has a broken length"));
         }
-        for raw in listing.chunks_exact(4) {
+        for raw in listing.as_chunks::<4>().0 {
             let idx = u32::from_le_bytes([raw[0], raw[1], raw[2], raw[3]]);
             if idx < count {
                 bits[idx as usize / 64] |= 1 << (idx % 64);

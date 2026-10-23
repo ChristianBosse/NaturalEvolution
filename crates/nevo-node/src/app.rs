@@ -15,6 +15,7 @@ use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
 use axum::Router;
 use nevo_format::{seal, ContentFile, Id, Keypair, Kind, Revision, Sealed, Time, TimeSource, Topic, Visibility};
+use nevo_search::{Config as SearchConfig, SearchIndex};
 use nevo_store::{BlobInfo, Store, StoreError};
 use tokio::sync::{mpsc, Semaphore};
 use tower::ServiceExt;
@@ -23,7 +24,7 @@ use tower_http::set_header::SetResponseHeaderLayer;
 
 use crate::accounts::{Accounts, Session};
 use crate::auth::{self, Contributor, Viewer};
-use crate::{account_pages, edit, markdown, pages, setup};
+use crate::{account_pages, edit, markdown, pages, search, setup};
 
 /// Largest upload accepted in one form: enough for a long video. Computed in u64 so it also
 /// compiles on 32-bit boards (armv7 Raspberry Pi OS), where it is capped at the address space.
@@ -52,6 +53,8 @@ pub struct AppState {
     /// This node's key. It signs the node's log; people sign what they add with their own keys.
     pub node: Arc<Keypair>,
     pub accounts: Arc<Accounts>,
+    /// The library's search index (search.rs).
+    pub search: Arc<SearchIndex>,
     /// Held while choosing a clock value and storing the object, so two additions at the same
     /// moment can't get the same clock (spec section 2: each new object needs a higher one).
     pub(crate) adding: Arc<Mutex<()>>,
@@ -64,9 +67,17 @@ impl AppState {
             store,
             node,
             accounts,
+            // In memory until the caller opens the node's own index (`with_search`); tests keep it.
+            search: Arc::new(SearchIndex::in_memory(SearchConfig::default()).expect("an in-memory index opens")),
             adding: Arc::new(Mutex::new(())),
             uploads: Arc::new(Semaphore::new(MAX_CONCURRENT_UPLOADS)),
         }
+    }
+
+    /// Uses a search index stored on disk.
+    pub fn with_search(mut self, index: Arc<SearchIndex>) -> AppState {
+        self.search = index;
+        self
     }
 }
 
@@ -76,6 +87,7 @@ pub fn router(state: AppState) -> Router {
     Router::new()
         .route("/", get(home))
         .route("/topics", get(topics))
+        .route("/search", get(search::page))
         .route("/topic/{*path}", get(topic))
         .route("/item/{id}", get(item))
         .route("/file/{rev}/{index}/{name}", get(file))
@@ -402,7 +414,10 @@ async fn add_submit(
     let result = add(&state, &session, multipart, &mut form).await;
     form.csrf = session.csrf_token();
     match result {
-        Ok(item) => Redirect::to(&format!("/item/{item}")).into_response(),
+        Ok(item) => {
+            search::update_later(&state, item);
+            Redirect::to(&format!("/item/{item}")).into_response()
+        }
         Err(AppError::BadRequest(message)) => {
             form.error = Some(message);
             (StatusCode::BAD_REQUEST, Html(pages::add(&form).into_string())).into_response()

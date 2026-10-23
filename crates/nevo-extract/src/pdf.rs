@@ -317,7 +317,7 @@ fn info_title(pdf: &Document) -> Option<String> {
 /// PDFDocEncoding, read as Latin-1 (they differ only in rare punctuation).
 fn text_string(b: &[u8]) -> String {
     if let Some(rest) = b.strip_prefix(b"\xfe\xff") {
-        let units = rest.chunks_exact(2).map(|p| u16::from_be_bytes([p[0], p[1]]));
+        let units = rest.as_chunks::<2>().0.iter().map(|p| u16::from_be_bytes([p[0], p[1]]));
         char::decode_utf16(units).map(|r| r.unwrap_or('\u{fffd}')).collect()
     } else if let Some(rest) = b.strip_prefix(b"\xef\xbb\xbf") {
         String::from_utf8_lossy(rest).into_owned()
@@ -432,7 +432,7 @@ impl OutputDev for Collector<'_> {
         font_size: f64,
         c: &str,
     ) -> Result<(), OutputError> {
-        if self.chars % 256 == 0 && self.cancel.stopped() {
+        if self.chars.is_multiple_of(256) && self.cancel.stopped() {
             return self.halt(Stop::Cancelled);
         }
         let position = trm.post_transform(&self.flip);

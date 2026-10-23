@@ -435,7 +435,7 @@ impl Round<'_> {
             };
             let got = res.data.len() as u64;
             let end = have.saturating_add(got);
-            let whole_pieces = got % PIECE == 0 || end == res.size;
+            let whole_pieces = got.is_multiple_of(PIECE) || end == res.size;
             if !sizes.contains(&res.size) || end > res.size || (got == 0 && have < res.size) || !whole_pieces {
                 self.problem(format!(
                     "refused blob {blob}: the peer's answer doesn't fit its revisions"

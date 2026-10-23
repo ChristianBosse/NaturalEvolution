@@ -405,7 +405,10 @@ pub(crate) async fn edit_submit(
     let result = save(&state, &session, item, multipart, &mut form).await;
     form.fields.csrf = session.csrf_token();
     match result {
-        Ok(()) => Redirect::to(&format!("/item/{item}")).into_response(),
+        Ok(()) => {
+            crate::search::update_later(&state, item);
+            Redirect::to(&format!("/item/{item}")).into_response()
+        }
         Err(AppError::BadRequest(message)) => {
             form.fields.error = Some(message);
             // Show the form again with what was typed.

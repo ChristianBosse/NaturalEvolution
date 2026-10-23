@@ -118,7 +118,7 @@ pub fn home(recent: &[(Id, Sealed<Revision>)], free: Option<u64>) -> Markup {
         "Library",
         html! {
             h1 { "Library" }
-            p.muted { "Guides and documents on this NEVO. Search is coming next." }
+            (search_box(""))
             h2 { "Topics" }
             p { @for (top, _) in STARTING_TOPICS { a.tag href={ "/topic/" (top) } { (top) } } }
             h2 { "Recently added" }
@@ -128,6 +128,49 @@ pub fn home(recent: &[(Id, Sealed<Revision>)], free: Option<u64>) -> Markup {
                 (item_list(recent))
             }
             @if let Some(free) = free { p.meta { "Storage: " (size(free)) " free" } }
+        },
+    )
+}
+
+fn search_box(q: &str) -> Markup {
+    html! {
+        form method="get" action="/search" role="search" {
+            label for="q" { "Search the library" }
+            input type="search" id="q" name="q" value=(q) maxlength="200" placeholder="e.g. clean water, burns, seeds";
+            button type="submit" { "Search" }
+        }
+    }
+}
+
+/// One search result. `snippet` is already HTML-escaped by nevo-search, with matches in <b>.
+pub struct SearchResult {
+    pub item: Id,
+    pub title: String,
+    pub topics: Vec<String>,
+    pub snippet: String,
+}
+
+pub fn search(q: &str, results: &[SearchResult]) -> Markup {
+    layout(
+        if q.is_empty() { "Search" } else { q },
+        html! {
+            h1 { "Search" }
+            (search_box(q))
+            @if !q.is_empty() {
+                @if results.is_empty() {
+                    p { "Nothing in the library matches. Try other words, or fewer of them." }
+                } @else {
+                    ul.items {
+                        @for r in results {
+                            li {
+                                a href={ "/item/" (r.item) } { (r.title) }
+                                div.muted { (PreEscaped(&r.snippet)) }
+                                div.meta { @for t in &r.topics { span { (t) } } }
+                            }
+                        }
+                    }
+                }
+            }
         },
     )
 }
