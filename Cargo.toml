@@ -1,5 +1,5 @@
 [workspace]
-# Resolver 3 only picks dependency versions that support our rust-version (1.85).
+# Resolver 3 only picks dependency versions that support our rust-version (1.88).
 resolver = "3"
 members = ["crates/*"]
 # Spikes are throwaway experiments with their own Cargo.toml.
@@ -14,7 +14,7 @@ opt-level = 3
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.86"
+rust-version = "1.88"
 license = "AGPL-3.0-only"
 repository = "https://github.com/ChristianBosse/NaturalEvolution"
 

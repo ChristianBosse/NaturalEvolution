@@ -3,7 +3,6 @@ name = "nevo-search"
 description = "NEVO search: a Tantivy index over library items and ZIM articles, with passages for the AI"
 version.workspace = true
 edition.workspace = true
-# Tantivy 0.26 needs Rust 1.86, one release above the workspace minimum.
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true

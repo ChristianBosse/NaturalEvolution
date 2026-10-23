@@ -22,7 +22,7 @@ env:
   # Keep in step with the toolchain used locally (the nevo-rust Docker image).
   RUST_VERSION: "1.99.1"
   # Must match `rust-version` in Cargo.toml.
-  MSRV: "1.86"
+  MSRV: "1.88"
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: "0"
 
@@ -62,7 +62,7 @@ jobs:
         run: cargo test --workspace --locked
 
   msrv:
-    name: MSRV (Rust 1.86)
+    name: MSRV (Rust 1.88)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
