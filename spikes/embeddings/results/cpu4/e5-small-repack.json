@@ -1,0 +1,16 @@
+{
+ "model": "e5-small",
+ "file": "multilingual-e5-small-q8_0.gguf",
+ "file_mb": 132,
+ "load_s": 14.2,
+ "dim": 384,
+ "passages": 300,
+ "passages_per_s": 28.9,
+ "query_ms_median": 6,
+ "memory": {
+  "cgroup_peak_mb": 473,
+  "process_peak_rss_mb": 314
+ },
+ "small_settings": false,
+ "repack": true
+}

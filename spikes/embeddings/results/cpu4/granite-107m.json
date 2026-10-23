@@ -1,0 +1,14 @@
+{
+ "model": "granite-107m",
+ "file": "granite-embedding-107m-multilingual-Q8_0.gguf",
+ "file_mb": 121,
+ "load_s": 27.3,
+ "dim": 384,
+ "passages": 300,
+ "passages_per_s": 32.0,
+ "query_ms_median": 14,
+ "memory": {
+  "cgroup_peak_mb": 421,
+  "process_peak_rss_mb": 301
+ }
+}

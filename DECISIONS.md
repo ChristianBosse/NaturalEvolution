@@ -334,3 +334,26 @@ Until a node has an admin, every page leads to `/setup`, where the first person 
 *2026-10-22*
 
 Following D-038 (one key per person, moved by QR code), the account page shows the secret key as an inline SVG QR code and as text, only after the passphrase is typed again: a session alone (a borrowed phone, a copied cookie) must not be enough to take someone's key. The text form is `NEVO-SECRET-1:` followed by the 32 bytes in uppercase RFC 4648 base32 without padding, which QR codes store compactly in alphanumeric mode. Importing on the other device comes with the app or a second node's sign-in.
+
+## Embeddings and reranking (Phase 0 spike)
+
+### D-055 (Proposed): The embedding model is multilingual-e5-small
+*2026-10-22*
+
+Four small multilingual embedding models and two rerankers were tested on 70 English, French and Spanish questions over 2,500 WikiMed passages, and in a 4 GB, 4-core container (see `spikes/embeddings/RESULTS.md`). multilingual-e5-small (MIT, Q8_0, 132 MB, 384 dimensions) is the only good one small enough to stay loaded next to the 3.4 GB chat model (about 0.3 GB), and embeds a question in milliseconds. Seed and every node use it (D-029), with `query: ` and `passage: ` prefixes, and store vectors as int8 (38 MB per 100,000 passages, no measured loss). NEVO converts the model to GGUF itself and checks it with a fixed test: two of three public conversions were broken.
+*Considered:* Qwen3-Embedding-0.6B (Apache-2.0; best quality, but 1.2 GB and 20–30 times slower; the upgrade path if Standard nodes get more memory), nomic-embed-text-v2-moe (slow on CPU), granite-embedding-107m (slightly worse), EmbeddingGemma (not Apache/MIT).
+
+### D-056 (Proposed): Hybrid search: passage-level BM25 plus embeddings, fused by rank
+*2026-10-22*
+
+Keyword and embedding results are merged with reciprocal rank fusion, which needs no extra model. This scored 0.96 Recall@10 and 0.78 MRR, against 0.94 / 0.69 for keyword search with translation and 0.91 / 0.69 for e5-small alone. When the question's language differs from the pack's, the chat AI translates it for the keyword side only (D-037). Indexing passages headed "Title - Section" already puts *Snakebite - First aid* first for "snake bite first aid".
+
+### D-057 (Proposed): No reranker on 4 GB nodes
+*2026-10-22*
+
+The good rerankers took 30–40 s to rerank 50 passages on 4 desktop cores (minutes on a Pi) and need 0.85–1.2 GB, so they can't share 4 GB with the chat model. On 8 GB and up, Qwen3-Reranker-0.6B (Apache-2.0, best MRR 0.84) or bge-reranker-v2-m3 (Apache-2.0, 0.81) may rerank the top 10–20 passages, after a Pi test. Rerankers get the translated question. jina rerankers are excluded (CC-BY-NC).
+
+### D-058 (Proposed): On 4 GB nodes the embedder stays loaded next to the chat model
+*2026-10-22*
+
+Reloading the chat model per question would take about 30 s or more, so models are not swapped per question. The e5-small embedder stays loaded with one 512-token slot. If that is too tight on a real Pi, the fallbacks are a 3072-token chat context, the Qwen3.5 2B model, or keyword search with translation only. Embedding new content on a node happens only while the chat model is unloaded, like indexing (D-036).

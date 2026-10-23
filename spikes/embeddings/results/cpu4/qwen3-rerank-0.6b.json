@@ -1,0 +1,14 @@
+{
+ "model": "qwen3-rerank-0.6b",
+ "file": "qwen3-reranker-0.6b-q8_0.gguf",
+ "file_mb": 639,
+ "load_s": 27.2,
+ "queries": 10,
+ "rerank50_s_median": 40.14,
+ "rerank50_s_max": 58.57,
+ "avg_words_per_doc": 145,
+ "memory": {
+  "cgroup_peak_mb": 1352,
+  "process_peak_rss_mb": 1197
+ }
+}
