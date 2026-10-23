@@ -2,7 +2,9 @@
 
 **An offline library of human knowledge, with a built-in AI, that runs on a small solar-powered computer.**
 
-> **Status: planning.** There is no code yet. This repository currently holds the vision, the roadmap and the design decisions. See [ROADMAP.md](ROADMAP.md) for what comes first.
+[![CI](https://github.com/ChristianBosse/NaturalEvolution/actions/workflows/ci.yml/badge.svg)](https://github.com/ChristianBosse/NaturalEvolution/actions/workflows/ci.yml)
+
+> **Status: early development (Phase 1).** A first node runs: you can browse, search, read, add and edit guides from any browser. The AI, ZIM packs, sync and USB bundles are built as libraries and being connected. Nothing has run on a real Raspberry Pi yet. See [what works today](#status-and-trying-it).
 
 ## What is NEVO?
 
@@ -40,17 +42,48 @@ Every node runs the AI itself. On Windows, plan for about 8 GB, since Windows us
 
 Planned platforms: Linux (ARM and x86), Windows, macOS. Android later.
 
-## How it's built (planned)
+## How it's built
 
-- **Rust** core, shipped as a single program per platform
-- **llama.cpp** compiled in for the AI
+- **Rust** core, shipped as a single program per platform (Rust 1.88 or newer)
+- **llama.cpp** compiled in for the AI, running small open models (Qwen3.5, Gemma 4)
 - **Kiwix ZIM** files for large reference libraries
 - **Tantivy** for search, **SQLite** for data
+- Every piece of content is signed and identified by its hash ([content format](docs/spec/content-model.md)), so it can be checked without trusting whoever passed it on
 - Plain, open file formats, so the knowledge outlives the software
+
+The code is a Rust workspace in [`crates/`](crates):
+
+| Crate | What it does |
+|---|---|
+| `nevo-node` | The `nevo` program: the web server people use |
+| `nevo-format` | The content format: IDs, signatures, objects |
+| `nevo-store` | Storage: objects, files, sync logs, integrity checks |
+| `nevo-search` | Multilingual search, with passages for the AI |
+| `nevo-trust` | Trust labels: Reference, Verified, Community, Unknown |
+| `nevo-llm` | Runs the AI model with llama.cpp |
+| `nevo-answer` | The AI's prompt, and code checks on its answers before anyone sees them |
+| `nevo-zim` | Reads Kiwix ZIM packs and extracts clean text |
+| `nevo-extract` | Checks uploaded files and extracts text from PDF, EPUB and web pages |
+| `nevo-sync` | Sync between nodes on a local network |
+| `nevo-bundle` | `.nevo` bundles for USB sticks, and export to plain folders |
+| `nevo-seed` | NEVO Seed tools: verified downloads, USB stick test, vault checks |
 
 ## Status and trying it
 
-NEVO is early in Phase 1 ([roadmap](ROADMAP.md)). What works today: a node that stores signed content and serves a web page where you can browse topics, read guides and add your own (text, photos, PDFs, video). Search, the built-in AI, accounts and sync are next.
+NEVO is in Phase 1 ([roadmap](ROADMAP.md)).
+
+**Works today in the `nevo` program:**
+
+- A setup wizard on first start (it needs a one-time code printed in the console), with accounts for contributors and admins
+- Browsing by topic, reading guides (with photos, video and audio), and search across guides and the text of uploaded PDFs, EPUBs and web pages
+- Adding and editing guides; when two people edit offline, comparing and merging their versions; full history
+- Trust labels on every item, with the reasons behind them
+- Private items only their author sees, and items that never leave this node
+- Housekeeping: unused files are cleaned up and uploads stop before the disk is full
+
+**Built and tested, not yet connected to the web pages:** the AI (model runner plus answer safety checks), Kiwix ZIM packs, sync between nodes, USB bundles, and the NEVO Seed tools.
+
+**Not done yet:** a test on a real Raspberry Pi, ready-made downloads, and the Seed program itself.
 
 To run it with Docker (no Rust install needed), from the repository folder:
 
@@ -58,13 +91,18 @@ To run it with Docker (no Rust install needed), from the repository folder:
 docker run --rm -it -p 8080:8080 -v "$PWD:/src" -w /src rust:1-bookworm cargo run --release -p nevo-node -- --data /tmp/nevo
 ```
 
-Then open http://localhost:8080 (or `http://<this computer's address>:8080` from a phone on the same Wi-Fi).
+Then open http://localhost:8080 (or `http://<this computer's address>:8080` from a phone on the same Wi-Fi). On first start the console prints a setup code: the setup page asks for it before creating the first admin account.
+
+CI builds and tests every change on Linux, Windows and macOS, and builds the program for 32-bit and 64-bit Raspberry Pi.
 
 ## Documents
 
 - [VISION.md](VISION.md): why NEVO exists, its principles and its design
 - [ROADMAP.md](ROADMAP.md): phases from first prototype to v1.0 and beyond
-- [DECISIONS.md](DECISIONS.md): every major decision so far and the reasoning behind it
+- [DECISIONS.md](DECISIONS.md): every major decision so far and the reasoning behind it ("Proposed" ones still need review)
+- [Content format](docs/spec/content-model.md), [sync protocol](docs/spec/sync.md) and [catalog format](docs/spec/catalog.md): the specs
+- [Security](docs/security.md): the threat model, and what is protected and what isn't yet
+- [Kits](docs/kits.md): what a Seed stick can carry, per topic, language and stick size
 
 ### Guides
 
@@ -76,7 +114,7 @@ Printable guides for people who run and use a node:
 
 ## Contributing
 
-NEVO is in the planning phase. If you care about offline knowledge, open an issue or a discussion. Not all help is code: curating knowledge packs (medical, farming, repair) and translating will matter as much as programming. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+NEVO is in early development. If you care about offline knowledge, open an issue or a discussion. To report a security problem, see [SECURITY.md](SECURITY.md). Not all help is code: curating knowledge packs (medical, farming, repair) and translating will matter as much as programming. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
